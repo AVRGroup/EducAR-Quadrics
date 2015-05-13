@@ -1,0 +1,141 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/verdequadro"
+    tools:context=".HelpActivity">
+
+    <Button
+        android:id="@+id/button1"
+        style="@android:style/Theme.Light"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:onClick="dismiss"
+        android:text="OK"
+        android:background="@color/madeira"
+        android:textColor="#ffffffff"
+        android:layout_marginTop="0dp" />
+
+    <TextView
+        android:id="@+id/instructions"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal|top"
+        android:text="@string/instructions"
+        android:textColor="@android:color/white"
+        android:textSize="24dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="0dp"
+        android:background="@color/madeira"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:height="1dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_below="@+id/instructions"
+        android:layout_above="@+id/button1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:orientation="vertical"
+            android:id="@+id/linlayout"
+            android:paddingBottom="40dp">
+
+
+            <TextView
+                android:id="@+id/part1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="0dp"
+                android:text="@string/instructions_um"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/link_marcador"
+                android:id="@+id/textView"
+                android:paddingTop="5dp" />
+
+            <ImageView
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:id="@+id/marker"
+                android:scaleType="fitCenter"
+                android:src="@drawable/marcador"
+                android:layout_gravity="center_horizontal|top"
+                android:padding="10dp" />
+
+            <TextView
+                android:id="@+id/part2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="0dp"
+                android:text="@string/instructions_dois"
+                android:textColor="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/focus"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/foco" />
+
+            <TextView
+                android:id="@+id/part3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="0dp"
+                android:text="@string/instructions_tres"
+                android:textColor="@android:color/white" />
+
+            <ImageView
+                android:layout_width="178dp"
+                android:layout_height="76dp"
+                android:id="@+id/getcomp"
+                android:src="@drawable/getcomp"
+                android:layout_gravity="center_horizontal"
+                android:padding="10dp" />
+
+            <TextView
+                android:id="@+id/about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="0dp"
+                android:text="@string/about"
+                android:textColor="@android:color/white"
+                android:paddingTop="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/contact"
+                android:id="@+id/contato"
+                android:padding="10dp"
+                android:gravity="center_horizontal" />
+
+            <CheckBox
+                android:id="@+id/not_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_show_again"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+<string name="app_name">EducAR - Quadrics</string>
+<string name="error_unkown_pixel_format">the camera uses an unkown pixel format.</string><string name="mode_rgb">RGB</string><string name="mode_gray">luminance</string><string name="mode_edges">edges</string><string name="mode_contours">contours</string><string name="mode_bin">binarized</string>
+<string name="description">AndAR is a project that tries to bring Augmented Reality to the android platform.</string>
+<string name="takescreenshot">Take a screenshot.</string>
+<string name="screenshotsaved">Screenshot saved!</string>
+<string name="screenshotfailed">Failed to save screenshot: </string>
+<string name="elipsoide">Elipsoide</string>
+<string name="cone">Cone Cilindrico</string>
+<string name="help">Teste da Tela de HELP</string>
+<string name="instructions">Instruções</string>
+<string name="instructions_um">1. Baixe o marcador, imprima ou abra o arquivo em algum outro dispositivo que permita a visualização da imagem, como celular ou tablet.</string>
+<string name="instructions_dois">2. Aponte o seu dispositivo para o marcador de modo que ele esteja completamente visível na imagem da câmera.</string>
+<string name="instructions_tres">3. Toque na tela para exibir o menu de troca das superfícies. Recomendamos que oculte o marcador para fazer a troca.</string>
+<string name="exit">Sair</string>
+<string name="about">EducAR - Quadrics é desenvolvido por Lidiane Teixeira Pereira com a colaboração de Igor Couto, Douglas Coelho e contribuições de Jorge Moreira e Matheus Oliveira sob a orientação de Rodrigo Luis de Souza da Silva como um projeto do GETComp (Grupo de Educação Tutorial do Curso de Ciência da Computação).</string>
+<string name="contact">Contato: educar.getcomp@gmail.com</string>
+<string name="not_show_again">Não mostrar novamente</string>
+<string name="link_marcador">Link para download do marcador: http://goo.gl/souy1h</string>
+</resources>

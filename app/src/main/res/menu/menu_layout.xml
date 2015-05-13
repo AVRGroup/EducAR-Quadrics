@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"    >
+    
+    <group>
+        
+	    <item android:id="@+id/elipsoide"
+	          android:icon="@drawable/elipsoide"/>
+	    
+	    <item android:id="@+id/cone"
+	          android:icon="@drawable/cone"/>
+	    
+	    <item android:id="@+id/paraboloide"
+	          android:icon="@drawable/paraboloide"/>
+	    
+	    <item android:id="@+id/parab_hip"
+	          android:icon="@drawable/parab_hip"/>
+	    
+	    <item android:id="@+id/hiperb_duas"
+	          android:icon="@drawable/hiperb_duas"/>
+	    
+	    <item android:id="@+id/hiperb_uma"
+	          android:icon="@drawable/hiperb_uma"/>
+
+    </group>
+</menu>
