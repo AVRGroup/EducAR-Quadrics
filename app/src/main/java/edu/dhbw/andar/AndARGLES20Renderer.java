@@ -122,24 +122,24 @@ public class AndARGLES20Renderer extends AndARRenderer {
         
         // Grab Attributes and uniforms from the loaded shader
         maPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
-        GraphicsUtil.checkGlError("glGetAttribLocation aPosition");
+        GraphicsUtil.checkGlError("glGetAttribLocation aPosition ");
         if (maPositionHandle == -1) {
-            throw new RuntimeException("Could not get attrib location for aPosition");
+            throw new RuntimeException("Could not get attrib location for aPosition mProgram");
         }
         maTextureHandle = GLES20.glGetAttribLocation(mProgram, "aTextureCoord");
         GraphicsUtil.checkGlError("glGetAttribLocation aTextureCoord");
         if (maTextureHandle == -1) {
-            throw new RuntimeException("Could not get attrib location for aTextureCoord");
+            throw new RuntimeException("Could not get attrib location for aTextureCoord mProgram");
         }
         muMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
         GraphicsUtil.checkGlError("glGetUniformLocation uMVPMatrix");
         if (muMVPMatrixHandle == -1) {
-            throw new RuntimeException("Could not get attrib location for uMVPMatrix");
+            throw new RuntimeException("Could not get attrib location for uMVPMatrix mProgram");
         }
         mSamplerLoc = GLES20.glGetUniformLocation (mProgram, "sTexture");
         GraphicsUtil.checkGlError("glGetUniformLocation sTexture");
         if (mSamplerLoc == -1) {
-        	throw new RuntimeException("Could not get uniform location for SamplerLoc");
+        	throw new RuntimeException("Could not get uniform location for SamplerLoc mProgram");
         }
         
         // Load the projective texture program
@@ -152,22 +152,22 @@ public class AndARGLES20Renderer extends AndARRenderer {
         maProjPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
         GraphicsUtil.checkGlError("glGetAttribLocation aPosition");
         if (maProjPositionHandle == -1) {
-            throw new RuntimeException("Could not get attrib location for aPosition");
+            throw new RuntimeException("Could not get attrib location for aPosition mProjProgram");
         }
         maProjTextureHandle = GLES20.glGetAttribLocation(mProgram, "aTextureCoord");
         GraphicsUtil.checkGlError("glGetAttribLocation aTextureCoord");
         if (maProjTextureHandle == -1) {
-            throw new RuntimeException("Could not get attrib location for aTextureCoord");
+            throw new RuntimeException("Could not get attrib location for aTextureCoord mProjProgram");
         }
         muProjMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
         GraphicsUtil.checkGlError("glGetUniformLocation uMVPMatrix");
         if (muProjMVPMatrixHandle == -1) {
-            throw new RuntimeException("Could not get attrib location for uMVPMatrix");
+            throw new RuntimeException("Could not get attrib location for uMVPMatrix mProjProgram");
         }
         mProjSamplerLoc = GLES20.glGetUniformLocation (mProgram, "sTexture");
         GraphicsUtil.checkGlError("glGetUniformLocation sTexture");
         if (mProjSamplerLoc == -1) {
-        	throw new RuntimeException("Could not get uniform location for SamplerLoc");
+        	throw new RuntimeException("Could not get uniform location for SamplerLoc mProjProgram");
         }
         
         // Set the GL clear color here

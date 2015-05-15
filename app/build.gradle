@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "getcomp.educar.quadrics"
-        minSdkVersion 17
+        minSdkVersion 15
         targetSdkVersion 22
     }
 
