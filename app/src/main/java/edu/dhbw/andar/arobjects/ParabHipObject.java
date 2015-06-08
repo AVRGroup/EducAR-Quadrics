@@ -34,15 +34,15 @@ public class ParabHipObject extends ARGLES20Object{
 	@Override
 	public void initGLES20() {
 		
-		mPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
+		mPositionHandle = GLES20.glGetAttribLocation(myProgram, "aPosition");
 		GraphicsUtil.checkGlError("glGetAttribLocation aPosition");
 		if (mPositionHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for aPosition");
 		}
 
-		mColorHandle = GLES20.glGetAttribLocation(mProgram, "a_Color");
+		mColorHandle = GLES20.glGetAttribLocation(myProgram, "a_Color");
 
-		mNormalHandle = GLES20.glGetAttribLocation(mProgram, "a_Normal");
+		mNormalHandle = GLES20.glGetAttribLocation(myProgram, "a_Normal");
 		
 	}
 	@Override
@@ -120,18 +120,22 @@ public class ParabHipObject extends ARGLES20Object{
 		GLES20.glDrawArrays(GLES20.GL_LINES, 0, parabWire.getNumIndices());
 		
 	}
-	
+
 	/**
 	 * Set the shader program files for this object
 	 */
 	@Override
-	public String vertexProgramPath() {
-		return "shaders/meuVertexShader.vs";
+	public String vertexProgramPath(int mode) {
+		if (mode == 1)
+			return "shaders/meuVertexShader.vs";
+		return "shaders/simplecolor.vs";
 	}
 
 	@Override
-	public String fragmentProgramPath() {
-		return "shaders/meuFragmentShader.fs";
+	public String fragmentProgramPath(int mode) {
+		if (mode == 1)
+			return "shaders/meuFragmentShader.fs";
+		return "shaders/simplecolor.fs";
 	}
 
 }

@@ -62,17 +62,17 @@ public class ReflectiveObject extends ARGLES20Object {
 	@Override
 	public void initGLES20() {
 		//REFLECTION: EASY MODE???
-		maPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
+		maPositionHandle = GLES20.glGetAttribLocation(myProgram, "aPosition");
         GraphicsUtil.checkGlError("glGetAttribLocation aPosition");
         if (maPositionHandle == -1) {
             throw new RuntimeException("Could not get attrib location for aPosition");
         }
-        maNormalHandle = GLES20.glGetAttribLocation(mProgram, "aNormal");
+        maNormalHandle = GLES20.glGetAttribLocation(myProgram, "aNormal");
         GraphicsUtil.checkGlError("glGetAttribLocation aNormal");
         if (maNormalHandle == -1) {
             throw new RuntimeException("Could not get attrib location for aNormal");
         }
-        muCubemap = GLES20.glGetUniformLocation(mProgram, "uCubemap");
+        muCubemap = GLES20.glGetUniformLocation(myProgram, "uCubemap");
         GraphicsUtil.checkGlError("glGetUniformLocation uCubemap");
         if (muCubemap == -1) {
             throw new RuntimeException("Could not get uniform location for uCubemap");
@@ -86,8 +86,16 @@ public class ReflectiveObject extends ARGLES20Object {
 	 * Set the shader program files for this object
 	 */
 	@Override
-	public String vertexProgramPath() { return "shaders/reflect.vs"; }
+	public String vertexProgramPath(int mode) {
+		if (mode == 1)
+			return "shaders/reflect.vs";
+		return "shaders/reflect.vs";
+	}
 
 	@Override
-	public String fragmentProgramPath() { return "shaders/reflect.fs"; }
+	public String fragmentProgramPath(int mode) {
+		if (mode == 1)
+			return "shaders/reflect.fs";
+		return "shaders/reflect.fs";
+	}
 }

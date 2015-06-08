@@ -32,15 +32,15 @@ public class ElipsoideObject extends ARGLES20Object{
 	@Override
 	public void initGLES20() {
 		
-		mPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
+		mPositionHandle = GLES20.glGetAttribLocation(myProgram, "aPosition");
 		GraphicsUtil.checkGlError("glGetAttribLocation aPosition");
 		if (mPositionHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for aPosition");
 		}
 
-		mColorHandle = GLES20.glGetAttribLocation(mProgram, "a_Color");
+		mColorHandle = GLES20.glGetAttribLocation(myProgram, "a_Color");
 
-		mNormalHandle = GLES20.glGetAttribLocation(mProgram, "a_Normal");
+		mNormalHandle = GLES20.glGetAttribLocation(myProgram, "a_Normal");
 		
 	}
 
@@ -74,7 +74,7 @@ public class ElipsoideObject extends ARGLES20Object{
 		
 		// Desenha elipsoide
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, elipsoide.getNumIndices());
-		
+
 		/** ELIPSOIDE WIREFRAME**/
 		// Pass in the position information
 		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
@@ -103,13 +103,17 @@ public class ElipsoideObject extends ARGLES20Object{
 	 * Set the shader program files for this object
 	 */
 	@Override
-	public String vertexProgramPath() {
-		return "shaders/meuVertexShader.vs";
+	public String vertexProgramPath(int mode) {
+		if (mode == 1)
+			return "shaders/meuVertexShader.vs";
+		return "shaders/simplecolor.vs";
 	}
 
 	@Override
-	public String fragmentProgramPath() {
-		return "shaders/meuFragmentShader.fs";
+	public String fragmentProgramPath(int mode) {
+		if (mode == 1)
+			return "shaders/meuFragmentShader.fs";
+		return "shaders/simplecolor.fs";
 	}
 
 }

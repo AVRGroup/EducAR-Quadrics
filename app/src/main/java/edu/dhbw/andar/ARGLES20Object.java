@@ -17,7 +17,8 @@ import android.util.Log;
  */
 public abstract class ARGLES20Object extends ARObject {
 	protected AndARGLES20Renderer mRenderer;
-	protected int mProgram;
+	protected int myProgram;
+	protected int simpleProgram;
 	protected int muMVMatrixHandle;
 	protected int muPMatrixHandle;
 	protected float[] mMVMatrix = new float[16]; // ModelView Matrix
@@ -26,7 +27,8 @@ public abstract class ARGLES20Object extends ARObject {
 	public ARGLES20Object(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
 		super(name, patternName, markerWidth, markerCenter);
 		mRenderer = renderer;
-		mProgram = 0;
+		myProgram = 0;
+		simpleProgram = 0;
 		muMVMatrixHandle = 0;
 		muPMatrixHandle = 0;
 	}
@@ -43,7 +45,7 @@ public abstract class ARGLES20Object extends ARObject {
 		}
 		
 		// Ensure we're using the program we need
-		GLES20.glUseProgram( mProgram );
+		GLES20.glUseProgram( myProgram );
 		
 		if( glCameraMatrixBuffer != null) {
 			// Transform to where the marker is
@@ -65,7 +67,7 @@ public abstract class ARGLES20Object extends ARObject {
 		}
 		
 		// Ensure we're using the program we need
-		GLES20.glUseProgram( mProgram );
+		GLES20.glUseProgram( myProgram );
 		
 		if( glCameraMatrixBuffer != null) {
 			// Transform to where the marker is
@@ -85,7 +87,7 @@ public abstract class ARGLES20Object extends ARObject {
 	 */
 	@Override
 	public void init( GL10 glUnused ) {
-		setProgram( vertexProgramPath(), fragmentProgramPath() );
+		setProgram( vertexProgramPath(1), fragmentProgramPath(1));
 		initGLES20();
 	}
 	
@@ -94,16 +96,16 @@ public abstract class ARGLES20Object extends ARObject {
 	 * @param vspath Path relative to the "assets" directory which denotes location of the vertex shader
 	 * @param fspath Path relative to the "assets" directory which denotes location of the fragment shader
 	 */
-	public void setProgram( String vspath, String fspath )
+	public void setProgram( String vspath, String fspath)
 	{
 		// Load and compile the program, grab the attribute for transformation matrix
-		mProgram = GraphicsUtil.loadProgram( mRenderer.activity, vspath, fspath );
-		muMVMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVMatrix");
+		myProgram = GraphicsUtil.loadProgram( mRenderer.activity, vspath, fspath );
+		muMVMatrixHandle = GLES20.glGetUniformLocation(myProgram, "uMVMatrix");
         GraphicsUtil.checkGlError("ARGLES20Object glGetUniformLocation uMVMatrix");
         if (muMVMatrixHandle == -1) {
             throw new RuntimeException("Requested shader does not have a uniform named uMVMatrix");
         }
-        muPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uPMatrix");
+        muPMatrixHandle = GLES20.glGetUniformLocation(myProgram, "uPMatrix");
         GraphicsUtil.checkGlError("ARGLES20Object glGetUniformLocation uPMatrix");
         if (muPMatrixHandle == -1) {
             throw new RuntimeException("Requested shader does not have a uniform named uPMatrix");
@@ -188,10 +190,10 @@ public abstract class ARGLES20Object extends ARObject {
 	/**
 	 * Return the path relative to the "assets" directory for the vertex program
 	 */
-	public abstract String vertexProgramPath();
+	public abstract String vertexProgramPath(int mode);
 	
 	/**
 	 * Return the path relative to the "assets" directory for the fragment program
 	 */
-	public abstract String fragmentProgramPath();
+	public abstract String fragmentProgramPath(int mode);
 }

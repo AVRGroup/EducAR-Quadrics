@@ -127,7 +127,7 @@ public class GraphicsUtil {
 	
 	/**
 	 * Calculate axis aligned bounding box vertices
-	 * @param arr The array
+	 * @param vertices The array
 	 * @return [minx][miny][minz][maxx][maxy][maxz]
 	 */
 	public static float[] calcAABB( float[] vertices )

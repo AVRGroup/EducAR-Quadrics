@@ -67,17 +67,17 @@ public class SimpleColorObject extends ARGLES20Object {
 	
 	@Override
 	public void initGLES20() {
-		maPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
+		maPositionHandle = GLES20.glGetAttribLocation(myProgram, "aPosition");
         GraphicsUtil.checkGlError("glGetAttribLocation aPosition");
         if (maPositionHandle == -1) {
             throw new RuntimeException("Could not get attrib location for aPosition");
         }
-        maNormalHandle = GLES20.glGetAttribLocation(mProgram, "aNormal");
+        maNormalHandle = GLES20.glGetAttribLocation(myProgram, "aNormal");
         GraphicsUtil.checkGlError("glGetAttribLocation aNormal");
         if (maNormalHandle == -1) {
             throw new RuntimeException("Could not get attrib location for aNormal");
         }
-        muColor = GLES20.glGetUniformLocation(mProgram, "uColor");
+        muColor = GLES20.glGetUniformLocation(myProgram, "uColor");
         GraphicsUtil.checkGlError("glGetUniformLocation uColor");
         if (muColor == -1) {
             throw new RuntimeException("Could not get uniform location for uColor");
@@ -88,8 +88,16 @@ public class SimpleColorObject extends ARGLES20Object {
 	 * Set the shader program files for this object
 	 */
 	@Override
-	public String vertexProgramPath() { return "shaders/simplecolor.vs"; }
+	public String vertexProgramPath(int mode) {
+		if (mode == 1)
+			return "shaders/simplecolor.vs";
+		return "shaders/simplecolor.vs";
+	}
 
 	@Override
-	public String fragmentProgramPath() { return "shaders/simplecolor.fs"; }
+	public String fragmentProgramPath(int mode) {
+		if (mode == 1)
+			return "shaders/simplecolor.fs";
+		return "shaders/simplecolor.fs";
+	}
 }
