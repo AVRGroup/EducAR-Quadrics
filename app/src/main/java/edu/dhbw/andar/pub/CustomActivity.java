@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.content.SharedPreferences;
 import android.content.Context;
 
+import edu.dhbw.andar.ARObject;
 import edu.dhbw.andar.ARGLES20Object;
 import edu.dhbw.andar.AndARActivity;
 import edu.dhbw.andar.AndARGLES20Renderer;
@@ -32,7 +33,8 @@ public class CustomActivity extends AndARActivity {
 		
 	private static int superficie = 1;
 	
-	ARGLES20Object rendedObj = null;
+	//ARGLES20Object rendedObj = null;
+	ARObject rendedObj = null;
 
     @Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,8 @@ public class CustomActivity extends AndARActivity {
 			if( super.isGLES20() ) {
 				switch(superficie) {
 				case 1:
-					rendedObj = new ElipsoideObject("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+					//rendedObj = new ElipsoideObject("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+					rendedObj = new ObjetoTeste("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 2:
 					rendedObj = new ConeCilindricoObject("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
