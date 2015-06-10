@@ -7,7 +7,6 @@ import javax.microedition.khronos.opengles.GL10;
 import edu.dhbw.andar.ARObject;
 import edu.dhbw.andar.AndARGLES20Renderer;
 import edu.dhbw.andar.surfaces.Elipsoide;
-import edu.dhbw.andar.surfaces.ElipsoideWireframe;
 import edu.dhbw.andar.util.GraphicsUtil;
 
 /**

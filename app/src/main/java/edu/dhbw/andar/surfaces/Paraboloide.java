@@ -22,15 +22,18 @@ public class Paraboloide {
 	public final float passoT = (float) ((2*Math.PI)/slices);
 	public final float passoA = (float) ((2*Math.PI)/stacks);
 	public final float erro = 0.05f;
+
+	public final int wireframecolor;
 	
 
-	public Paraboloide(int fatorNormal) {
+	public Paraboloide(int fatorNormal, int wireframe) {
 		
 		vertices=allocateFloatBuffer(numCoord*4);
 		normais=allocateFloatBuffer(numCoord*4);
 		cores=allocateFloatBuffer(numCoord*4);
-		wire=allocateFloatBuffer(numCoord*4);
-		
+		wire=allocateFloatBuffer(numCoord * 4);
+		wireframecolor = wireframe;
+
 		constroiParaboloide(fatorNormal);		
 		
 	}
@@ -287,23 +290,8 @@ public class Paraboloide {
 	
 	public static FloatBuffer allocateFloatBuffer(int capacity){
 		ByteBuffer vbb = ByteBuffer.allocateDirect(capacity);
-        vbb.order(ByteOrder.nativeOrder());
+		vbb.order(ByteOrder.nativeOrder());
         return vbb.asFloatBuffer();
-	}
-	
-	public final void draw(GL10 gl) {
-		gl.glNormalPointer(GL10.GL_FLOAT, 0, normais);
-	    gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertices);
-	    
-	    gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-	    gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-	    
-	    gl.glPointSize(5.0f);
-	    gl.glDrawArrays(GL10.GL_TRIANGLES, 0, numCoord/3);
-
-	    gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-	    gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
-
 	}
 	
 	public FloatBuffer getVertices() {
@@ -315,7 +303,9 @@ public class Paraboloide {
 	}
 	
 	public FloatBuffer getCores() {
-		return cores;
+		if(wireframecolor == 0)
+			return cores;
+		return wire;
 	}
 	
 	public FloatBuffer getWire() {
