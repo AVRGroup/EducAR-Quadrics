@@ -11,7 +11,7 @@ public class Elipsoide {
 	
 	public FloatBuffer vertices;
 	public FloatBuffer normais;
-	public  FloatBuffer cores;
+	public FloatBuffer cores;
 	public FloatBuffer wire;
 	public final int slices = 40;
 	public final int stacks = 40;

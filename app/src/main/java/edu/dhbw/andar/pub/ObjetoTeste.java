@@ -16,6 +16,7 @@ import edu.dhbw.andar.util.GraphicsUtil;
 public class ObjetoTeste extends ARObject {
     protected AndARGLES20Renderer mRenderer;
     protected int myProgram;
+    protected int myProgram2;
     protected int simpleProgram;
     protected int muMVMatrixHandle;
     protected int muPMatrixHandle;
@@ -38,6 +39,7 @@ public class ObjetoTeste extends ARObject {
         super(name, patternName, markerWidth, markerCenter);
         mRenderer = renderer;
         myProgram = 0;
+        myProgram2 = 0;
         simpleProgram = 0;
         muMVMatrixHandle = 0;
         muPMatrixHandle = 0;
@@ -51,20 +53,37 @@ public class ObjetoTeste extends ARObject {
      * @param vspath Path relative to the "assets" directory which denotes location of the vertex shader
      * @param fspath Path relative to the "assets" directory which denotes location of the fragment shader
      */
-    public void setProgram( String vspath, String fspath)
+    public void setProgram( String vspath, String fspath, int mode)
     {
-        // Load and compile the program, grab the attribute for transformation matrix
-        myProgram = GraphicsUtil.loadProgram(mRenderer.activity, vspath, fspath);
-        muMVMatrixHandle = GLES20.glGetUniformLocation(myProgram, "uMVMatrix");
-        GraphicsUtil.checkGlError("ARGLES20Object glGetUniformLocation uMVMatrix");
-        if (muMVMatrixHandle == -1) {
-            throw new RuntimeException("Requested shader does not have a uniform named uMVMatrix");
+        if (mode == 1){
+            // Load and compile the program, grab the attribute for transformation matrix
+            myProgram = GraphicsUtil.loadProgram(mRenderer.activity, vspath, fspath);
+            muMVMatrixHandle = GLES20.glGetUniformLocation(myProgram, "uMVMatrix");
+            GraphicsUtil.checkGlError("ARGLES20Object glGetUniformLocation uMVMatrix");
+            if (muMVMatrixHandle == -1) {
+                throw new RuntimeException("Requested shader does not have a uniform named uMVMatrix");
+            }
+            muPMatrixHandle = GLES20.glGetUniformLocation(myProgram, "uPMatrix");
+            GraphicsUtil.checkGlError("ARGLES20Object glGetUniformLocation uPMatrix");
+            if (muPMatrixHandle == -1) {
+                throw new RuntimeException("Requested shader does not have a uniform named uPMatrix");
+            }
         }
-        muPMatrixHandle = GLES20.glGetUniformLocation(myProgram, "uPMatrix");
-        GraphicsUtil.checkGlError("ARGLES20Object glGetUniformLocation uPMatrix");
-        if (muPMatrixHandle == -1) {
-            throw new RuntimeException("Requested shader does not have a uniform named uPMatrix");
+        else{
+            // Load and compile the program, grab the attribute for transformation matrix
+            myProgram2 = GraphicsUtil.loadProgram(mRenderer.activity, vspath, fspath);
+            muMVMatrixHandle = GLES20.glGetUniformLocation(myProgram2, "uMVMatrix");
+            GraphicsUtil.checkGlError("ARGLES20Object glGetUniformLocation uMVMatrix");
+            if (muMVMatrixHandle == -1) {
+                throw new RuntimeException("Requested shader does not have a uniform named uMVMatrix");
+            }
+            muPMatrixHandle = GLES20.glGetUniformLocation(myProgram2, "uPMatrix");
+            GraphicsUtil.checkGlError("ARGLES20Object glGetUniformLocation uPMatrix");
+            if (muPMatrixHandle == -1) {
+                throw new RuntimeException("Requested shader does not have a uniform named uPMatrix");
+            }
         }
+
     }
 
     /**
@@ -73,13 +92,15 @@ public class ObjetoTeste extends ARObject {
     public String vertexProgramPath(int mode) {
         if (mode == 1)
             return "shaders/meuVertexShader.vs";
-        return "shaders/simplecolor.vs";
+        else
+            return "shaders/simpleShader.vs";
     }
 
     public String fragmentProgramPath(int mode) {
         if (mode == 1)
             return "shaders/meuFragmentShader.fs";
-        return "shaders/simplecolor.fs";
+        else
+            return "shaders/simpleShader.fs";
     }
 
     /**
@@ -88,7 +109,8 @@ public class ObjetoTeste extends ARObject {
      */
     @Override
     public void init( GL10 glUnused ) {
-        setProgram( vertexProgramPath(1), fragmentProgramPath(1));
+        setProgram( vertexProgramPath(1), fragmentProgramPath(1), 1);
+        setProgram( vertexProgramPath(0), fragmentProgramPath(0), 0);
 
         mPositionHandle = GLES20.glGetAttribLocation(myProgram, "aPosition");
         GraphicsUtil.checkGlError("glGetAttribLocation aPosition");
@@ -103,7 +125,7 @@ public class ObjetoTeste extends ARObject {
 
     @Override
     public synchronized void predraw( GL10 glUnused ) {
-        if(!initialized) {
+        /*if(!initialized) {
             init(glUnused);
             initialized = true;
         }
@@ -117,7 +139,7 @@ public class ObjetoTeste extends ARObject {
             GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
             GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
             GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
-        }
+        }*/
 
     }
 
@@ -166,6 +188,17 @@ public class ObjetoTeste extends ARObject {
 
         // Desenha elipsoide
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, elipsoide.getNumIndices());
+
+        // Ensure we're using the program we need
+        GLES20.glUseProgram(myProgram2);
+
+        if( glCameraMatrixBuffer != null) {
+            // Transform to where the marker is
+            GLES20.glUniformMatrix4fv(muMVMatrixHandle, 1, false, glMatrix, 0);
+            GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
+            GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
+            GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
+        }
 
         /** ELIPSOIDE WIREFRAME**/
         // Pass in the position information
