@@ -25,7 +25,7 @@ public class ElipsoideObject extends ARGLES20Object{
 			double[] markerCenter, AndARGLES20Renderer renderer) {
 		super(name, patternName, markerWidth, markerCenter, renderer);
 		
-		elipsoide = new Elipsoide(1);
+		elipsoide = new Elipsoide(1, 0);
 		elipWire = new ElipsoideWireframe(1);
 	}
 

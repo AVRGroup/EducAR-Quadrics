@@ -23,13 +23,16 @@ public class Elipsoide {
 	public float v = 0.0f;
 		
 	public final int numCoord = (slices+1)*(stacks+1)*3*6;
+
+	public final int wireframecolor;
 	
-public Elipsoide(int fatorNormal){
+public Elipsoide(int fatorNormal, int wireframe){
 		
 		vertices=allocateFloatBuffer(numCoord*4);
 		normais=allocateFloatBuffer(numCoord*4);
 		cores=allocateFloatBuffer(numCoord*4);
 		wire=allocateFloatBuffer(numCoord*4);
+		wireframecolor = wireframe;
 		
 		constroiElipsoide(fatorNormal);
 		
@@ -58,7 +61,7 @@ public Elipsoide(int fatorNormal){
 				z = coordZ(v+passoV, u+passoU);
 				Vetor d = new Vetor(x, y, z);
 				
-				//Normal para dentro, paraboloide interno
+				/*//Normal para dentro, paraboloide interno
 				if(fatorNormal == -1){
 					//Primeiro triangulo (inferior)
 					vertices.put(a.x);
@@ -96,10 +99,21 @@ public Elipsoide(int fatorNormal){
 					wire.put(1.0f);
 					wire.put(1.0f);
 					wire.put(1.0f);
-				}
+				}*/
 				//Normal para fora, paraboloide externo
 				if(fatorNormal == 1){
 					//Primeiro triangulo (inferior)
+					vertices.put(a.x);
+					vertices.put(a.y);
+					vertices.put(a.z);
+					cores.put(1.0f);
+					cores.put(0.0f);
+					cores.put(0.0f);
+
+					wire.put(1.0f);
+					wire.put(1.0f);
+					wire.put(1.0f);
+
 					vertices.put(c.x);
 					vertices.put(c.y);
 					vertices.put(c.z);
@@ -114,17 +128,6 @@ public Elipsoide(int fatorNormal){
 					vertices.put(b.x);
 					vertices.put(b.y);
 					vertices.put(b.z);
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
-					
-					vertices.put(a.x);
-					vertices.put(a.y);
-					vertices.put(a.z);
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
@@ -138,7 +141,7 @@ public Elipsoide(int fatorNormal){
 	//			Log.e("vetorY", String.valueOf(ab.getY()));
 	//			Log.e("vetorZ", String.valueOf(ab.getZ()));
 				
-				//Normal para dentro, paraboloide interno
+				/*//Normal para dentro, paraboloide interno
 				if(fatorNormal == -1){
 					//Segundo triangulo (superior)
 					vertices.put(d.x);
@@ -176,10 +179,21 @@ public Elipsoide(int fatorNormal){
 					wire.put(1.0f);
 					wire.put(1.0f);
 					wire.put(1.0f);
-				}
+				}*/
 				//Normal para fora, paraboloide externo
 				if(fatorNormal == 1){
 					//Segundo triangulo (superior)
+					vertices.put(b.x);
+					vertices.put(b.y);
+					vertices.put(b.z);
+					cores.put(1.0f);
+					cores.put(0.0f);
+					cores.put(0.0f);
+
+					wire.put(1.0f);
+					wire.put(1.0f);
+					wire.put(1.0f);
+
 					vertices.put(c.x);
 					vertices.put(c.y);
 					vertices.put(c.z);
@@ -194,17 +208,6 @@ public Elipsoide(int fatorNormal){
 					vertices.put(d.x);
 					vertices.put(d.y);
 					vertices.put(d.z);
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
-										
-					vertices.put(b.x);
-					vertices.put(b.y);
-					vertices.put(b.z);
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
@@ -294,7 +297,9 @@ public Elipsoide(int fatorNormal){
 	}
 	
 	public FloatBuffer getCores() {
-		return cores;
+		if(wireframecolor == 0)
+			return cores;
+		return wire;
 	}
 	
 	public FloatBuffer getWire(){
@@ -307,23 +312,6 @@ public Elipsoide(int fatorNormal){
 	
 	public int getNumIndices(){
 		return numCoord/3;
-	}
-	
-	public final void draw(GL10 gl) {
-		gl.glNormalPointer(GL10.GL_FLOAT, 0, normais);
-	    gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertices);
-
-	    
-	    gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-	    gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-	    
-	    gl.glPointSize(5.0f);
-	    gl.glDrawArrays(GL10.GL_TRIANGLES, 0, numCoord/3);
-
-
-	    gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-	    gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
-
 	}
 
 }

@@ -33,7 +33,7 @@ public class ObjetoTeste extends ARObject {
     private int mNormalHandle;
 
     private Elipsoide elipsoide;
-    private ElipsoideWireframe elipWire;
+    private Elipsoide elipWire;
 
     public ObjetoTeste(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter);
@@ -44,8 +44,8 @@ public class ObjetoTeste extends ARObject {
         muMVMatrixHandle = 0;
         muPMatrixHandle = 0;
 
-        elipsoide = new Elipsoide(1);
-        elipWire = new ElipsoideWireframe(1);
+        elipsoide = new Elipsoide(1, 0);
+        elipWire = new Elipsoide(1, 1);
     }
 
     /**
@@ -210,7 +210,7 @@ public class ObjetoTeste extends ARObject {
         // Pass in the color information
         //aten??o para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
         GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false,
-                0, elipWire.getWire());
+                0, elipWire.getCores());
         GLES20.glEnableVertexAttribArray(mColorHandle);
 
         // Pass in the normal information
