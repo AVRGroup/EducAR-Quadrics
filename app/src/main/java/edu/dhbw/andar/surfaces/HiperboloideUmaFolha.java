@@ -23,14 +23,17 @@ public class HiperboloideUmaFolha {
 	public float v = 0.0f;
 		
 	public final int numCoord = slices*(stacks+1)*3*6;
+
+	public final int wireframecolor;
 	
 
-	public HiperboloideUmaFolha(int fatorNormal) {
+	public HiperboloideUmaFolha(int fatorNormal, int wireframe) {
 		
 		vertices=allocateFloatBuffer(numCoord*4);
 		normais=allocateFloatBuffer(numCoord*4);
 		cores=allocateFloatBuffer(numCoord*4);
 		wire=allocateFloatBuffer(numCoord*4);
+		wireframecolor = wireframe;
 		
 		constroiHiperboloide(fatorNormal);		
 		
@@ -326,7 +329,9 @@ public class HiperboloideUmaFolha {
 	}
 	
 	public FloatBuffer getCores() {
-		return cores;
+		if(wireframecolor == 0)
+			return cores;
+		return wire;
 	}
 	
 	public int getNumIndices(){

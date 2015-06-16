@@ -31,7 +31,7 @@ import getcomp.educar.quadrics.R;
  */
 public class CustomActivity extends AndARActivity {
 		
-	private static int superficie = 5;
+	private static int superficie = 4;
 	
 	//ARGLES20Object rendedObj = null;
 	ARObject rendedObj = null;

@@ -24,14 +24,17 @@ public class ParaboloideHiperbolico {
 	
 	public float u = -1.0f;
 	public float v = -1.0f;
+
+	public final int wireframecolor;
 	
 
-	public ParaboloideHiperbolico(int fatorNormal) {
+	public ParaboloideHiperbolico(int fatorNormal, int wireframe) {
 		
 		vertices=allocateFloatBuffer(numCoord*4);
 		normais=allocateFloatBuffer(numCoord*4);
 		cores=allocateFloatBuffer(numCoord*4);
 		wire=allocateFloatBuffer(numCoord*4);
+		wireframecolor = wireframe;
 		
 		constroiParaboloideHiperbolico(fatorNormal);		
 		
@@ -327,7 +330,9 @@ public class ParaboloideHiperbolico {
 	}
 	
 	public FloatBuffer getCores() {
-		return cores;
+		if(wireframecolor == 0)
+			return cores;
+		return wire;
 	}
 	
 	public int getNumIndices(){
