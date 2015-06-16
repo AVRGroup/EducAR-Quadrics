@@ -23,13 +23,16 @@ public class Cilindro {
 	public float v = 0.0f;
 		
 	public final int numCoord = (slices+1)*(stacks+1)*3*6;
+
+	public final int wireframecolor;
 	
-	public Cilindro(int fatorNormal) {
+	public Cilindro(int fatorNormal, int wireframe) {
 			
 		vertices=allocateFloatBuffer(numCoord*4);
 		normais=allocateFloatBuffer(numCoord*4);
 		cores=allocateFloatBuffer(numCoord*4);
 		wire=allocateFloatBuffer(numCoord*4);
+		wireframecolor = wireframe;
 		
 		constroiCilindro(fatorNormal);
 	}
@@ -304,7 +307,9 @@ public class Cilindro {
 	}
 	
 	public FloatBuffer getCores() {
-		return cores;
+		if(wireframecolor == 0)
+			return cores;
+		return wire;
 	}
 	
 	public FloatBuffer getWire(){

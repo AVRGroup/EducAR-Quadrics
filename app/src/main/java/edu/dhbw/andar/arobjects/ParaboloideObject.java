@@ -242,6 +242,8 @@ public class ParaboloideObject extends ARObject {
 
 		GLES20.glEnableVertexAttribArray(mNormalHandle);
 
+		GLES20.glLineWidth(2.0f);
+
 		// Desenha elipsoide
 		GLES20.glDrawArrays(GLES20.GL_LINES, 0, paraboloideWire.getNumIndices());
 	}
