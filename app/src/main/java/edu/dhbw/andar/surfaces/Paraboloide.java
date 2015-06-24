@@ -16,6 +16,7 @@ public class Paraboloide {
 	public final int slices = 32;
 	public final int stacks = 32;
 	public final int numCoord = slices*stacks*18;
+	public final int numCoordWire = slices*stacks*3*8;
 	public final float A = 3.0f, B = 3.0f, C = 0.1f;
 	public float theta = 0.0f;
 	public float alpha = 0.0f;
@@ -31,7 +32,7 @@ public class Paraboloide {
 		vertices=allocateFloatBuffer(numCoord*4);
 		normais=allocateFloatBuffer(numCoord*4);
 		cores=allocateFloatBuffer(numCoord*4);
-		wire=allocateFloatBuffer(numCoord * 4);
+		wire=allocateFloatBuffer(numCoordWire * 4);
 		wireframecolor = wireframe;
 
 		constroiParaboloide(fatorNormal);		
@@ -60,6 +61,38 @@ public class Paraboloide {
 				y = coordY(alpha+passoA, theta+passoT);
 				z = (x*x+y*y)*C;
 				Vetor d = new Vetor(x, y, z);
+
+				wire.put(a.x);
+				wire.put(a.y);
+				wire.put(a.z);
+
+				wire.put(b.x);
+				wire.put(b.y);
+				wire.put(b.z);
+
+				wire.put(b.x);
+				wire.put(b.y);
+				wire.put(b.z);
+
+				wire.put(d.x);
+				wire.put(d.y);
+				wire.put(d.z);
+
+				wire.put(d.x);
+				wire.put(d.y);
+				wire.put(d.z);
+
+				wire.put(c.x);
+				wire.put(c.y);
+				wire.put(c.z);
+
+				wire.put(c.x);
+				wire.put(c.y);
+				wire.put(c.z);
+
+				wire.put(a.x);
+				wire.put(a.y);
+				wire.put(a.z);
 				
 				//Normal para dentro, paraboloide interno
 				if(fatorNormal == -1){
@@ -67,38 +100,26 @@ public class Paraboloide {
 					vertices.put(a.x);
 					vertices.put(a.y);
 					vertices.put(a.z);
-					
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
-					
+
 					vertices.put(c.x);
 					vertices.put(c.y);
 					vertices.put(c.z);
-					
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
-					
+
 					vertices.put(b.x);
 					vertices.put(b.y);
 					vertices.put(b.z);
-					
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 				}
 				//Normal para fora, paraboloide externo
 				if(fatorNormal == 1){
@@ -106,38 +127,26 @@ public class Paraboloide {
 					vertices.put(a.x);
 					vertices.put(a.y);
 					vertices.put(a.z);
-					
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
-					
+
 					vertices.put(b.x);
 					vertices.put(b.y);
 					vertices.put(b.z);
-					
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 					
 					vertices.put(c.x);
 					vertices.put(c.y);
 					vertices.put(c.z);
-					
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 				}
 				
 //				Log.e("vetorX", String.valueOf(ab.getX()));
@@ -150,14 +159,10 @@ public class Paraboloide {
 					vertices.put(d.x);
 					vertices.put(d.y);
 					vertices.put(d.z);
-					
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 					
 					vertices.put(b.x);
 					vertices.put(b.y);
@@ -167,10 +172,6 @@ public class Paraboloide {
 					cores.put(0.0f);
 					cores.put(0.0f);
 					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
-					
 					vertices.put(c.x);
 					vertices.put(c.y);
 					vertices.put(c.z);
@@ -178,10 +179,6 @@ public class Paraboloide {
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 				}
 				//Normal para fora, paraboloide externo
 				if(fatorNormal == 1){
@@ -194,10 +191,6 @@ public class Paraboloide {
 					cores.put(0.0f);
 					cores.put(0.0f);
 					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
-					
 					vertices.put(b.x);
 					vertices.put(b.y);
 					vertices.put(b.z);
@@ -206,10 +199,6 @@ public class Paraboloide {
 					cores.put(0.0f);
 					cores.put(0.0f);
 					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
-					
 					vertices.put(d.x);
 					vertices.put(d.y);
 					vertices.put(d.z);
@@ -217,10 +206,6 @@ public class Paraboloide {
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 				}
 
 				//Normal do primeiro triangulo
@@ -305,7 +290,7 @@ public class Paraboloide {
 	public FloatBuffer getCores() {
 		if(wireframecolor == 0)
 			return cores;
-		return wire;
+		return cores;
 	}
 	
 	public FloatBuffer getWire() {
@@ -313,7 +298,9 @@ public class Paraboloide {
 	}
 	
 	public int getNumIndices(){
-		return numCoord/3;
+		if(wireframecolor == 0)
+			return numCoord/3;
+		return numCoordWire/3;
 	}
 
 }

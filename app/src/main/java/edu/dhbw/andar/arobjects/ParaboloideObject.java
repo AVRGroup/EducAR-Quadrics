@@ -226,23 +226,9 @@ public class ParaboloideObject extends ARObject {
 		/** PARABOLOIDE WIREFRAME**/
 		// Pass in the position information
 		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
-				false, 0, paraboloideWire.getVertices()); // 3 = Size of the position data in elements.
+				false, 0, paraboloideWire.getWire()); // 3 = Size of the position data in elements.
 
 		GLES20.glEnableVertexAttribArray(mPositionHandle);
-
-		// Pass in the color information
-		//aten??o para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
-		GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false,
-				0, paraboloideWire.getCores());
-		GLES20.glEnableVertexAttribArray(mColorHandle);
-
-		// Pass in the normal information
-		GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, true,
-				0, paraboloideWire.getNormals());
-
-		GLES20.glEnableVertexAttribArray(mNormalHandle);
-
-		GLES20.glLineWidth(2.0f);
 
 		// Desenha elipsoide
 		GLES20.glDrawArrays(GLES20.GL_LINES, 0, paraboloideWire.getNumIndices());
