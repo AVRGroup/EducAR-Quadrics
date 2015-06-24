@@ -23,6 +23,7 @@ public class HiperboloideDuasFolhas {
 	public float t = -3.0f;
 		
 	public final int numCoord = (slices+1)*(stacks+1)*3*6;
+	public final int numCoordWire = (slices+1)*(stacks+1)*3*8;
 	
 	public final float A = 5.0f, B = 5.0f, C = 5.0f;
 
@@ -34,7 +35,7 @@ public class HiperboloideDuasFolhas {
 		vertices=allocateFloatBuffer(numCoord*4);
 		normais=allocateFloatBuffer(numCoord*4);
 		cores=allocateFloatBuffer(numCoord*4);
-		wire=allocateFloatBuffer(numCoord*4);
+		wire=allocateFloatBuffer(numCoordWire*4);
 		wireframecolor = wireframe;
 		
 		constroiHiperboloide(fatorNormal);		
@@ -63,6 +64,38 @@ public class HiperboloideDuasFolhas {
 				y = coordY(t+passoT, u+passoU);
 				z = coordZ(t+passoT, u+passoU);
 				Vetor d = new Vetor(x, y, z);
+
+				wire.put(a.x);
+				wire.put(a.y);
+				wire.put(a.z);
+
+				wire.put(b.x);
+				wire.put(b.y);
+				wire.put(b.z);
+
+				wire.put(b.x);
+				wire.put(b.y);
+				wire.put(b.z);
+
+				wire.put(d.x);
+				wire.put(d.y);
+				wire.put(d.z);
+
+				wire.put(d.x);
+				wire.put(d.y);
+				wire.put(d.z);
+
+				wire.put(c.x);
+				wire.put(c.y);
+				wire.put(c.z);
+
+				wire.put(c.x);
+				wire.put(c.y);
+				wire.put(c.z);
+
+				wire.put(a.x);
+				wire.put(a.y);
+				wire.put(a.z);
 				
 				//Normal para dentro, paraboloide interno
 				if(fatorNormal == -1){
@@ -70,38 +103,26 @@ public class HiperboloideDuasFolhas {
 					vertices.put(a.x);
 					vertices.put(a.y);
 					vertices.put(a.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					//cores.put(1.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
-					
+
 					vertices.put(c.x);
 					vertices.put(c.y);
 					vertices.put(c.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					//cores.put(1.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
-					
+
 					vertices.put(b.x);
 					vertices.put(b.y);
 					vertices.put(b.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					//cores.put(1.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 				}
 				//Normal para fora, paraboloide externo
 				if(fatorNormal == 1){
@@ -109,35 +130,26 @@ public class HiperboloideDuasFolhas {
 					vertices.put(a.x);
 					vertices.put(a.y);
 					vertices.put(a.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 					
 					vertices.put(b.x);
 					vertices.put(b.y);
 					vertices.put(b.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 					
 					vertices.put(c.x);
 					vertices.put(c.y);
 					vertices.put(c.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 				}
 				
 //				Log.e("vetorX", String.valueOf(ab.getX()));
@@ -150,38 +162,26 @@ public class HiperboloideDuasFolhas {
 					vertices.put(b.x);
 					vertices.put(b.y);
 					vertices.put(b.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					//cores.put(1.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 					
 					vertices.put(c.x);
 					vertices.put(c.y);
 					vertices.put(c.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					//cores.put(1.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 					
 					vertices.put(d.x);
 					vertices.put(d.y);
 					vertices.put(d.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					//cores.put(1.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 				}
 				//Normal para fora, paraboloide externo
 				if(fatorNormal == 1){
@@ -189,35 +189,26 @@ public class HiperboloideDuasFolhas {
 					vertices.put(c.x);
 					vertices.put(c.y);
 					vertices.put(c.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 					
 					vertices.put(b.x);
 					vertices.put(b.y);
 					vertices.put(b.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
-					
+
 					vertices.put(d.x);
 					vertices.put(d.y);
 					vertices.put(d.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 				}
 
 				//Normal do primeiro triangulo
@@ -295,21 +286,7 @@ public class HiperboloideDuasFolhas {
         vbb.order(ByteOrder.nativeOrder());
         return vbb.asFloatBuffer();
 	}
-	
-	public final void draw(GL10 gl) {
-		gl.glNormalPointer(GL10.GL_FLOAT, 0, normais);
-	    gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertices);
-	    
-	    gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-	    gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-	    
-	    gl.glPointSize(2.0f);
-	    gl.glDrawArrays(GL10.GL_LINE_LOOP, 0, numCoord/3);
 
-	    gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-	    gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
-
-	}
 	
 	public FloatBuffer getVertices() {
 		return vertices;
@@ -320,9 +297,7 @@ public class HiperboloideDuasFolhas {
 	}
 	
 	public FloatBuffer getCores() {
-		if(wireframecolor == 0)
 			return cores;
-		return wire;
 	}
 	
 	public FloatBuffer getWire() {
@@ -330,6 +305,8 @@ public class HiperboloideDuasFolhas {
 	}
 	
 	public int getNumIndices(){
-		return numCoord/3;
+		if(wireframecolor == 0)
+			return numCoord/3;
+		return numCoordWire/3;
 	}
 }
