@@ -31,7 +31,7 @@ import getcomp.educar.quadrics.R;
  */
 public class CustomActivity extends AndARActivity {
 		
-	private static int superficie = 6;
+	private static int superficie = 1;
 	
 	//ARGLES20Object rendedObj = null;
 	ARObject rendedObj = null;
@@ -52,8 +52,7 @@ public class CustomActivity extends AndARActivity {
 			if( super.isGLES20() ) {
 				switch(superficie) {
 				case 1:
-					//rendedObj = new ElipsoideObject("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
-					rendedObj = new ObjetoTeste("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+					rendedObj = new ElipsoideObject("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 2:
 					rendedObj = new ConeCilindricoObject("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());

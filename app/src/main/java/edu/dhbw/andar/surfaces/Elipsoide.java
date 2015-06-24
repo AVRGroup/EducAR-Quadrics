@@ -23,6 +23,7 @@ public class Elipsoide {
 	public float v = 0.0f;
 		
 	public final int numCoord = (slices+1)*(stacks+1)*3*6;
+	public final int numCoordWire = (slices+1)*(stacks+1)*3*8;
 
 	public final int wireframecolor;
 	
@@ -31,7 +32,7 @@ public Elipsoide(int fatorNormal, int wireframe){
 		vertices=allocateFloatBuffer(numCoord*4);
 		normais=allocateFloatBuffer(numCoord*4);
 		cores=allocateFloatBuffer(numCoord*4);
-		wire=allocateFloatBuffer(numCoord*4);
+		wire=allocateFloatBuffer(numCoordWire*4);
 		wireframecolor = wireframe;
 		
 		constroiElipsoide(fatorNormal);
@@ -60,6 +61,38 @@ public Elipsoide(int fatorNormal, int wireframe){
 				y = coordY(v+passoV, u+passoU);
 				z = coordZ(v+passoV, u+passoU);
 				Vetor d = new Vetor(x, y, z);
+
+				wire.put(a.x);
+				wire.put(a.y);
+				wire.put(a.z);
+
+				wire.put(b.x);
+				wire.put(b.y);
+				wire.put(b.z);
+
+				wire.put(b.x);
+				wire.put(b.y);
+				wire.put(b.z);
+
+				wire.put(d.x);
+				wire.put(d.y);
+				wire.put(d.z);
+
+				wire.put(d.x);
+				wire.put(d.y);
+				wire.put(d.z);
+
+				wire.put(c.x);
+				wire.put(c.y);
+				wire.put(c.z);
+
+				wire.put(c.x);
+				wire.put(c.y);
+				wire.put(c.z);
+
+				wire.put(a.x);
+				wire.put(a.y);
+				wire.put(a.z);
 				
 				/*//Normal para dentro, paraboloide interno
 				if(fatorNormal == -1){
@@ -106,35 +139,26 @@ public Elipsoide(int fatorNormal, int wireframe){
 					vertices.put(a.x);
 					vertices.put(a.y);
 					vertices.put(a.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 
 					vertices.put(c.x);
 					vertices.put(c.y);
 					vertices.put(c.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 					
 					vertices.put(b.x);
 					vertices.put(b.y);
 					vertices.put(b.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 				}
 				
 	//			Log.e("vetorX", String.valueOf(ab.getX()));
@@ -186,35 +210,26 @@ public Elipsoide(int fatorNormal, int wireframe){
 					vertices.put(b.x);
 					vertices.put(b.y);
 					vertices.put(b.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 
 					vertices.put(c.x);
 					vertices.put(c.y);
 					vertices.put(c.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 					
 					vertices.put(d.x);
 					vertices.put(d.y);
 					vertices.put(d.z);
+
 					cores.put(1.0f);
 					cores.put(0.0f);
 					cores.put(0.0f);
-					
-					wire.put(1.0f);
-					wire.put(1.0f);
-					wire.put(1.0f);
 				}
 				
 				//Normal do primeiro triangulo
@@ -297,9 +312,7 @@ public Elipsoide(int fatorNormal, int wireframe){
 	}
 	
 	public FloatBuffer getCores() {
-		if(wireframecolor == 0)
 			return cores;
-		return wire;
 	}
 	
 	public FloatBuffer getWire(){
@@ -311,7 +324,9 @@ public Elipsoide(int fatorNormal, int wireframe){
 	}
 	
 	public int getNumIndices(){
-		return numCoord/3;
+		if(wireframecolor == 0)
+			return numCoord/3;
+		return numCoordWire/3;
 	}
 
 }
