@@ -7,7 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 import edu.dhbw.andar.ARGLES20Object;
 import edu.dhbw.andar.ARObject;
 import edu.dhbw.andar.AndARGLES20Renderer;
-import edu.dhbw.andar.surfaces.Cilindro;
+import edu.dhbw.andar.surfaces.Cone;
 import edu.dhbw.andar.surfaces.CilindroWireframe;
 import edu.dhbw.andar.surfaces.Paraboloide;
 import edu.dhbw.andar.util.GraphicsUtil;
@@ -31,9 +31,9 @@ public class ConeCilindricoObject extends ARObject {
 	/** This will be used to pass in model normal information. */
 	private int mNormalHandle;
 
-	private Cilindro coneExt;
-	private Cilindro coneInt;
-	private Cilindro coneWire;
+	private Cone coneExt;
+	private Cone coneInt;
+	private Cone coneWire;
 
 	public ConeCilindricoObject(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
 		super(name, patternName, markerWidth, markerCenter);
@@ -44,9 +44,9 @@ public class ConeCilindricoObject extends ARObject {
 		muMVMatrixHandle = 0;
 		muPMatrixHandle = 0;
 
-		coneExt = new Cilindro(1, 0);
-		coneInt = new Cilindro(-1, 0);
-		coneWire = new Cilindro(1, 1);
+		coneExt = new Cone(1, 0);
+		coneInt = new Cone(-1, 0);
+		coneWire = new Cone(1, 1);
 	}
 
 	/**
@@ -226,21 +226,9 @@ public class ConeCilindricoObject extends ARObject {
 		/** CONE WIREFRAME**/
 		// Pass in the position information
 		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
-				false, 0, coneWire.getVertices()); // 3 = Size of the position data in elements.
+				false, 0, coneWire.getWire()); // 3 = Size of the position data in elements.
 
 		GLES20.glEnableVertexAttribArray(mPositionHandle);
-
-		// Pass in the color information
-		//aten??o para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
-		GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false,
-				0, coneWire.getCores());
-		GLES20.glEnableVertexAttribArray(mColorHandle);
-
-		// Pass in the normal information
-		GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, true,
-				0, coneWire.getNormals());
-
-		GLES20.glEnableVertexAttribArray(mNormalHandle);
 
 		GLES20.glLineWidth(2.0f);
 
