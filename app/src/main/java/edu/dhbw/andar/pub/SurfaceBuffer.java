@@ -26,6 +26,33 @@ public class SurfaceBuffer {
         vbb.order(ByteOrder.nativeOrder());
         return vbb.asFloatBuffer();
     }
+    public void preencheVertices(Vetor v){
+        preencheBuffer(this.vertices, v);
+    }
+
+    public void preencheCores(Vetor v){
+        preencheBuffer(this.cores, v);
+    }
+
+    public void preencheNormais(Vetor v){
+        preencheBuffer(this.normais, v);
+    }
+
+    public void preencheWireframe(Vetor v){
+        preencheBuffer(this.wireframe, v);
+    }
+
+    public void preencheBuffer(FloatBuffer fb, Vetor v){
+        fb.put(v.x);
+        fb.put(v.y);
+        fb.put(v.z);
+    }
+
+    public void preencheBuffer(FloatBuffer fb, Vetor v, int multiplicador){
+        fb.put((v.x*multiplicador));
+        fb.put((v.y*multiplicador));
+        fb.put((v.z*multiplicador));
+    }
 
     public FloatBuffer getVertices() {
         return vertices;

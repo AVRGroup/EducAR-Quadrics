@@ -31,6 +31,7 @@ public class ElipsoideObject extends ARObject {
 	/** This will be used to pass in model normal information. */
 	private int mNormalHandle;
 
+	//Aqui está o erro!!!
 	private Elipsoide elipsoide;
 	private Elipsoide elipWire;
 
@@ -169,19 +170,19 @@ public class ElipsoideObject extends ARObject {
 		/** ELIPSOIDE **/
 		// Pass in the position information
 		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
-				false, 0, elipsoide.elipsoideBuffer.getVertices()); // 3 = Size of the position data in elements.
+				false, 0, elipsoide.elipsoideBuffer.vertices); // 3 = Size of the position data in elements.
 
 		GLES20.glEnableVertexAttribArray(mPositionHandle);
 
 		// Pass in the color information
 		//aten??o para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
 		GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false,
-				0, elipsoide.elipsoideBuffer.getCores());
+				0, elipsoide.elipsoideBuffer.cores);
 		GLES20.glEnableVertexAttribArray(mColorHandle);
 
 		// Pass in the normal information
 		GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, true,
-				0, elipsoide.elipsoideBuffer.getNormals());
+				0, elipsoide.elipsoideBuffer.normais);
 
 		GLES20.glEnableVertexAttribArray(mNormalHandle);
 
@@ -202,7 +203,7 @@ public class ElipsoideObject extends ARObject {
 		/** ELIPSOIDE WIREFRAME**/
 		// Pass in the position information
 		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
-				false, 0, elipWire.elipsoideBuffer.getWire()); // 3 = Size of the position data in elements.
+				false, 0, elipWire.elipsoideBuffer.wireframe); // 3 = Size of the position data in elements.
 
 		GLES20.glEnableVertexAttribArray(mPositionHandle);
 
