@@ -1,4 +1,4 @@
-package edu.dhbw.andar.surfaces;
+package edu.dhbw.andar.pub;
 
 public class Vetor {
 	
@@ -70,7 +70,7 @@ public class Vetor {
 	    return ret;	
 	}
 	
-	void normaliza(){
+	public void normaliza(){
 
 	    double norma = Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2));
 	    this.x = (float) (x/norma);
