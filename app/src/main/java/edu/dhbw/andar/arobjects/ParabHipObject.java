@@ -4,11 +4,8 @@ import android.opengl.GLES20;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import edu.dhbw.andar.ARGLES20Object;
 import edu.dhbw.andar.ARObject;
 import edu.dhbw.andar.AndARGLES20Renderer;
-import edu.dhbw.andar.surfaces.HiperboloideUmaFolha;
-import edu.dhbw.andar.surfaces.ParabHiperbolicoWire;
 import edu.dhbw.andar.surfaces.ParaboloideHiperbolico;
 import edu.dhbw.andar.util.GraphicsUtil;
 

@@ -1,17 +1,12 @@
 package edu.dhbw.andar.pub;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.content.SharedPreferences;
-import android.content.Context;
 
 import edu.dhbw.andar.ARObject;
-import edu.dhbw.andar.ARGLES20Object;
 import edu.dhbw.andar.AndARActivity;
 import edu.dhbw.andar.AndARGLES20Renderer;
 import edu.dhbw.andar.arobjects.ConeCilindricoObject;
@@ -20,7 +15,6 @@ import edu.dhbw.andar.arobjects.HiperDuasObject;
 import edu.dhbw.andar.arobjects.HiperbUmaObject;
 import edu.dhbw.andar.arobjects.ParabHipObject;
 import edu.dhbw.andar.arobjects.ParaboloideObject;
-import edu.dhbw.andar.arobjects.ReflectiveObject;
 import edu.dhbw.andar.exceptions.AndARException;
 import getcomp.educar.quadrics.R;
 
@@ -70,19 +64,10 @@ public class CustomActivity extends AndARActivity {
 					rendedObj =  new ParabHipObject("parabhip", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				default:
-					rendedObj =  new ReflectiveObject("test", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+					rendedObj =  new ElipsoideObject("test", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 				}
 				
 				super.getArtoolkit().registerARObject(rendedObj);
-			}
-			else
-			{
-				CustomObject someObject = new CustomObject
-				("test", "patt.hiro", 80.0, new double[]{0,0});
-				super.getArtoolkit().registerARObject(someObject);
-				someObject = new CustomObject
-				("test", "android.patt", 80.0, new double[]{0,0});
-				super.getArtoolkit().registerARObject(someObject);
 			}
 		} catch (AndARException ex){
 			//handle the exception, that means: show the user what happened
