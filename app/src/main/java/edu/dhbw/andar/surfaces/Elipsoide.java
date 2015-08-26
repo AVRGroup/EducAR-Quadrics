@@ -1,14 +1,21 @@
 package edu.dhbw.andar.surfaces;
 
-import android.util.Log;
+import android.opengl.GLES20;
 
+import javax.microedition.khronos.opengles.GL10;
+
+import edu.dhbw.andar.AndARGLES20Renderer;
 import edu.dhbw.andar.pub.SurfaceBuffer;
+import edu.dhbw.andar.pub.SurfaceObject;
 import edu.dhbw.andar.pub.Vetor;
+import edu.dhbw.andar.util.GraphicsUtil;
 
 
-public class Elipsoide {
+public class Elipsoide extends SurfaceObject{
 	
-	public SurfaceBuffer elipsoideBuffer;
+	public SurfaceBuffer elipsoide;
+    public SurfaceBuffer elipsoideWireframe;
+
 	public final int slices = 40;
 	public final int stacks = 40;
 
@@ -21,18 +28,14 @@ public class Elipsoide {
 	public final int numCoord = (slices+1)*(stacks+1)*3*6;
 	public final int numCoordWire = (slices+1)*(stacks+1)*3*8;
 
-	public final int wireframecolor;
+    public Elipsoide(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
+        super(name, patternName, markerWidth, markerCenter, renderer);
 
-    public Vetor cor;
-	
-public Elipsoide(int fatorNormal, int wireframe){
-		
-		elipsoideBuffer = new SurfaceBuffer(numCoord, 0);
-		cor = new Vetor(1.0f, 0.0f, 0.0f);
+		elipsoide = new SurfaceBuffer(numCoord, 0, 1);
+        elipsoideWireframe = new SurfaceBuffer(numCoordWire, 1, 1);
 
-		wireframecolor = wireframe;
-		constroiElipsoide(fatorNormal);
-		
+        //Passa o fator normal do elipsoide, porque o wireframe nao tem normal
+        constroiElipsoide(elipsoide.fatorNormal);
 	}
 	
 	public void constroiElipsoide(int fatorNormal){
@@ -58,34 +61,33 @@ public Elipsoide(int fatorNormal, int wireframe){
 				z = coordZ(v+passoV, u+passoU);
 				Vetor d = new Vetor(x, y, z);
 
-                /*elipsoideBuffer.preencheWireframe(a);
-                elipsoideBuffer.preencheWireframe(b);
+                elipsoideWireframe.preencheVertices(a);
+                elipsoideWireframe.preencheVertices(b);
 
-                elipsoideBuffer.preencheWireframe(b);
-                elipsoideBuffer.preencheWireframe(d);
+                elipsoideWireframe.preencheVertices(b);
+                elipsoideWireframe.preencheVertices(d);
 
-                elipsoideBuffer.preencheWireframe(d);
-                elipsoideBuffer.preencheWireframe(c);
+                elipsoideWireframe.preencheVertices(d);
+                elipsoideWireframe.preencheVertices(c);
 
-                elipsoideBuffer.preencheWireframe(c);
-                elipsoideBuffer.preencheWireframe(a);*/
+                elipsoideWireframe.preencheVertices(c);
+                elipsoideWireframe.preencheVertices(a);
 
 				//Normal para fora, paraboloide externo
 				if(fatorNormal == 1){
 					//Primeiro triangulo (inferior)
-					elipsoideBuffer.preencheVertices(a);
-                    elipsoideBuffer.preencheVertices(c);
-                    elipsoideBuffer.preencheVertices(b);
+					elipsoide.preencheVertices(a);
+                    elipsoide.preencheVertices(c);
+                    elipsoide.preencheVertices(b);
 
 					//Segundo triangulo (superior)
-                    elipsoideBuffer.preencheVertices(b);
-                    elipsoideBuffer.preencheVertices(c);
-                    elipsoideBuffer.preencheVertices(d);
+                    elipsoide.preencheVertices(b);
+                    elipsoide.preencheVertices(c);
+                    elipsoide.preencheVertices(d);
 
                     for (int i = 0; i < 6; i++){
-                        elipsoideBuffer.preencheCores(cor);
+                        elipsoide.preencheCores(cor);
                     }
-
 				}
 				
 				//Normal do primeiro triangulo
@@ -100,7 +102,7 @@ public Elipsoide(int fatorNormal, int wireframe){
 				normalT1.normaliza();
 
                 for(int j = 0; j < 3; j++) {
-                    elipsoideBuffer.preencheNormais(normalT1, fatorNormal);
+                    elipsoide.preencheNormais(normalT1, fatorNormal);
                 }
 
 				//Normal do segundo triangulo
@@ -115,35 +117,92 @@ public Elipsoide(int fatorNormal, int wireframe){
 				normalT2.normaliza();
 
                 for(int j = 0; j < 3; j++){
-					elipsoideBuffer.preencheNormais(normalT2, fatorNormal);
+					elipsoide.preencheNormais(normalT2, fatorNormal);
                 }
-
             }
 		}
 
-        elipsoideBuffer.vertices.position(0);
-		elipsoideBuffer.normais.position(0);
-		elipsoideBuffer.cores.position(0);
-		/*elipsoideBuffer.wireframe.position(0);*/
+        elipsoide.vertices.position(0);
+		elipsoide.normais.position(0);
+		elipsoide.cores.position(0);
+		elipsoideWireframe.vertices.position(0);
 	}
 
 	public float coordX(float v, float u){
 		return (float) (30*Math.cos(u));
-				
-	}
+    }
 	
 	public float coordY(float v, float u){
 		return (float) (20*Math.sin(u)*Math.cos(v));
-				
-	}
+    }
 	
 	public float coordZ(float v, float u){
 		return (float) (20.0f+(20*Math.sin(u)*Math.sin(v)));				
 	}
 
-    public int getNumIndices(){
-/*        if(wireframecolor == 0)*/
-            return numCoord/3;
-/*        return numCoordWire/3;*/
+    @Override
+    public void draw( GL10 glUnused ){
+        if(!initialized) {
+            init(glUnused);
+            initialized = true;
+        }
+
+        // Ensure we're using the program we need
+        GLES20.glUseProgram(myProgram);
+
+        if( glCameraMatrixBuffer != null) {
+            // Transform to where the marker is
+            GLES20.glUniformMatrix4fv(muMVMatrixHandle, 1, false, glMatrix, 0);
+            GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
+            GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
+            GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
+        }
+
+        // Let the object draw
+
+        /** ELIPSOIDE **/
+        // Pass in the position information
+        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
+                false, 0, elipsoide.getVertices()); // 3 = Size of the position data in elements.
+
+        GLES20.glEnableVertexAttribArray(mPositionHandle);
+
+        // Pass in the color information
+        //aten??o para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
+        GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false,
+                0, elipsoide.getCores());
+        GLES20.glEnableVertexAttribArray(mColorHandle);
+
+        // Pass in the normal information
+        GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, true,
+                0, elipsoide.getNormals());
+
+        GLES20.glEnableVertexAttribArray(mNormalHandle);
+
+        // Desenha elipsoide
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, elipsoide.getNumIndices());
+
+		// Ensure we're using the program we need
+		GLES20.glUseProgram(myProgram2);
+
+		if( glCameraMatrixBuffer != null) {
+			// Transform to where the marker is
+			GLES20.glUniformMatrix4fv(muMVMatrixHandle, 1, false, glMatrix, 0);
+			GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
+			GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
+			GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
+		}
+
+		/** ELIPSOIDE WIREFRAME**/
+		// Pass in the position information
+		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
+				false, 0, elipsoideWireframe.getVertices()); // 3 = Size of the position data in elements.
+
+		GLES20.glEnableVertexAttribArray(mPositionHandle);
+
+        GLES20.glLineWidth(2.0f);
+
+		// Desenha elipsoide
+		GLES20.glDrawArrays(GLES20.GL_LINES, 0, elipsoideWireframe.getNumIndices());
     }
 }

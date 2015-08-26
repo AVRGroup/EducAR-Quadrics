@@ -22,13 +22,15 @@ public abstract class SurfaceObject extends ARObject{
     protected float[] mPMatrix = new float[16]; // Projection Matrix
 
     /** This will be used to pass in model position information. */
-    private int mPositionHandle;
+    protected int mPositionHandle;
 
     /** This will be used to pass in model color information. */
-    private int mColorHandle;
+    protected int mColorHandle;
 
     /** This will be used to pass in model normal information. */
-    private int mNormalHandle;
+    protected int mNormalHandle;
+
+    protected Vetor cor;
 
     public SurfaceObject(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter);
@@ -38,6 +40,8 @@ public abstract class SurfaceObject extends ARObject{
         simpleProgram = 0;
         muMVMatrixHandle = 0;
         muPMatrixHandle = 0;
+
+        cor = new Vetor(1.0f, 0.0f, 0.0f);
     }
 
     /**
@@ -114,9 +118,6 @@ public abstract class SurfaceObject extends ARObject{
 
         mNormalHandle = GLES20.glGetAttribLocation(myProgram, "a_Normal");
     }
-
-    @Override
-    public void predraw( GL10 glUnused ) {}
 
     /**
      * Allow the program to draw without dealing with transformations

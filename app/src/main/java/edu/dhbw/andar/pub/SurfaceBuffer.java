@@ -13,10 +13,12 @@ public class SurfaceBuffer {
     public FloatBuffer normais;
     public FloatBuffer cores;
     public int numCoord;
+    public int fatorNormal;
 
-    public SurfaceBuffer(int numCoord, int modeloWireframe){
+    public SurfaceBuffer(int numCoord, int modeloWireframe, int fatorNormal){
         //Necessario ter uma variavel na classe para o metodo getNumIndices()
         this.numCoord = numCoord;
+        this.fatorNormal = fatorNormal;
 
         //Verifica se esta sendo construido um modelo solido ou wireframe
         if(modeloWireframe == 0){
