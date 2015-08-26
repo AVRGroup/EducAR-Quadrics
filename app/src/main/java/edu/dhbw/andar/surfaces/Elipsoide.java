@@ -102,7 +102,7 @@ public class Elipsoide extends SurfaceObject{
 				normalT1.normaliza();
 
                 for(int j = 0; j < 3; j++) {
-                    elipsoide.preencheNormais(normalT1, fatorNormal);
+                    elipsoide.preencheNormais(normalT1);
                 }
 
 				//Normal do segundo triangulo
@@ -117,7 +117,7 @@ public class Elipsoide extends SurfaceObject{
 				normalT2.normaliza();
 
                 for(int j = 0; j < 3; j++){
-					elipsoide.preencheNormais(normalT2, fatorNormal);
+					elipsoide.preencheNormais(normalT2);
                 }
             }
 		}
@@ -141,7 +141,7 @@ public class Elipsoide extends SurfaceObject{
 	}
 
     @Override
-    public void draw( GL10 glUnused ){
+    public synchronized void draw( GL10 glUnused ){
         if(!initialized) {
             init(glUnused);
             initialized = true;

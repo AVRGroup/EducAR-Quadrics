@@ -1,18 +1,21 @@
 package edu.dhbw.andar.surfaces;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
+import android.opengl.GLES20;
 
+import javax.microedition.khronos.opengles.GL10;
+
+import edu.dhbw.andar.AndARGLES20Renderer;
+import edu.dhbw.andar.pub.SurfaceBuffer;
+import edu.dhbw.andar.pub.SurfaceObject;
 import edu.dhbw.andar.pub.Vetor;
+import edu.dhbw.andar.util.GraphicsUtil;
 
+public class Cone extends SurfaceObject {
 
-public class Cone {
+    public SurfaceBuffer coneInt;
+    public SurfaceBuffer coneExt;
+    public SurfaceBuffer coneWire;
 
-    public FloatBuffer vertices;
-    public FloatBuffer normais;
-    public  FloatBuffer cores;
-    public FloatBuffer wire;
     public final int slices = 30;
     public final int stacks = 30;
 
@@ -25,20 +28,17 @@ public class Cone {
     public final int numCoord = (slices+1)*(stacks+1)*3*6;
     public final int numCoordWire = (slices+1)*(stacks+1)*3*8;
 
-    public final int wireframecolor;
+    public Cone(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
+        super(name, patternName, markerWidth, markerCenter, renderer);
 
-    public Cone(int fatorNormal, int wireframe) {
+        coneInt = new SurfaceBuffer(numCoord, 0, -1);
+        coneExt = new SurfaceBuffer(numCoord, 0, 1);
+        coneWire = new SurfaceBuffer(numCoordWire, 1, 1);
 
-        vertices=allocateFloatBuffer(numCoord*4);
-        normais=allocateFloatBuffer(numCoord*4);
-        cores=allocateFloatBuffer(numCoord*4);
-        wire=allocateFloatBuffer(numCoordWire*4);
-        wireframecolor = wireframe;
-
-        constroiCilindro(fatorNormal);
+        constroiCilindro();
     }
 
-    public void constroiCilindro(int fatorNormal){
+    public void constroiCilindro(){
 
         for(u = -25.0f; u < 25.0f; u+=passoU){
             for(v = 0.0f; v < 2*Math.PI; v+= passoV){
@@ -46,13 +46,13 @@ public class Cone {
                 float x = coordX(v, u), y = coordY(v, u), z = coordZ(v, u);
                 Vetor a = new Vetor(x, y, z);
 
-                x = coordX(v+passoV, u);
-                y = coordY(v+passoV, u);
-                z = coordZ(v+passoV, u);
+                x = coordX(v + passoV, u);
+                y = coordY(v + passoV, u);
+                z = coordZ(v + passoV, u);
                 Vetor b = new Vetor(x, y, z);
 
-                x = coordX(v, u+passoU);
-                y = coordY(v, u+passoU);
+                x = coordX(v, u + passoU);
+                y = coordY(v, u + passoU);
                 z = coordZ(v, u+passoU);
                 Vetor c = new Vetor(x, y, z);
 
@@ -61,150 +61,43 @@ public class Cone {
                 z = coordZ(v+passoV, u+passoU);
                 Vetor d = new Vetor(x, y, z);
 
-                wire.put(a.x);
-                wire.put(a.y);
-                wire.put(a.z);
+                coneWire.preencheVertices(a);
+                coneWire.preencheVertices(b);
 
-                wire.put(b.x);
-                wire.put(b.y);
-                wire.put(b.z);
+                coneWire.preencheVertices(b);
+                coneWire.preencheVertices(d);
 
-                wire.put(b.x);
-                wire.put(b.y);
-                wire.put(b.z);
+                coneWire.preencheVertices(d);
+                coneWire.preencheVertices(c);
 
-                wire.put(d.x);
-                wire.put(d.y);
-                wire.put(d.z);
+                coneWire.preencheVertices(c);
+                coneWire.preencheVertices(a);
 
-                wire.put(d.x);
-                wire.put(d.y);
-                wire.put(d.z);
+                //Normal para fora, paraboloide externo
+                //Primeiro triangulo (inferior)
+                coneExt.preencheVertices(a);
+                coneExt.preencheVertices(b);
+                coneExt.preencheVertices(c);
 
-                wire.put(c.x);
-                wire.put(c.y);
-                wire.put(c.z);
-
-                wire.put(c.x);
-                wire.put(c.y);
-                wire.put(c.z);
-
-                wire.put(a.x);
-                wire.put(a.y);
-                wire.put(a.z);
+                //Segundo triangulo (superior)
+                coneExt.preencheVertices(c);
+                coneExt.preencheVertices(b);
+                coneExt.preencheVertices(d);
 
                 //Normal para dentro, paraboloide interno
-                if(fatorNormal == -1){
-                    //Primeiro triangulo (inferior)
-                    vertices.put(a.x);
-                    vertices.put(a.y);
-                    vertices.put(a.z);
+                //Primeiro triangulo (inferior)
+                coneInt.preencheVertices(a);
+                coneInt.preencheVertices(c);
+                coneInt.preencheVertices(b);
 
-                    cores.put(1.0f);
-                    cores.put(0.0f);
-                    cores.put(0.0f);
+                //Segundo triangulo (superior)
+                coneInt.preencheVertices(d);
+                coneInt.preencheVertices(b);
+                coneInt.preencheVertices(c);
 
-                    vertices.put(c.x);
-                    vertices.put(c.y);
-                    vertices.put(c.z);
-
-                    cores.put(1.0f);
-                    cores.put(0.0f);
-                    cores.put(0.0f);
-
-                    vertices.put(b.x);
-                    vertices.put(b.y);
-                    vertices.put(b.z);
-
-                    cores.put(1.0f);
-                    cores.put(0.0f);
-                    cores.put(0.0f);
-                }
-                //Normal para fora, paraboloide externo
-                if(fatorNormal == 1){
-                    //Primeiro triangulo (inferior)
-                    vertices.put(a.x);
-                    vertices.put(a.y);
-                    vertices.put(a.z);
-
-                    cores.put(1.0f);
-                    cores.put(0.0f);
-                    cores.put(0.0f);
-
-                    vertices.put(b.x);
-                    vertices.put(b.y);
-                    vertices.put(b.z);
-
-                    cores.put(1.0f);
-                    cores.put(0.0f);
-                    cores.put(0.0f);
-
-                    vertices.put(c.x);
-                    vertices.put(c.y);
-                    vertices.put(c.z);
-
-                    cores.put(1.0f);
-                    cores.put(0.0f);
-                    cores.put(0.0f);
-                }
-
-//				Log.e("vetorX", String.valueOf(ab.getX()));
-//				Log.e("vetorY", String.valueOf(ab.getY()));
-//				Log.e("vetorZ", String.valueOf(ab.getZ()));
-
-                //Normal para dentro, paraboloide interno
-                if(fatorNormal == -1){
-                    //Segundo triangulo (superior)
-                    vertices.put(d.x);
-                    vertices.put(d.y);
-                    vertices.put(d.z);
-
-                    cores.put(1.0f);
-                    cores.put(0.0f);
-                    cores.put(0.0f);
-
-                    vertices.put(b.x);
-                    vertices.put(b.y);
-                    vertices.put(b.z);
-
-                    cores.put(1.0f);
-                    cores.put(0.0f);
-                    cores.put(0.0f);
-
-                    vertices.put(c.x);
-                    vertices.put(c.y);
-                    vertices.put(c.z);
-
-                    cores.put(1.0f);
-                    cores.put(0.0f);
-                    cores.put(0.0f);
-                }
-                //Normal para fora, paraboloide externo
-                if(fatorNormal == 1){
-                    //Segundo triangulo (superior)
-                    vertices.put(c.x);
-                    vertices.put(c.y);
-                    vertices.put(c.z);
-
-                    cores.put(1.0f);
-                    cores.put(0.0f);
-                    cores.put(0.0f);
-
-                    vertices.put(b.x);
-                    vertices.put(b.y);
-                    vertices.put(b.z);
-
-                    cores.put(1.0f);
-                    cores.put(0.0f);
-                    cores.put(0.0f);
-
-                    vertices.put(d.x);
-                    vertices.put(d.y);
-                    vertices.put(d.z);
-
-                    cores.put(1.0f);
-                    cores.put(0.0f);
-                    cores.put(0.0f);
+                for (int i = 0; i < 6; i++){
+                    coneExt.preencheCores(cor);
+                    coneInt.preencheCores(cor);
                 }
 
                 //Normal do primeiro triangulo
@@ -218,17 +111,10 @@ public class Cone {
                 normalT1 = ab.vetorial(bc);
                 normalT1.normaliza();
 
-                normais.put(normalT1.x*fatorNormal);
-                normais.put(normalT1.y*fatorNormal);
-                normais.put(normalT1.z*fatorNormal);
-
-                normais.put(normalT1.x*fatorNormal);
-                normais.put(normalT1.y*fatorNormal);
-                normais.put(normalT1.z*fatorNormal);
-
-                normais.put(normalT1.x*fatorNormal);
-                normais.put(normalT1.y*fatorNormal);
-                normais.put(normalT1.z*fatorNormal);
+                for(int j = 0; j < 3; j++) {
+                    coneExt.preencheNormais(normalT1);
+                    coneInt.preencheNormais(normalT1);
+                }
 
                 //Normal do segundo triangulo
                 Vetor cb = new Vetor();
@@ -241,69 +127,119 @@ public class Cone {
                 normalT2 = cb.vetorial(bd);
                 normalT2.normaliza();
 
-                normais.put(normalT2.x*fatorNormal);
-                normais.put(normalT2.y *fatorNormal);
-                normais.put(normalT2.z*fatorNormal);
-
-                normais.put(normalT2.x*fatorNormal);
-                normais.put(normalT2.y*fatorNormal);
-                normais.put(normalT2.z*fatorNormal);
-
-                normais.put(normalT2.x*fatorNormal);
-                normais.put(normalT2.y*fatorNormal);
-                normais.put(normalT2.z*fatorNormal);
-
+                for(int j = 0; j < 3; j++) {
+                    coneExt.preencheNormais(normalT2);
+                    coneInt.preencheNormais(normalT2);
+                }
             }
         }
 
-        vertices.position(0);
-        normais.position(0);
-        cores.position(0);
-        wire.position(0);
+        coneExt.vertices.position(0);
+        coneInt.vertices.position(0);
+        coneExt.normais.position(0);
+        coneInt.normais.position(0);
+        coneExt.cores.position(0);
+        coneInt.cores.position(0);
+        coneWire.vertices.position(0);
     }
 
     public float coordX(float v, float u){
         return (float) (u*Math.sin(v));
-
     }
 
     public float coordY(float v, float u){
         return (float) (u*Math.cos(v));
-
     }
 
     public float coordZ(float v, float u){
         return (float) 25.0f+u;
-
     }
 
-    public static FloatBuffer allocateFloatBuffer(int capacity){
-        ByteBuffer vbb = ByteBuffer.allocateDirect(capacity);
-        vbb.order(ByteOrder.nativeOrder());
-        return vbb.asFloatBuffer();
-    }
+    @Override
+    public synchronized void draw( GL10 glUnused ) {
+        if(!initialized) {
+            init(glUnused);
+            initialized = true;
+        }
 
-    public FloatBuffer getVertices() {
-        return vertices;
-    }
+        // Ensure we're using the program we need
+        GLES20.glUseProgram(myProgram);
 
-    public FloatBuffer getNormals() {
-        return normais;
-    }
+        if( glCameraMatrixBuffer != null) {
+            // Transform to where the marker is
+            GLES20.glUniformMatrix4fv(muMVMatrixHandle, 1, false, glMatrix, 0);
+            GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
+            GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
+            GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
+        }
 
-    public FloatBuffer getCores() {
-        if(wireframecolor == 0)
-            return cores;
-        return cores;
-    }
+        // Let the object draw
 
-    public FloatBuffer getWire(){
-        return wire;
-    }
+        /** CONE EXTERNO **/
+        // Pass in the position information
+        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
+                false, 0, coneExt.getVertices()); // 3 = Size of the position data in elements.
 
-    public int getNumIndices(){
-        if(wireframecolor == 0)
-            return numCoord/3;
-        return numCoordWire/3;
+        GLES20.glEnableVertexAttribArray(mPositionHandle);
+
+        // Pass in the color information
+        //Atencao para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
+        GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false,
+                0, coneExt.getCores());
+        GLES20.glEnableVertexAttribArray(mColorHandle);
+
+        // Pass in the normal information
+        GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, true,
+                0, coneExt.getNormals());
+
+        GLES20.glEnableVertexAttribArray(mNormalHandle);
+
+        // Desenha cone externo
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, coneExt.getNumIndices());
+
+        /** CONE INTERNO **/
+        // Pass in the position information
+        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
+                false, 0, coneInt.getVertices()); // 3 = Size of the position data in elements.
+
+        GLES20.glEnableVertexAttribArray(mPositionHandle);
+
+        // Pass in the color information
+        //aten??o para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
+        GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false,
+                0, coneInt.getCores());
+        GLES20.glEnableVertexAttribArray(mColorHandle);
+
+        // Pass in the normal information
+        GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, true,
+                0, coneInt.getNormals());
+
+        GLES20.glEnableVertexAttribArray(mNormalHandle);
+
+        // Desenha elipsoide
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, coneInt.getNumIndices());
+
+        // Ensure we're using the program we need
+        GLES20.glUseProgram(myProgram2);
+
+        if( glCameraMatrixBuffer != null) {
+            // Transform to where the marker is
+            GLES20.glUniformMatrix4fv(muMVMatrixHandle, 1, false, glMatrix, 0);
+            GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
+            GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
+            GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
+        }
+
+        /** CONE WIREFRAME**/
+        // Pass in the position information
+        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
+                false, 0, coneWire.getVertices()); // 3 = Size of the position data in elements.
+
+        GLES20.glEnableVertexAttribArray(mPositionHandle);
+
+        GLES20.glLineWidth(2.0f);
+
+        // Desenha elipsoide
+        GLES20.glDrawArrays(GLES20.GL_LINES, 0, coneWire.getNumIndices());
     }
 }

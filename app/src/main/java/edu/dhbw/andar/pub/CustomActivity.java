@@ -9,12 +9,12 @@ import android.view.MenuItem;
 import edu.dhbw.andar.ARObject;
 import edu.dhbw.andar.AndARActivity;
 import edu.dhbw.andar.AndARGLES20Renderer;
-import edu.dhbw.andar.arobjects.ConeCilindricoObject;
 import edu.dhbw.andar.arobjects.HiperDuasObject;
 import edu.dhbw.andar.arobjects.HiperbUmaObject;
 import edu.dhbw.andar.arobjects.ParabHipObject;
 import edu.dhbw.andar.arobjects.ParaboloideObject;
 import edu.dhbw.andar.exceptions.AndARException;
+import edu.dhbw.andar.surfaces.Cone;
 import edu.dhbw.andar.surfaces.Elipsoide;
 import getcomp.educar.quadrics.R;
 
@@ -49,7 +49,7 @@ public class CustomActivity extends AndARActivity {
 					rendedObj = new Elipsoide("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 2:
-					rendedObj = new ConeCilindricoObject("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+					rendedObj = new Cone("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 3:
 					rendedObj =  new ParaboloideObject("paraboloide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());

@@ -51,7 +51,7 @@ public class SurfaceBuffer {
         this.cores.put(cor.z);
     }
 
-    public void preencheNormais(Vetor normal, int fatorNormal) {
+    public void preencheNormais(Vetor normal) {
         this.normais.put((normal.x*fatorNormal));
         this.normais.put((normal.y*fatorNormal));
         this.normais.put((normal.z*fatorNormal));
