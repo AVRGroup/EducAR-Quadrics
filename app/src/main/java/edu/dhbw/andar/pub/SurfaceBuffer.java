@@ -12,13 +12,24 @@ public class SurfaceBuffer {
     public FloatBuffer vertices;
     public FloatBuffer normais;
     public FloatBuffer cores;
-    public FloatBuffer wireframe;
+    public int numCoord;
 
-    public SurfaceBuffer(int numCoord, int numCoordWire){
-        vertices=allocateFloatBuffer(numCoord*4);
-        normais=allocateFloatBuffer(numCoord*4);
-        cores=allocateFloatBuffer(numCoord*4);
-        wireframe=allocateFloatBuffer(numCoordWire*4);
+    public SurfaceBuffer(int numCoord, int modeloWireframe){
+        //Necessario ter uma variavel na classe para o metodo getNumIndices()
+        this.numCoord = numCoord;
+
+        //Verifica se esta sendo construido um modelo solido ou wireframe
+        if(modeloWireframe == 0){
+            vertices=allocateFloatBuffer(numCoord*4);
+            normais=allocateFloatBuffer(numCoord*4);
+            cores=allocateFloatBuffer(numCoord*4);
+        }else{
+            //Modelo wireframe so tem vertices, entao nao precisa dos outros buffers
+            vertices=allocateFloatBuffer(numCoord*4);
+            normais=null;
+            cores=null;
+        }
+
     }
 
     public static FloatBuffer allocateFloatBuffer(int capacity){
@@ -26,47 +37,37 @@ public class SurfaceBuffer {
         vbb.order(ByteOrder.nativeOrder());
         return vbb.asFloatBuffer();
     }
-    public void preencheVertices(Vetor v){
-        preencheBuffer(this.vertices, v);
+    public void preencheVertices(Vetor ponto){
+        this.vertices.put(ponto.x);
+        this.vertices.put(ponto.y);
+        this.vertices.put(ponto.z);
     }
 
-    public void preencheCores(Vetor v){
-        preencheBuffer(this.cores, v);
+    public void preencheCores(Vetor cor){
+        this.cores.put(cor.x);
+        this.cores.put(cor.y);
+        this.cores.put(cor.z);
     }
 
-    public void preencheNormais(Vetor v){
-        preencheBuffer(this.normais, v);
-    }
-
-    public void preencheWireframe(Vetor v){
-        preencheBuffer(this.wireframe, v);
-    }
-
-    public void preencheBuffer(FloatBuffer fb, Vetor v){
-        fb.put(v.x);
-        fb.put(v.y);
-        fb.put(v.z);
-    }
-
-    public void preencheBuffer(FloatBuffer fb, Vetor v, int multiplicador){
-        fb.put((v.x*multiplicador));
-        fb.put((v.y*multiplicador));
-        fb.put((v.z*multiplicador));
+    public void preencheNormais(Vetor normal, int fatorNormal) {
+        this.normais.put((normal.x*fatorNormal));
+        this.normais.put((normal.y*fatorNormal));
+        this.normais.put((normal.z*fatorNormal));
     }
 
     public FloatBuffer getVertices() {
-        return vertices;
+        return this.vertices;
     }
 
     public FloatBuffer getCores() {
-        return cores;
-    }
-
-    public FloatBuffer getWire(){
-        return wireframe;
+        return this.cores;
     }
 
     public FloatBuffer getNormals() {
-        return normais;
+        return this.normais;
+    }
+
+    public int getNumIndices(){
+        return numCoord/3;
     }
 }

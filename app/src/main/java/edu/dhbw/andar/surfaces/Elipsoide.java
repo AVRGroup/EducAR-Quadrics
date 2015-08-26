@@ -1,5 +1,7 @@
 package edu.dhbw.andar.surfaces;
 
+import android.util.Log;
+
 import edu.dhbw.andar.pub.SurfaceBuffer;
 import edu.dhbw.andar.pub.Vetor;
 
@@ -25,13 +27,11 @@ public class Elipsoide {
 	
 public Elipsoide(int fatorNormal, int wireframe){
 		
-		elipsoideBuffer = new SurfaceBuffer(numCoord, numCoordWire);
+		elipsoideBuffer = new SurfaceBuffer(numCoord, 0);
+		cor = new Vetor(1.0f, 0.0f, 0.0f);
 
 		wireframecolor = wireframe;
-		
 		constroiElipsoide(fatorNormal);
-
-        cor = new Vetor(1.0f, 1.0f, 1.0f);
 		
 	}
 	
@@ -58,7 +58,7 @@ public Elipsoide(int fatorNormal, int wireframe){
 				z = coordZ(v+passoV, u+passoU);
 				Vetor d = new Vetor(x, y, z);
 
-                elipsoideBuffer.preencheWireframe(a);
+                /*elipsoideBuffer.preencheWireframe(a);
                 elipsoideBuffer.preencheWireframe(b);
 
                 elipsoideBuffer.preencheWireframe(b);
@@ -68,12 +68,12 @@ public Elipsoide(int fatorNormal, int wireframe){
                 elipsoideBuffer.preencheWireframe(c);
 
                 elipsoideBuffer.preencheWireframe(c);
-                elipsoideBuffer.preencheWireframe(a);
+                elipsoideBuffer.preencheWireframe(a);*/
 
 				//Normal para fora, paraboloide externo
 				if(fatorNormal == 1){
 					//Primeiro triangulo (inferior)
-                    elipsoideBuffer.preencheVertices(a);
+					elipsoideBuffer.preencheVertices(a);
                     elipsoideBuffer.preencheVertices(c);
                     elipsoideBuffer.preencheVertices(b);
 
@@ -100,9 +100,7 @@ public Elipsoide(int fatorNormal, int wireframe){
 				normalT1.normaliza();
 
                 for(int j = 0; j < 3; j++) {
-                    elipsoideBuffer.normais.put(normalT1.x * fatorNormal);
-                    elipsoideBuffer.normais.put(normalT1.y * fatorNormal);
-                    elipsoideBuffer.normais.put(normalT1.z * fatorNormal);
+                    elipsoideBuffer.preencheNormais(normalT1, fatorNormal);
                 }
 
 				//Normal do segundo triangulo
@@ -117,9 +115,7 @@ public Elipsoide(int fatorNormal, int wireframe){
 				normalT2.normaliza();
 
                 for(int j = 0; j < 3; j++){
-                    elipsoideBuffer.normais.put(normalT2.x*fatorNormal);
-                    elipsoideBuffer.normais.put(normalT2.y*fatorNormal);
-                    elipsoideBuffer.normais.put(normalT2.z * fatorNormal);
+					elipsoideBuffer.preencheNormais(normalT2, fatorNormal);
                 }
 
             }
@@ -128,7 +124,7 @@ public Elipsoide(int fatorNormal, int wireframe){
         elipsoideBuffer.vertices.position(0);
 		elipsoideBuffer.normais.position(0);
 		elipsoideBuffer.cores.position(0);
-		elipsoideBuffer.wireframe.position(0);
+		/*elipsoideBuffer.wireframe.position(0);*/
 	}
 
 	public float coordX(float v, float u){
@@ -146,9 +142,8 @@ public Elipsoide(int fatorNormal, int wireframe){
 	}
 
     public int getNumIndices(){
-        if(wireframecolor == 0)
+/*        if(wireframecolor == 0)*/
             return numCoord/3;
-        return numCoordWire/3;
+/*        return numCoordWire/3;*/
     }
-
 }
