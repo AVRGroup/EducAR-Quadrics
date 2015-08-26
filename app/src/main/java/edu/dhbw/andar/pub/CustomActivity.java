@@ -10,12 +10,12 @@ import edu.dhbw.andar.ARObject;
 import edu.dhbw.andar.AndARActivity;
 import edu.dhbw.andar.AndARGLES20Renderer;
 import edu.dhbw.andar.arobjects.HiperDuasObject;
-import edu.dhbw.andar.arobjects.HiperbUmaObject;
 import edu.dhbw.andar.arobjects.ParabHipObject;
 import edu.dhbw.andar.arobjects.ParaboloideObject;
 import edu.dhbw.andar.exceptions.AndARException;
 import edu.dhbw.andar.surfaces.Cone;
 import edu.dhbw.andar.surfaces.Elipsoide;
+import edu.dhbw.andar.surfaces.HiperboloideUmaFolha;
 import getcomp.educar.quadrics.R;
 
 /**
@@ -55,7 +55,7 @@ public class CustomActivity extends AndARActivity {
 					rendedObj =  new ParaboloideObject("paraboloide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 4:
-					rendedObj = new HiperbUmaObject("hiperbuma", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+					rendedObj = new HiperboloideUmaFolha("hiperbuma", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 5:
 					rendedObj = new HiperDuasObject("hiperbduas", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());

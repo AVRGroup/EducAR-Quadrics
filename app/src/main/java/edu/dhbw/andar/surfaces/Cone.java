@@ -43,22 +43,22 @@ public class Cone extends SurfaceObject {
         for(u = -25.0f; u < 25.0f; u+=passoU){
             for(v = 0.0f; v < 2*Math.PI; v+= passoV){
 
-                float x = coordX(v, u), y = coordY(v, u), z = coordZ(v, u);
+                float x = coordX(v, u), y = coordY(v, u), z = coordZ(u);
                 Vetor a = new Vetor(x, y, z);
 
                 x = coordX(v + passoV, u);
                 y = coordY(v + passoV, u);
-                z = coordZ(v + passoV, u);
+                z = coordZ(u);
                 Vetor b = new Vetor(x, y, z);
 
                 x = coordX(v, u + passoU);
                 y = coordY(v, u + passoU);
-                z = coordZ(v, u+passoU);
+                z = coordZ(u+passoU);
                 Vetor c = new Vetor(x, y, z);
 
                 x = coordX(v+passoV, u+passoU);
                 y = coordY(v+passoV, u+passoU);
-                z = coordZ(v+passoV, u+passoU);
+                z = coordZ(u+passoU);
                 Vetor d = new Vetor(x, y, z);
 
                 coneWire.preencheVertices(a);
@@ -107,8 +107,7 @@ public class Cone extends SurfaceObject {
                 Vetor bc = new Vetor();
                 bc = bc.subtracao(b, c);
 
-                Vetor normalT1 = new Vetor();
-                normalT1 = ab.vetorial(bc);
+                Vetor normalT1 = ab.vetorial(bc);
                 normalT1.normaliza();
 
                 for(int j = 0; j < 3; j++) {
@@ -123,8 +122,7 @@ public class Cone extends SurfaceObject {
                 Vetor bd = new Vetor();
                 bd = bd.subtracao(b, d);
 
-                Vetor normalT2 = new Vetor();
-                normalT2 = cb.vetorial(bd);
+                Vetor normalT2 = cb.vetorial(bd);
                 normalT2.normaliza();
 
                 for(int j = 0; j < 3; j++) {
@@ -151,8 +149,8 @@ public class Cone extends SurfaceObject {
         return (float) (u*Math.cos(v));
     }
 
-    public float coordZ(float v, float u){
-        return (float) 25.0f+u;
+    public float coordZ(float u){
+        return 25.0f+u;
     }
 
     @Override

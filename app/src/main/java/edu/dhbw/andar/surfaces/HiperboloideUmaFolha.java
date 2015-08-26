@@ -1,18 +1,22 @@
 package edu.dhbw.andar.surfaces;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
+import android.opengl.GLES20;
 
+import javax.microedition.khronos.opengles.GL10;
+
+import edu.dhbw.andar.AndARGLES20Renderer;
+import edu.dhbw.andar.pub.SurfaceBuffer;
+import edu.dhbw.andar.pub.SurfaceObject;
 import edu.dhbw.andar.pub.Vetor;
+import edu.dhbw.andar.util.GraphicsUtil;
 
 
-public class HiperboloideUmaFolha {
-	
-	public FloatBuffer vertices;
-	public FloatBuffer normais;
-	public  FloatBuffer cores;
-	public FloatBuffer wire;
+public class HiperboloideUmaFolha extends SurfaceObject{
+
+	public SurfaceBuffer hiperbUmaExt;
+	public SurfaceBuffer hiperbUmaInt;
+	public SurfaceBuffer hiperbUmaWire;
+
 	public final int slices = 30;
 	public final int stacks = 30;
 
@@ -25,22 +29,17 @@ public class HiperboloideUmaFolha {
 	public final int numCoord = slices*(stacks+1)*3*6;
 	public final int numCoordWire = slices*(stacks+1)*3*8;
 
-	public final int wireframecolor;
-	
+	public HiperboloideUmaFolha(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
+		super(name, patternName, markerWidth, markerCenter, renderer);
 
-	public HiperboloideUmaFolha(int fatorNormal, int wireframe) {
-		
-		vertices=allocateFloatBuffer(numCoord*4);
-		normais=allocateFloatBuffer(numCoord*4);
-		cores=allocateFloatBuffer(numCoord*4);
-		wire=allocateFloatBuffer(numCoordWire*4);
-		wireframecolor = wireframe;
-		
-		constroiHiperboloide(fatorNormal);		
-		
+		hiperbUmaInt = new SurfaceBuffer(numCoord, 0, -1);
+		hiperbUmaExt = new SurfaceBuffer(numCoord, 0, 1);
+		hiperbUmaWire = new SurfaceBuffer(numCoordWire, 1, 1);
+
+		constroiHiperboloide();
 	}
 	
-	public void constroiHiperboloide(int fatorNormal){
+	public void constroiHiperboloide(){
 		
 		for(u = -1.5f; u < 1.5f; u+=passoU){
 			for(v = 0.0f; v < 2*Math.PI; v+= passoV){
@@ -48,13 +47,13 @@ public class HiperboloideUmaFolha {
 				float x = coordX(v, u), y = coordY(v, u), z = coordZ(v, u);
 				Vetor a = new Vetor(x, y, z);
 				
-				x = coordX(v+passoV, u);
-				y = coordY(v+passoV, u);
-				z = coordZ(v+passoV, u);
+				x = coordX(v + passoV, u);
+				y = coordY(v + passoV, u);
+				z = coordZ(v + passoV, u);
 				Vetor b = new Vetor(x, y, z);
 				
-				x = coordX(v, u+passoU);
-				y = coordY(v, u+passoU);
+				x = coordX(v, u + passoU);
+				y = coordY(v, u + passoU);
 				z = coordZ(v, u+passoU);
 				Vetor c = new Vetor(x, y, z);
 				
@@ -63,151 +62,43 @@ public class HiperboloideUmaFolha {
 				z = coordZ(v+passoV, u+passoU);
 				Vetor d = new Vetor(x, y, z);
 
-				wire.put(a.x);
-				wire.put(a.y);
-				wire.put(a.z);
+				hiperbUmaWire.preencheVertices(a);
+				hiperbUmaWire.preencheVertices(b);
 
-				wire.put(b.x);
-				wire.put(b.y);
-				wire.put(b.z);
+				hiperbUmaWire.preencheVertices(b);
+				hiperbUmaWire.preencheVertices(d);
 
-				wire.put(b.x);
-				wire.put(b.y);
-				wire.put(b.z);
+				hiperbUmaWire.preencheVertices(d);
+				hiperbUmaWire.preencheVertices(c);
 
-				wire.put(d.x);
-				wire.put(d.y);
-				wire.put(d.z);
+				hiperbUmaWire.preencheVertices(c);
+				hiperbUmaWire.preencheVertices(a);
 
-				wire.put(d.x);
-				wire.put(d.y);
-				wire.put(d.z);
-
-				wire.put(c.x);
-				wire.put(c.y);
-				wire.put(c.z);
-
-				wire.put(c.x);
-				wire.put(c.y);
-				wire.put(c.z);
-
-				wire.put(a.x);
-				wire.put(a.y);
-				wire.put(a.z);
-				
-				//Normal para dentro, paraboloide interno
-				if(fatorNormal == -1){
-					//Primeiro triangulo (inferior)
-					vertices.put(a.x);
-					vertices.put(a.y);
-					vertices.put(a.z);
-					
-					vertices.put(c.x);
-					vertices.put(c.y);
-					vertices.put(c.z);
-					
-					vertices.put(b.x);
-					vertices.put(b.y);
-					vertices.put(b.z);
-
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
-					
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
-					
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
-
-				}
 				//Normal para fora, paraboloide externo
-				if(fatorNormal == 1){
-					//Primeiro triangulo (inferior)
-					vertices.put(a.x);
-					vertices.put(a.y);
-					vertices.put(a.z);
-					
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
-					
-					vertices.put(b.x);
-					vertices.put(b.y);
-					vertices.put(b.z);
-					
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
-					
-					vertices.put(c.x);
-					vertices.put(c.y);
-					vertices.put(c.z);
-					
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
-				}
-				
-//				Log.e("vetorX", String.valueOf(ab.getX()));
-//				Log.e("vetorY", String.valueOf(ab.getY()));
-//				Log.e("vetorZ", String.valueOf(ab.getZ()));
-				
+				//Primeiro triangulo (inferior)
+				hiperbUmaExt.preencheVertices(a);
+				hiperbUmaExt.preencheVertices(b);
+				hiperbUmaExt.preencheVertices(c);
+
+				//Segundo triangulo (superior)
+				hiperbUmaExt.preencheVertices(c);
+				hiperbUmaExt.preencheVertices(b);
+				hiperbUmaExt.preencheVertices(d);
+
 				//Normal para dentro, paraboloide interno
-				if(fatorNormal == -1){
-					//Segundo triangulo (superior)
-					vertices.put(b.x);
-					vertices.put(b.y);
-					vertices.put(b.z);
+				//Primeiro triangulo (inferior)
+				hiperbUmaInt.preencheVertices(a);
+				hiperbUmaInt.preencheVertices(c);
+				hiperbUmaInt.preencheVertices(b);
 
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
-					
-					vertices.put(c.x);
-					vertices.put(c.y);
-					vertices.put(c.z);
+				//Segundo triangulo (superior)
+				hiperbUmaInt.preencheVertices(b);
+				hiperbUmaInt.preencheVertices(c);
+				hiperbUmaInt.preencheVertices(d);
 
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
-					
-					vertices.put(d.x);
-					vertices.put(d.y);
-					vertices.put(d.z);
-
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
-				}
-				//Normal para fora, paraboloide externo
-				if(fatorNormal == 1){
-					//Segundo triangulo (superior)
-					vertices.put(c.x);
-					vertices.put(c.y);
-					vertices.put(c.z);
-					
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
-					
-					vertices.put(b.x);
-					vertices.put(b.y);
-					vertices.put(b.z);
-					
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
-					
-					vertices.put(d.x);
-					vertices.put(d.y);
-					vertices.put(d.z);
-					
-					cores.put(1.0f);
-					cores.put(0.0f);
-					cores.put(0.0f);
+				for (int i = 0; i < 6; i++){
+					hiperbUmaExt.preencheCores(cor);
+					hiperbUmaInt.preencheCores(cor);
 				}
 
 				//Normal do primeiro triangulo
@@ -217,94 +108,136 @@ public class HiperboloideUmaFolha {
 				Vetor bc = new Vetor();
 				bc = bc.subtracao(b, c);
 				
-				Vetor normalT1 = new Vetor();
-				normalT1 = ab.vetorial(bc);
+				Vetor normalT1 = ab.vetorial(bc);
 				normalT1.normaliza();
-				
-				normais.put(normalT1.x*fatorNormal);
-				normais.put(normalT1.y*fatorNormal);
-				normais.put(normalT1.z*fatorNormal);
-				
-				normais.put(normalT1.x*fatorNormal);
-				normais.put(normalT1.y*fatorNormal);
-				normais.put(normalT1.z*fatorNormal);
-				
-				normais.put(normalT1.x*fatorNormal);
-				normais.put(normalT1.y*fatorNormal);
-				normais.put(normalT1.z*fatorNormal);
+
+				for(int j = 0; j < 3; j++) {
+					hiperbUmaExt.preencheNormais(normalT1);
+					hiperbUmaInt.preencheNormais(normalT1);
+				}
 				
 				//Normal do segundo triangulo
-				Vetor cb = new Vetor();			
+				Vetor cb = new Vetor();
 				cb = cb.subtracao(c, b);
 				
 				Vetor bd = new Vetor();
 				bd = bd.subtracao(b, d);
 				
-				Vetor normalT2 = new Vetor();
-				normalT2 = cb.vetorial(bd);
+				Vetor normalT2 = cb.vetorial(bd);
 				normalT2.normaliza();
-				
-				normais.put(normalT2.x*fatorNormal);
-				normais.put(normalT2.y*fatorNormal);
-				normais.put(normalT2.z*fatorNormal);
-				
-				normais.put(normalT2.x*fatorNormal);
-				normais.put(normalT2.y*fatorNormal);
-				normais.put(normalT2.z*fatorNormal);
-				
-				normais.put(normalT2.x*fatorNormal);
-				normais.put(normalT2.y*fatorNormal);
-				normais.put(normalT2.z*fatorNormal);
-	
+
+				for(int j = 0; j < 3; j++) {
+					hiperbUmaExt.preencheNormais(normalT2);
+					hiperbUmaInt.preencheNormais(normalT2);
+				}
 			}
 		}
-		
-		vertices.position(0);
-		normais.position(0);
-		cores.position(0);
-		wire.position(0);
+		hiperbUmaExt.vertices.position(0);
+		hiperbUmaInt.vertices.position(0);
+		hiperbUmaExt.normais.position(0);
+		hiperbUmaInt.normais.position(0);
+		hiperbUmaExt.cores.position(0);
+		hiperbUmaInt.cores.position(0);
+		hiperbUmaWire.vertices.position(0);
 	}
 	
 	public float coordX(float v, float u){
 		return (float) (10*Math.cosh(u)*Math.cos(v));
-				
 	}
 	
 	public float coordY(float v, float u){
 		return (float) (10*Math.cosh(u)*Math.sin(v));
-				
 	}
 	
 	public float coordZ(float v, float u){
 		return (float) (20.0f+(10*Math.sinh(u)));				
 	}
-	
-	public static FloatBuffer allocateFloatBuffer(int capacity){
-		ByteBuffer vbb = ByteBuffer.allocateDirect(capacity);
-        vbb.order(ByteOrder.nativeOrder());
-        return vbb.asFloatBuffer();
-	}
-	
-	public FloatBuffer getVertices() {
-		return vertices;
-	}
 
-	public FloatBuffer getNormals() {
-		return normais;
-	}
-	
-	public FloatBuffer getWire(){
-		return wire;
-	}
-	
-	public FloatBuffer getCores() {
-		return cores;
-	}
-	
-	public int getNumIndices(){
-		if(wireframecolor == 0)
-			return numCoord/3;
-		return numCoordWire/3;
-	}
+	@Override
+	public synchronized void draw( GL10 glUnused ) {
+		if(!initialized) {
+			init(glUnused);
+			initialized = true;
+		}
 
+		// Ensure we're using the program we need
+		GLES20.glUseProgram(myProgram);
+
+		if( glCameraMatrixBuffer != null) {
+			// Transform to where the marker is
+			GLES20.glUniformMatrix4fv(muMVMatrixHandle, 1, false, glMatrix, 0);
+			GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
+			GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
+			GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
+		}
+
+		// Let the object draw
+
+		/** HIPERBOLOIDE UMA FOLHA EXTERNO **/
+		// Pass in the position information
+		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
+				false, 0, hiperbUmaExt.getVertices()); // 3 = Size of the position data in elements.
+
+		GLES20.glEnableVertexAttribArray(mPositionHandle);
+
+		// Pass in the color information
+		//aten??o para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
+		GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false,
+				0, hiperbUmaExt.getCores());
+		GLES20.glEnableVertexAttribArray(mColorHandle);
+
+		// Pass in the normal information
+		GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, true,
+				0, hiperbUmaExt.getNormals());
+
+		GLES20.glEnableVertexAttribArray(mNormalHandle);
+
+		// Desenha elipsoide
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, hiperbUmaExt.getNumIndices());
+
+		/** HIPERBOLOIDE UMA FOLHA INTERNO **/
+		// Pass in the position information
+		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
+				false, 0, hiperbUmaInt.getVertices()); // 3 = Size of the position data in elements.
+
+		GLES20.glEnableVertexAttribArray(mPositionHandle);
+
+		// Pass in the color information
+		//aten??o para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
+		GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false,
+				0, hiperbUmaInt.getCores());
+		GLES20.glEnableVertexAttribArray(mColorHandle);
+
+		// Pass in the normal information
+		GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, true,
+				0, hiperbUmaInt.getNormals());
+
+		GLES20.glEnableVertexAttribArray(mNormalHandle);
+
+		// Desenha elipsoide
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, hiperbUmaInt.getNumIndices());
+
+		// Ensure we're using the program we need
+		GLES20.glUseProgram(myProgram2);
+
+		if( glCameraMatrixBuffer != null) {
+			// Transform to where the marker is
+			GLES20.glUniformMatrix4fv(muMVMatrixHandle, 1, false, glMatrix, 0);
+			GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
+			GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
+			GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
+		}
+
+		/** HIPERBOLOIDE UMA FOLHA WIREFRAME**/
+		// Pass in the position information
+		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
+				false, 0, hiperbUmaWire.getVertices()); // 3 = Size of the position data in elements.
+
+		GLES20.glEnableVertexAttribArray(mPositionHandle);
+
+        GLES20.glLineWidth(2.0f);
+
+		// Desenha elipsoide
+		GLES20.glDrawArrays(GLES20.GL_LINES, 0, hiperbUmaWire.getNumIndices());
+	}
 }
