@@ -9,13 +9,13 @@ import android.view.MenuItem;
 import edu.dhbw.andar.ARObject;
 import edu.dhbw.andar.AndARActivity;
 import edu.dhbw.andar.AndARGLES20Renderer;
-import edu.dhbw.andar.arobjects.HiperDuasObject;
-import edu.dhbw.andar.arobjects.ParabHipObject;
-import edu.dhbw.andar.arobjects.ParaboloideObject;
 import edu.dhbw.andar.exceptions.AndARException;
 import edu.dhbw.andar.surfaces.Cone;
 import edu.dhbw.andar.surfaces.Elipsoide;
+import edu.dhbw.andar.surfaces.HiperboloideDuasFolhas;
 import edu.dhbw.andar.surfaces.HiperboloideUmaFolha;
+import edu.dhbw.andar.surfaces.Paraboloide;
+import edu.dhbw.andar.surfaces.ParaboloideHiperbolico;
 import getcomp.educar.quadrics.R;
 
 /**
@@ -52,16 +52,16 @@ public class CustomActivity extends AndARActivity {
 					rendedObj = new Cone("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 3:
-					rendedObj =  new ParaboloideObject("paraboloide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+					rendedObj =  new Paraboloide("paraboloide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 4:
 					rendedObj = new HiperboloideUmaFolha("hiperbuma", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 5:
-					rendedObj = new HiperDuasObject("hiperbduas", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+					rendedObj = new HiperboloideDuasFolhas("hiperbduas", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 6:
-					rendedObj =  new ParabHipObject("parabhip", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+					rendedObj =  new ParaboloideHiperbolico("parabhip", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				default:
 					rendedObj =  new Elipsoide("test", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
@@ -95,27 +95,9 @@ public class CustomActivity extends AndARActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.menu_layout, menu);
-	    
-//	    menu.findItem(0).setTitle("");
-//	    menu.findItem(1).setTitle("");
-//	    menu.findItem(2).setTitle("");
-//	    menu.findItem(3).setTitle("");
-//	    menu.findItem(4).setTitle("");
-//	    menu.findItem(5).setTitle("");
-	    
-		
-//		menu.add(0, R.id.cone, 0, getResources().getText(R.string.cone))
-//		.setIcon(R.drawable.coneicon);
-//		menu.add(0, R.id.elipsoide, 0, getResources().getText(R.string.elipsoide))
-//		.setIcon(R.drawable.elipsoideicon);
-//		menu.add(0, 2, 0, getResources().getText(R.string.cone))
-//		.setIcon(R.drawable.screenshoticon);
 		return true;
 	}
-		
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-	 */
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
@@ -147,24 +129,5 @@ public class CustomActivity extends AndARActivity {
 	        default:
 	            return true;
 	    }
-		
-//		if(item.getItemId()==R.id.elipsoide) {
-//			superficie = 1;
-//			DesenhaSuperficie();
-//		} else if(item.getItemId()==R.id.cone) {
-//			superficie = 2;
-//			DesenhaSuperficie();
-////			try {
-////				someObject = new CustomObject
-////				("test", "patt.hiro", 80.0, new double[]{0,0});
-////				artoolkit.registerARObject(someObject);
-////			} catch (AndARException e) {
-////				e.printStackTrace();
-////			}
-//		}
-//
-//		return true;
 	}
-
-	
 }
