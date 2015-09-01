@@ -7,6 +7,5 @@ attribute vec3 a_Normal;
 void main(void){
 
 	mat4 mvpmatrix = uPMatrix * uMVMatrix;
-
 	gl_Position = mvpmatrix * aPosition;
 }

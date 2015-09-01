@@ -16,22 +16,22 @@ public class Elipsoide extends SurfaceObject{
 	public SurfaceBuffer elipsoide;
     public SurfaceBuffer elipsoideWireframe;
 
-	public final int slices = 25;
-	public final int stacks = 30;
+    //Tem que ser multiplo de 3 para fechar a superficie
+	public final int slices = 24;
+	public final int stacks = 24;
 
 	public final float passoU = (float) ((2*Math.PI)/slices);
 	public final float passoV = (float) ((7.0f)/stacks);
 		
 	public final int numCoord = (slices)*(stacks)*3*6;
-	public final int numCoordWire = (slices)*(stacks)*3*6;
+	public final int numCoordWire = (slices)*(stacks)*3*8;
 
-    public final float A = 50.0f;
-    public final float B = 50.0f;
-    public final float C = 50.0f;
+    public final float A = 40.0f;
+    public final float B = 40.0f;
+    public final float C = 40.0f;
     public final float Xo = 0.0f;
     public final float Yo = 0.0f;
     public final float Zo = 0.0f;
-
 
     public Elipsoide(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
@@ -42,40 +42,38 @@ public class Elipsoide extends SurfaceObject{
 	}
 	
 	public void constroiElipsoide(){
-        for(float u = 0.0f; u < 2*Math.PI; u+=passoU){
-            for(float v = -3.0f; v <= 3.0f; v+= passoV){
+        for(float u = 0.0f; u < 2*Math.PI-passoU; u+=passoU){
+            for(float v = -3.0f; v < 4.0f-passoV; v+= passoV){
 
 				float x = coordX(v, u), y = coordY(v, u), z = coordZ(v, u);
 				Vetor a = new Vetor(x, y, z);
 				
-				x = coordX(v + passoV, u);
-				y = coordY(v + passoV, u);
-				z = coordZ(v + passoV, u);
-				Vetor b = new Vetor(x, y, z);
-				
 				x = coordX(v, u + passoU);
 				y = coordY(v, u + passoU);
 				z = coordZ(v, u + passoU);
+				Vetor b = new Vetor(x, y, z);
+				
+				x = coordX(v + passoV, u);
+				y = coordY(v + passoV, u);
+				z = coordZ(v + passoV, u);
 				Vetor c = new Vetor(x, y, z);
 				
 				x = coordX(v + passoV, u + passoU);
 				y = coordY(v + passoV, u + passoU);
-				z = coordZ(v+passoV, u+passoU);
+				z = coordZ(v + passoV, u + passoU);
 				Vetor d = new Vetor(x, y, z);
 
                 elipsoideWireframe.preencheVertices(a);
-                elipsoideWireframe.preencheVertices(c);
                 elipsoideWireframe.preencheVertices(b);
 
-                elipsoideWireframe.preencheVertices(b);
+                elipsoideWireframe.preencheVertices(d);
                 elipsoideWireframe.preencheVertices(c);
+
+                elipsoideWireframe.preencheVertices(b);
                 elipsoideWireframe.preencheVertices(d);
 
-                /*elipsoideWireframe.preencheVertices(d);
                 elipsoideWireframe.preencheVertices(c);
-
-                elipsoideWireframe.preencheVertices(c);
-                elipsoideWireframe.preencheVertices(a);*/
+                elipsoideWireframe.preencheVertices(a);
 
 				//Normal para fora, paraboloide externo
                 //Primeiro triangulo (inferior)
@@ -92,7 +90,6 @@ public class Elipsoide extends SurfaceObject{
                     elipsoide.preencheCores(cor);
                 }
 
-				
 				//Normal do primeiro triangulo
 				Vetor ab = new Vetor();			
 				ab = ab.subtracao(b, a);
@@ -100,8 +97,7 @@ public class Elipsoide extends SurfaceObject{
 				Vetor bc = new Vetor();
 				bc = bc.subtracao(c, a);
 				
-				Vetor normalT1 = new Vetor();
-				normalT1 = bc.vetorial(ab);
+				Vetor normalT1 = bc.vetorial(ab);
 				normalT1.normaliza();
 
                 for(int j = 0; j < 3; j++) {
@@ -115,8 +111,7 @@ public class Elipsoide extends SurfaceObject{
 				Vetor bd = new Vetor();
 				bd = bd.subtracao(b, d);
 				
-				Vetor normalT2 = new Vetor();
-				normalT2 = bd.vetorial(cb);
+				Vetor normalT2 = bd.vetorial(cb);
 				normalT2.normaliza();
 
                 for(int j = 0; j < 3; j++){
@@ -140,7 +135,7 @@ public class Elipsoide extends SurfaceObject{
     }
 	
 	public float coordZ(float v, float u){
-        return (float) (C+(Zo + C*Math.sin(v)));
+        return (float) (C + (Zo + C*Math.sin(v)));
 	}
 
     @Override
@@ -162,7 +157,6 @@ public class Elipsoide extends SurfaceObject{
         }
 
         // Let the object draw
-
         /** ELIPSOIDE **/
         // Pass in the position information
         GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
@@ -191,21 +185,19 @@ public class Elipsoide extends SurfaceObject{
 		if( glCameraMatrixBuffer != null) {
 			// Transform to where the marker is
 			GLES20.glUniformMatrix4fv(muMVMatrixHandle, 1, false, glMatrix, 0);
-			GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
-			GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
+            GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
+            GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
 			GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
 		}
-/*
-		*//** ELIPSOIDE WIREFRAME**//*
+
+		/** ELIPSOIDE WIREFRAME **/
 		// Pass in the position information
-		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
-				false, 0, elipsoideWireframe.getVertices()); // 3 = Size of the position data in elements.
+        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
+                false, 0, elipsoideWireframe.getVertices()); // 3 = Size of the position data in elements.
 
 		GLES20.glEnableVertexAttribArray(mPositionHandle);
 
-        //GLES20.glLineWidth(2.0f);
-
 		// Desenha elipsoide
-		GLES20.glDrawArrays(GLES20.GL_LINES, 0, elipsoideWireframe.getNumIndices());*/
+		GLES20.glDrawArrays(GLES20.GL_LINES, 0, numCoordWire/3);
     }
 }
