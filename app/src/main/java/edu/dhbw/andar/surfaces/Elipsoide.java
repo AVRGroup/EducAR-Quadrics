@@ -21,14 +21,14 @@ public class Elipsoide extends SurfaceObject{
 	public final int stacks = 24;
 
 	public final float passoU = (float) ((2*Math.PI)/slices);
-	public final float passoV = (float) ((7.0f)/stacks);
+	public final float passoV = (float) ((Math.PI)/stacks);
 		
 	public final int numCoord = (slices)*(stacks)*3*6;
 	public final int numCoordWire = (slices)*(stacks)*3*8;
 
-    public final float A = 40.0f;
-    public final float B = 40.0f;
-    public final float C = 40.0f;
+    public final float A = 20.0f;
+    public final float B = 20.0f;
+    public final float C = 30.0f;
     public final float Xo = 0.0f;
     public final float Yo = 0.0f;
     public final float Zo = 0.0f;
@@ -42,8 +42,8 @@ public class Elipsoide extends SurfaceObject{
 	}
 	
 	public void constroiElipsoide(){
-        for(float u = 0.0f; u < 2*Math.PI-passoU; u+=passoU){
-            for(float v = -3.0f; v < 4.0f-passoV; v+= passoV){
+        for(float v = 0.0f; v <= Math.PI-passoV; v+= passoV){
+            for(float u = 0.0f; u < 2*Math.PI-passoU; u+=passoU){
 
 				float x = coordX(v, u), y = coordY(v, u), z = coordZ(v, u);
 				Vetor a = new Vetor(x, y, z);
@@ -127,15 +127,15 @@ public class Elipsoide extends SurfaceObject{
 	}
 
 	public float coordX(float v, float u){
-		return (float) (Xo + A*Math.cos(v)*Math.sin(u));
+		return (float) (Xo + A*Math.cos(u)*Math.sin(v));
     }
 	
 	public float coordY(float v, float u){
-        return (float) (Yo + B*Math.cos(v)*Math.cos(u));
+        return (float) (Yo + B*Math.sin(u)*Math.sin(v));
     }
 	
 	public float coordZ(float v, float u){
-        return (float) (C + (Zo + C*Math.sin(v)));
+        return (float) (C + (Zo + C*Math.cos(v)));
 	}
 
     @Override
@@ -197,7 +197,9 @@ public class Elipsoide extends SurfaceObject{
 
 		GLES20.glEnableVertexAttribArray(mPositionHandle);
 
+        GLES20.glLineWidth(2.0f);
+
 		// Desenha elipsoide
-		GLES20.glDrawArrays(GLES20.GL_LINES, 0, numCoordWire/3);
+		GLES20.glDrawArrays(GLES20.GL_LINES, 0, elipsoideWireframe.getNumIndices());
     }
 }
