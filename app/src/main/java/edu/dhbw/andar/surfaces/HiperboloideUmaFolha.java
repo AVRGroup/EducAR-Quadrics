@@ -29,6 +29,13 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 	public final int numCoord = slices*(stacks+1)*3*6;
 	public final int numCoordWire = slices*(stacks+1)*3*8;
 
+	public final float A = 10.0f;
+	public final float B = 20.0f;
+	public final float C = 30.0f;
+	public final float Xo = 0.0f;
+	public final float Yo = 0.0f;
+	public final float Zo = 0.0f;
+
 	public HiperboloideUmaFolha(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
 		super(name, patternName, markerWidth, markerCenter, renderer);
 
@@ -142,15 +149,15 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 	}
 	
 	public float coordX(float v, float u){
-		return (float) (10*Math.cosh(u)*Math.cos(v));
+		return (float) (Xo + (A * Math.cosh(u)*Math.cos(v)));
 	}
 	
 	public float coordY(float v, float u){
-		return (float) (10*Math.cosh(u)*Math.sin(v));
+		return (float) (Yo + (B * Math.cosh(u)*Math.sin(v)));
 	}
 	
 	public float coordZ(float v, float u){
-		return (float) (20.0f+(10*Math.sinh(u)));				
+		return (float) (2 * C + (Zo + (C * Math.sinh(u))));
 	}
 
 	@Override
