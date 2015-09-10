@@ -19,19 +19,10 @@
  */
 package edu.dhbw.andar;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.Date;
-import java.util.List;
-
-
-import edu.dhbw.andar.exceptions.AndARException;
 import edu.dhbw.andar.exceptions.AndARRuntimeException;
 import edu.dhbw.andar.interfaces.OpenGLRenderer;
-import edu.dhbw.andar.pub.CustomActivity;
-import edu.dhbw.andar.util.GraphicsUtil;
 import edu.dhbw.andar.util.IO;
 import getcomp.educar.quadrics.R;
 
@@ -42,14 +33,8 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ConfigurationInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.PixelFormat;
-import android.graphics.Bitmap.CompressFormat;
 import android.hardware.Camera;
-import android.hardware.Camera.Parameters;
-import android.hardware.Camera.Size;
 import android.opengl.GLSurfaceView;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.view.SurfaceHolder;
@@ -59,7 +44,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.SurfaceHolder.Callback;
 import android.widget.FrameLayout;
-import android.widget.Toast;
+
 
 public abstract class AndARActivity extends Activity implements Callback, UncaughtExceptionHandler{
 	private GLSurfaceView glSurfaceView;
@@ -75,6 +60,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
 	private Preview previewSurface;
 	private boolean startPreviewRightAway;
 	private boolean gles20 = false;
+
 	
 	public AndARActivity() {
 		startPreviewRightAway = true;
@@ -89,12 +75,15 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Thread.currentThread().setUncaughtExceptionHandler(this);
         res = getResources();
         
         artoolkit = new ARToolkit(res, getFilesDir());
         setFullscreen();
         disableScreenTurnOff();
+
+
         //orientation is set via the manifest
         try {
 			IO.transferFilesToPrivateFS(getFilesDir(),res);
@@ -102,7 +91,10 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
 			e.printStackTrace();
 			throw new AndARRuntimeException(e.getMessage());
 		}
-		FrameLayout frame = new FrameLayout(this);
+
+        setContentView(R.layout.primeiro);
+        FrameLayout frame = (FrameLayout)findViewById(R.id.frame_principal);
+
 		previewSurface = new Preview(this);
 				
         glSurfaceView = new GLSurfaceView(this);
@@ -120,7 +112,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
         glSurfaceView.setRenderer(renderer);
         glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         glSurfaceView.getHolder().addCallback(this);
-        
+
         frame.addView(glSurfaceView);
         frame.addView(previewSurface);
         
@@ -128,12 +120,10 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
         frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            	openOptionsMenu();
+                openOptionsMenu();
             }
         });
-        
-        
-        setContentView(frame);
+
         if(Config.DEBUG)
          	Debug.startMethodTracing("AndAR");
     }
@@ -266,6 +256,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
     	if(mPausing || isFinishing()) return;
     	if (camStatus.previewing) stopPreview();
     	openCamera();
+        camera.setDisplayOrientation(90);
 		camera.startPreview();
 		camStatus.previewing = true;
     }
@@ -285,9 +276,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
 	 * @see android.view.SurfaceHolder.Callback#surfaceChanged(android.view.SurfaceHolder, int, int, int)
 	 */
 
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
-		
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 	}
 
 	/* The GLSurfaceView was created
@@ -296,7 +285,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
 	 */
 
 	public void surfaceCreated(SurfaceHolder holder) {
-		surfaceCreated = true;			
+        surfaceCreated = true;
 	}
 
 	/* GLSurfaceView was destroyed

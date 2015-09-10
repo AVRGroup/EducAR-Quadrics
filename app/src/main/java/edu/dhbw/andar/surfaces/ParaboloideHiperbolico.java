@@ -22,7 +22,7 @@ public class ParaboloideHiperbolico extends SurfaceObject{
 	public final int numCoord = slices*stacks*18;
 	public final int numCoordWire = slices*stacks*3*8;
 	
-	public final float A = 10.0f, B = 10.0f;
+	public final float A = 8.0f, B = 8.0f;
 
 	public final float passoU = (float) ((8.0f)/slices);
 	public final float passoV = (float) ((8.0f)/stacks);

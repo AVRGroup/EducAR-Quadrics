@@ -30,8 +30,8 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 	public final int numCoordWire = slices*(stacks+1)*3*8;
 
 	public final float A = 10.0f;
-	public final float B = 20.0f;
-	public final float C = 30.0f;
+	public final float B = 10.0f;
+	public final float C = 10.0f;
 	public final float Xo = 0.0f;
 	public final float Yo = 0.0f;
 	public final float Zo = 0.0f;
