@@ -44,59 +44,84 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.SurfaceHolder.Callback;
 import android.widget.FrameLayout;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import android.widget.RelativeLayout;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.view.GravityCompat;
+import android.view.Gravity;
+import java.util.ArrayList;
 
 
 public abstract class AndARActivity extends Activity implements Callback, UncaughtExceptionHandler{
-	private GLSurfaceView glSurfaceView;
-	private Camera camera;
-	private AndARRenderer renderer;
-	private Resources res;
-	private CameraPreviewHandler cameraHandler;
-	private boolean mPausing = false;
-	private ARToolkit artoolkit;
-	private CameraStatus camStatus = new CameraStatus();
-	private boolean surfaceCreated = false;
-	private SurfaceHolder mSurfaceHolder = null;
-	private Preview previewSurface;
-	private boolean startPreviewRightAway;
-	private boolean gles20 = false;
+    private GLSurfaceView glSurfaceView;
+    private Camera camera;
+    private AndARRenderer renderer;
+    private Resources res;
+    private CameraPreviewHandler cameraHandler;
+    private boolean mPausing = false;
+    private ARToolkit artoolkit;
+    private CameraStatus camStatus = new CameraStatus();
+    private boolean surfaceCreated = false;
+    private SurfaceHolder mSurfaceHolder = null;
+    private Preview previewSurface;
+    private boolean startPreviewRightAway;
+    private boolean gles20 = false;
 
-	
-	public AndARActivity() {
-		startPreviewRightAway = true;
-	}
-	
-	public AndARActivity(boolean startPreviewRightAway) {
-		this.startPreviewRightAway = startPreviewRightAway;
-	}
 
-	
+//	private ListView mDrawerList;
+//	private ArrayAdapter<String> mAdapter;
+//	private DrawerLayout mDrawerLayout;
+
+
+    ListView mDrawerList;
+    RelativeLayout mDrawerPane;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+
+    ArrayList<NavDrawerItem> mNavItems = new ArrayList<NavDrawerItem>();
+
+
+
+
+    public AndARActivity() {
+        startPreviewRightAway = true;
+    }
+
+    public AndARActivity(boolean startPreviewRightAway) {
+        this.startPreviewRightAway = startPreviewRightAway;
+    }
+
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         Thread.currentThread().setUncaughtExceptionHandler(this);
         res = getResources();
-        
+
         artoolkit = new ARToolkit(res, getFilesDir());
         setFullscreen();
+
         disableScreenTurnOff();
-
-
         //orientation is set via the manifest
         try {
-			IO.transferFilesToPrivateFS(getFilesDir(),res);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new AndARRuntimeException(e.getMessage());
-		}
+            IO.transferFilesToPrivateFS(getFilesDir(),res);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new AndARRuntimeException(e.getMessage());
+        }
 
-        setContentView(R.layout.primeiro);
-        FrameLayout frame = (FrameLayout)findViewById(R.id.frame_principal);
+//        setContentView(R.layout.main);
+//		//FrameLayout frame = new FrameLayout(this);
+//		FrameLayout frame = (FrameLayout) findViewById(R.id.frame_layout_OpenGL);
 
-		previewSurface = new Preview(this);
-				
+        previewSurface = new Preview(this);
+
         glSurfaceView = new GLSurfaceView(this);
         if( !Config.FORCE_GL10 && detectOpenGLES20()) {
             // If we aren't forcing GL10 and we have GLES20 available, we'll use it.
@@ -107,62 +132,90 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
             // Just use GL10
             renderer = new AndARRenderer(res, artoolkit, this);
         }
-        
+
         cameraHandler = new CameraPreviewHandler(glSurfaceView, renderer, res, artoolkit, camStatus);
         glSurfaceView.setRenderer(renderer);
         glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         glSurfaceView.getHolder().addCallback(this);
 
+
+        //setOrientation();
+
+        setContentView(R.layout.main);
+
+        FrameLayout frame = (FrameLayout) findViewById(R.id.frame_layout_OpenGL);
+
+
         frame.addView(glSurfaceView);
         frame.addView(previewSurface);
-        
-        
+
         frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openOptionsMenu();
+                mDrawerLayout.openDrawer(Gravity.LEFT);
             }
         });
 
+
+
+
+
+
+        //FrameLayout frame = new FrameLayout(this);
+
+
+        //setContentView(frame);
+        //setContentView(R.layout.main);
+
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mDrawerList = (ListView)findViewById(R.id.navList);
+        addDrawerItems();
+
+        mDrawerLayout.openDrawer(Gravity.LEFT);
+
+
+
         if(Config.DEBUG)
-         	Debug.startMethodTracing("AndAR");
+            Debug.startMethodTracing("AndAR");
     }
-    
+
     /**
      * Detect if the system supports GLES 2.0 for advanced rendering
      */
     private boolean detectOpenGLES20() {
         ActivityManager am =
-            (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo info = am.getDeviceConfigurationInfo();
         //return (info.reqGlEsVersion >= 0x20000);
         return true;
     }
-    
+
     /**
      * Set a renderer that draws non AR stuff. Optional, may be set to null or omited.
      * and setups lighting stuff.
      * @param customRenderer
      */
     public void setNonARRenderer(OpenGLRenderer customRenderer) {
-		renderer.setNonARRenderer(customRenderer);
-	}
+        renderer.setNonARRenderer(customRenderer);
+    }
 
     /**
      * Avoid that the screen get's turned off by the system.
      */
-	public void disableScreenTurnOff() {
-    	getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-    			WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    public void disableScreenTurnOff() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
-    
-	/**
-	 * Set's the orientation to landscape, as this is needed by AndAR.
-	 */
+
+    /**
+     * Set's the orientation to landscape, as this is needed by AndAR.
+     */
     public void setOrientation()  {
-    	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
-    
+
     /**
      * Maximize the application.
      */
@@ -171,215 +224,244 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
-   
+
     public void setNoTitle() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-    } 
-    
+    }
+
     @Override
     protected void onPause() {
-    	mPausing = true;
+        mPausing = true;
         this.glSurfaceView.onPause();
         super.onPause();
         finish();
         if(cameraHandler != null)
-        	cameraHandler.stopThreads();
+            cameraHandler.stopThreads();
     }
-    
+
     @Override
     protected void onDestroy() {
-    	super.onDestroy();    	
-    	System.runFinalization();
-    	if(Config.DEBUG)
-    		Debug.stopMethodTracing();
+        super.onDestroy();
+        System.runFinalization();
+        if(Config.DEBUG)
+            Debug.stopMethodTracing();
     }
-    
-    
+
+
 
     @Override
     protected void onResume() {
-    	mPausing = false;
-    	glSurfaceView.onResume();
+        mPausing = false;
+        glSurfaceView.onResume();
         super.onResume();
     }
-    
+
     /* (non-Javadoc)
      * @see android.app.Activity#onStop()
      */
     @Override
     protected void onStop() {
-    	super.onStop();
+        super.onStop();
     }
-    
+
     /**
      * Open the camera.
      */
     private void openCamera()  {
-    	if (camera == null) {
-    		camera = CameraHolder.instance().open();
-    		 
-    		try {
-				camera.setPreviewDisplay(mSurfaceHolder);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			
-			CameraParameters.setCameraParameters(camera, 
-					previewSurface.getWidth(), previewSurface.getHeight());
-	        
-	        if(!Config.USE_ONE_SHOT_PREVIEW) {
-	        	camera.setPreviewCallbackWithBuffer(cameraHandler);	 
-	        } 
-			try {
-				cameraHandler.init(camera);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}			
-    	}
-    }
-    
-    private void closeCamera() {
-        if (camera != null) {
-        	CameraHolder.instance().keep();
-        	CameraHolder.instance().release();
-        	camera = null;
-        	camStatus.previewing = false;
+        if (camera == null) {
+            camera = CameraHolder.instance().open();
+            try {
+                camera.setPreviewDisplay(mSurfaceHolder);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+            CameraParameters.setCameraParameters(camera,
+                    previewSurface.getWidth(), previewSurface.getHeight());
+
+            if(!Config.USE_ONE_SHOT_PREVIEW) {
+                camera.setPreviewCallbackWithBuffer(cameraHandler);
+            }
+            try {
+                cameraHandler.init(camera);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
-    
+
+    private void closeCamera() {
+        if (camera != null) {
+            CameraHolder.instance().keep();
+            CameraHolder.instance().release();
+            camera = null;
+            camStatus.previewing = false;
+        }
+    }
+
     /**
      * Open the camera and start detecting markers.
      * note: You must assure that the preview surface already exists!
      */
     public void startPreview() {
-    	if(!surfaceCreated) return;
-    	if(mPausing || isFinishing()) return;
-    	if (camStatus.previewing) stopPreview();
-    	openCamera();
-        camera.setDisplayOrientation(90);
-		camera.startPreview();
-		camStatus.previewing = true;
+        if(!surfaceCreated) return;
+        if(mPausing || isFinishing()) return;
+        if (camStatus.previewing) stopPreview();
+        openCamera();
+
+
+        Camera.Parameters parameters = camera.getParameters();
+        parameters.set("orientation", "portrait");
+        parameters.setRotation(90);
+        camera.setParameters(parameters);
+
+        camera.startPreview();
+        camStatus.previewing = true;
     }
-    
+
     /**
      * Close the camera and stop detecting markers.
      */
     private void stopPreview() {
-    	if (camera != null && camStatus.previewing ) {
-    		camStatus.previewing = false;
+        if (camera != null && camStatus.previewing ) {
+            camStatus.previewing = false;
             camera.stopPreview();
-         }
-    	
+        }
     }
 
 	/* The GLSurfaceView changed
 	 * @see android.view.SurfaceHolder.Callback#surfaceChanged(android.view.SurfaceHolder, int, int, int)
 	 */
 
-	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-	}
+    public void surfaceChanged(SurfaceHolder holder, int format, int width,
+                               int height) {
+
+    }
 
 	/* The GLSurfaceView was created
-	 * The camera will be opened and the preview started 
+	 * The camera will be opened and the preview started
 	 * @see android.view.SurfaceHolder.Callback#surfaceCreated(android.view.SurfaceHolder)
 	 */
 
-	public void surfaceCreated(SurfaceHolder holder) {
+    public void surfaceCreated(SurfaceHolder holder) {
         surfaceCreated = true;
-	}
+    }
 
 	/* GLSurfaceView was destroyed
 	 * The camera will be closed and the preview stopped.
 	 * @see android.view.SurfaceHolder.Callback#surfaceDestroyed(android.view.SurfaceHolder)
 	 */
 
-	public void surfaceDestroyed(SurfaceHolder holder) {
+    public void surfaceDestroyed(SurfaceHolder holder) {
 
-	}
-	
-	/**
-	 * @return  a the instance of the ARToolkit.
-	 */
-	public ARToolkit getArtoolkit() {
-		return artoolkit;
-	}	
-	
-	/**
-	 * Take a screenshot. Must not be called from the GUI thread, e.g. from methods like
-	 * onCreateOptionsMenu and onOptionsItemSelected. You have to use a asynctask for this purpose.
-	 * @return the screenshot
-	 */
-	public Bitmap takeScreenshot() {
-		return renderer.takeScreenshot();
-	}	
-	
-	/**
-	 * 
-	 * @return the OpenGL surface.
-	 */
-	public SurfaceView getSurfaceView() {
-		return glSurfaceView;
-	}
-	
-	/**
-	 * 
-	 * @return if the rendering is in OpenGL ES 2.0.
-	 */
-	public boolean isGLES20() {
-		return gles20;
-	}
-	
-	/**
-	 * 
-	 * @return the renderer being used in the glSurfaceView
-	 */
-	public AndARRenderer getRenderer() {
-		return renderer;
-	}
-	
-	class Preview extends SurfaceView implements SurfaceHolder.Callback {
-	    SurfaceHolder mHolder;
-	    Camera mCamera;
-	    private int w;
-	    private int h;
-	    
-	    Preview(Context context) {
-	        super(context);
-	        
-	        // Install a SurfaceHolder.Callback so we get notified when the
-	        // underlying surface is created and destroyed.
-	        mHolder = getHolder();
-	        mHolder.addCallback(this);
-	        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-	    }
+    }
 
-	    public void surfaceCreated(SurfaceHolder holder) {
-	    }
+    /**
+     * @return  a the instance of the ARToolkit.
+     */
+    public ARToolkit getArtoolkit() {
+        return artoolkit;
+    }
 
-	    public void surfaceDestroyed(SurfaceHolder holder) {
-	        // Surface will be destroyed when we return, so stop the preview.
-	        // Because the CameraDevice object is not a shared resource, it's very
-	        // important to release it when the activity is paused.
-	        stopPreview();
-	        closeCamera();
-	        mSurfaceHolder = null;
-	    }
+    /**
+     * Take a screenshot. Must not be called from the GUI thread, e.g. from methods like
+     * onCreateOptionsMenu and onOptionsItemSelected. You have to use a asynctask for this purpose.
+     * @return the screenshot
+     */
+    public Bitmap takeScreenshot() {
+        return renderer.takeScreenshot();
+    }
 
-	    public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-	    	this.w=w;
-	    	this.h=h;
-	    	mSurfaceHolder = holder;
-	    	if(startPreviewRightAway)
-	    		startPreview();
-	    }
-	    
-	    public int getScreenWidth() {
-	    	return w;
-	    }
-	    
-	    public int getScreenHeight() {
-	    	return h;
-	    }
+    /**
+     *
+     * @return the OpenGL surface.
+     */
+    public SurfaceView getSurfaceView() {
+        return glSurfaceView;
+    }
 
-	}
+    /**
+     *
+     * @return if the rendering is in OpenGL ES 2.0.
+     */
+    public boolean isGLES20() {
+        return gles20;
+    }
+
+    /**
+     *
+     * @return the renderer being used in the glSurfaceView
+     */
+    public AndARRenderer getRenderer() {
+        return renderer;
+    }
+
+    class Preview extends SurfaceView implements SurfaceHolder.Callback {
+        SurfaceHolder mHolder;
+        Camera mCamera;
+        private int w;
+        private int h;
+
+        Preview(Context context) {
+            super(context);
+
+            // Install a SurfaceHolder.Callback so we get notified when the
+            // underlying surface is created and destroyed.
+            mHolder = getHolder();
+            mHolder.addCallback(this);
+            mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        }
+
+        public void surfaceCreated(SurfaceHolder holder) {
+        }
+
+        public void surfaceDestroyed(SurfaceHolder holder) {
+            // Surface will be destroyed when we return, so stop the preview.
+            // Because the CameraDevice object is not a shared resource, it's very
+            // important to release it when the activity is paused.
+            stopPreview();
+            closeCamera();
+            mSurfaceHolder = null;
+        }
+
+        public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+            this.w=w;
+            this.h=h;
+            mSurfaceHolder = holder;
+            if(startPreviewRightAway)
+                startPreview();
+        }
+
+        public int getScreenWidth() {
+            return w;
+        }
+
+        public int getScreenHeight() {
+            return h;
+        }
+
+        public void rotateCamera(){
+            mCamera.setDisplayOrientation(90);
+        }
+
+    }
+
+
+    private void addDrawerItems() {
+
+        mNavItems.add(new NavDrawerItem(R.drawable.cone));
+        mNavItems.add(new NavDrawerItem(R.drawable.elipsoide));
+        mNavItems.add(new NavDrawerItem(R.drawable.hiperb_duas));
+        mNavItems.add(new NavDrawerItem(R.drawable.hiperb_uma));
+        mNavItems.add(new NavDrawerItem(R.drawable.parab_hip));
+        mNavItems.add(new NavDrawerItem(R.drawable.paraboloide));
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+//	    Populate the Navigtion Drawer with options
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        YourAdapter adapter = new YourAdapter(this, mNavItems);
+        mDrawerList.setAdapter(adapter);
+    }
 }

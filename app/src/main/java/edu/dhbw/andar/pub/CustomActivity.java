@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import edu.dhbw.andar.ARObject;
 import edu.dhbw.andar.AndARActivity;
@@ -26,8 +28,10 @@ import getcomp.educar.quadrics.R;
 public class CustomActivity extends AndARActivity {
 		
 	private static int superficie = 1;
-	
-	//ARGLES20Object rendedObj = null;
+
+	private ListView mDrawerList;
+	private ArrayAdapter<String> mAdapter;
+
 	ARObject rendedObj = null;
 
     @Override
@@ -130,4 +134,12 @@ public class CustomActivity extends AndARActivity {
 	            return true;
 	    }
 	}
+
+	private void addDrawerItems() {
+		String[] osArray = { "TESTE", "TESTE", "TESTE", "TESTE", "TESTE" };
+		mAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item_1, osArray);
+		mDrawerList.setAdapter(mAdapter);
+	}
+
+
 }
