@@ -9,6 +9,8 @@ import edu.dhbw.andar.pub.SurfaceBuffer;
 import edu.dhbw.andar.pub.SurfaceObject;
 import edu.dhbw.andar.pub.Vetor;
 import edu.dhbw.andar.util.GraphicsUtil;
+import android.os.SystemClock;
+import android.util.Log;
 
 
 public class Elipsoide extends SurfaceObject{
@@ -26,12 +28,14 @@ public class Elipsoide extends SurfaceObject{
 	public final int numCoord = (slices)*(stacks)*3*6;
 	public final int numCoordWire = (slices)*(stacks)*3*8;
 
-    public final float A = 20.0f;
+    public float A = 0.0f;
     public final float B = 20.0f;
     public final float C = 30.0f;
     public final float Xo = 0.0f;
     public final float Yo = 0.0f;
     public final float Zo = 0.0f;
+
+    public float dir = 1;
 
     public Elipsoide(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
@@ -155,6 +159,14 @@ public class Elipsoide extends SurfaceObject{
             GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
             GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
         }
+
+        long time = SystemClock.uptimeMillis()  % 100L;
+        if(A <= 15.0 || A >= 25.0) {
+            dir *= -1;
+        }
+        A += (dir) * time;
+
+        constroiElipsoide();
 
         // Let the object draw
         /** ELIPSOIDE **/
