@@ -29,7 +29,7 @@ public class HiperboloideDuasFolhas extends SurfaceObject{
 	public final int numCoord = (slices+1)*(stacks+1)*3*6;
 	public final int numCoordWire = (slices+1)*(stacks+1)*3*8;
 	
-	public final float A = 5.0f, B = 5.0f, C = 5.0f;
+	public float A = 5.0f, B = 5.0f, C = 5.0f;
 
 	public HiperboloideDuasFolhas(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
@@ -153,6 +153,16 @@ public class HiperboloideDuasFolhas extends SurfaceObject{
 	public float coordZ(float t, float u){
 		return (float) (2 * C + (C * t));
 	}
+
+    @Override
+    public float getParameter(){
+        return this.A;
+    }
+
+    @Override
+    public void setParameter(float progress){
+        this.A = progress;
+    }
 
     @Override
     public synchronized void draw( GL10 glUnused ) {

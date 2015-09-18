@@ -154,6 +154,16 @@ public class Cone extends SurfaceObject {
     }
 
     @Override
+    public float getParameter(){
+        return this.u;
+    }
+
+    @Override
+    public void setParameter(float progress){
+        this.u = progress;
+    }
+
+    @Override
     public synchronized void draw( GL10 glUnused ) {
         if(!initialized) {
             init(glUnused);

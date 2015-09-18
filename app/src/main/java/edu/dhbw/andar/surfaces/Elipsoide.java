@@ -28,9 +28,9 @@ public class Elipsoide extends SurfaceObject{
 	public final int numCoord = (slices)*(stacks)*3*6;
 	public final int numCoordWire = (slices)*(stacks)*3*8;
 
-    public float A = 20.0f;
-    public final float B = 20.0f;
-    public final float C = 30.0f;
+    public float A = 10.0f;
+    public float B = 10.0f;
+    public float C = 10.0f;
     public final float Xo = 0.0f;
     public final float Yo = 0.0f;
     public final float Zo = 0.0f;
@@ -143,6 +143,16 @@ public class Elipsoide extends SurfaceObject{
 	}
 
     @Override
+    public float getParameter(){
+        return this.A;
+    }
+
+    @Override
+    public void setParameter(float progress){
+        this.A = progress;
+    }
+
+    @Override
     public synchronized void draw( GL10 glUnused ){
         if(!initialized) {
             init(glUnused);
@@ -164,9 +174,9 @@ public class Elipsoide extends SurfaceObject{
         if(A <= 15.0 || A >= 25.0) {
             dir *= -1;
         }
-        A += (dir) * time;
+        A += (dir) * time;*/
 
-        constroiElipsoide();*/
+        constroiElipsoide();
 
         // Let the object draw
         /** ELIPSOIDE **/

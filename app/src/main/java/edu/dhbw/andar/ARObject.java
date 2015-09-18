@@ -159,5 +159,9 @@ public abstract class ARObject {
 			initialized = true;
 		}
 	}
+
+	public abstract float getParameter();
+
+    public abstract void setParameter(float progress);
 	
 }

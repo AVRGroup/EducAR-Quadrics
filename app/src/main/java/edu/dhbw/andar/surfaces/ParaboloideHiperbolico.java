@@ -22,7 +22,7 @@ public class ParaboloideHiperbolico extends SurfaceObject{
 	public final int numCoord = slices*stacks*18;
 	public final int numCoordWire = slices*stacks*3*8;
 	
-	public final float A = 8.0f, B = 8.0f;
+	public float A = 8.0f, B = 8.0f;
 
 	public final float passoU = (float) ((8.0f)/slices);
 	public final float passoV = (float) ((8.0f)/stacks);
@@ -152,6 +152,16 @@ public class ParaboloideHiperbolico extends SurfaceObject{
 	public float coordZ(float u, float v){
 		return (float) (A+B + (u*u)-(v*v));
 	}
+
+    @Override
+    public float getParameter(){
+        return this.A;
+    }
+
+    @Override
+    public void setParameter(float progress){
+        this.A = progress;
+    }
 
     @Override
     public synchronized void draw( GL10 glUnused ) {

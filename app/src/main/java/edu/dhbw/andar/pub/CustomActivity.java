@@ -22,6 +22,14 @@ import edu.dhbw.andar.surfaces.Paraboloide;
 import edu.dhbw.andar.surfaces.ParaboloideHiperbolico;
 import getcomp.educar.quadrics.R;
 
+
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Toast;
+import android.widget.TextView;
+
+import javax.microedition.khronos.opengles.GL10;
+
 /**
  * Example of an application that makes use of the AndAR toolkit.
  * @author Tobi
@@ -30,6 +38,8 @@ import getcomp.educar.quadrics.R;
 public class CustomActivity extends AndARActivity {
 		
 	private static int superficie = 1;
+
+    private SeekBar seekBar;
 
 	/*private ListView mDrawerList;
 	private ArrayAdapter<String> mAdapter;*/
@@ -42,8 +52,39 @@ public class CustomActivity extends AndARActivity {
 
         CriaBotoes();
 
+        CriaScaleBar();
+
 		DesenhaSuperficie();		
 	}
+
+    public void CriaScaleBar(){
+        seekBar = (SeekBar) findViewById(R.id.scale_bar);
+
+        seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+            int progress = 10;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+                progress = progresValue;
+                rendedObj.setParameter(progress);
+                DesenhaSuperficie();
+                //Toast.makeText(getApplicationContext(), "Changing seekbar's progress", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                //Toast.makeText(getApplicationContext(), "Started tracking seekbar", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                //textView.setText("Covered: " + progress + "/" + seekBar.getMax());
+                //Toast.makeText(getApplicationContext(), "Stopped tracking seekbar", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
 
     public void CriaBotoes(){
         ImageButton btnElipsoide = (ImageButton) findViewById(R.id.btn_elipsoide);

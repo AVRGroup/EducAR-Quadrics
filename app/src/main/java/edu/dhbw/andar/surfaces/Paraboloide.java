@@ -20,7 +20,7 @@ public class Paraboloide extends SurfaceObject{
 	public final int stacks = 32;
 	public final int numCoord = slices*stacks*18;
 	public final int numCoordWire = slices*stacks*3*8;
-	public final float A = 3.0f, B = 3.0f, C = 0.1f;
+	public float A = 3.0f, B = 3.0f, C = 0.1f;
 	public float theta = 0.0f;
 	public float alpha = 0.0f;
 	public final float passoT = (float) ((2*Math.PI)/slices);
@@ -144,6 +144,16 @@ public class Paraboloide extends SurfaceObject{
 	public float coordY(float alpha, float theta){
 		return (float) (B*alpha*Math.sin(theta));
 	}
+
+    @Override
+    public float getParameter(){
+        return this.A;
+    }
+
+    @Override
+    public void setParameter(float progress){
+        this.A = progress;
+    }
 
     @Override
     public synchronized void draw( GL10 glUnused ) {
