@@ -70,11 +70,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
     private boolean startPreviewRightAway;
     private boolean gles20 = false;
 
-
-//	private ListView mDrawerList;
-//	private ArrayAdapter<String> mAdapter;
-//	private DrawerLayout mDrawerLayout;
-
+/*
 
     ListView mDrawerList;
     RelativeLayout mDrawerPane;
@@ -82,9 +78,9 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
     private DrawerLayout mDrawerLayout;
 
     ArrayList<NavDrawerItem> mNavItems = new ArrayList<NavDrawerItem>();
+*/
 
-
-
+    View surface_menu;
 
     public AndARActivity() {
         startPreviewRightAway = true;
@@ -116,10 +112,9 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
             throw new AndARRuntimeException(e.getMessage());
         }
 
-//        setContentView(R.layout.main);
-//		//FrameLayout frame = new FrameLayout(this);
-//		FrameLayout frame = (FrameLayout) findViewById(R.id.frame_layout_OpenGL);
+        setContentView(R.layout.main_layout);
 
+        FrameLayout frame = (FrameLayout) findViewById(R.id.main_frame);
         previewSurface = new Preview(this);
 
         glSurfaceView = new GLSurfaceView(this);
@@ -139,43 +134,27 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
         glSurfaceView.getHolder().addCallback(this);
 
 
-        //setOrientation();
-
-        setContentView(R.layout.main);
-
-        FrameLayout frame = (FrameLayout) findViewById(R.id.frame_layout_OpenGL);
-
-
         frame.addView(glSurfaceView);
         frame.addView(previewSurface);
+
+        surface_menu = (View) findViewById(R.id.surface_menu);
 
         frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawerLayout.openDrawer(Gravity.LEFT);
+                if(surface_menu.getVisibility() == View.VISIBLE)
+                    surface_menu.setVisibility(View.GONE);
+                if(surface_menu.getVisibility() == View.GONE)
+                    surface_menu.setVisibility(View.VISIBLE);
             }
         });
 
-
-
-
-
-
-        //FrameLayout frame = new FrameLayout(this);
-
-
-        //setContentView(frame);
-        //setContentView(R.layout.main);
-
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+/*        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         mDrawerList = (ListView)findViewById(R.id.navList);
         addDrawerItems();
 
-        mDrawerLayout.openDrawer(Gravity.LEFT);
-
-
+        mDrawerLayout.openDrawer(Gravity.LEFT);*/
 
         if(Config.DEBUG)
             Debug.startMethodTracing("AndAR");
@@ -448,7 +427,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
     }
 
 
-    private void addDrawerItems() {
+/*    private void addDrawerItems() {
 
         mNavItems.add(new NavDrawerItem(R.drawable.cone));
         mNavItems.add(new NavDrawerItem(R.drawable.elipsoide));
@@ -463,5 +442,5 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
         mDrawerList = (ListView) findViewById(R.id.navList);
         YourAdapter adapter = new YourAdapter(this, mNavItems);
         mDrawerList.setAdapter(adapter);
-    }
+    }*/
 }

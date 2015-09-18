@@ -28,7 +28,7 @@ public class Elipsoide extends SurfaceObject{
 	public final int numCoord = (slices)*(stacks)*3*6;
 	public final int numCoordWire = (slices)*(stacks)*3*8;
 
-    public float A = 0.0f;
+    public float A = 20.0f;
     public final float B = 20.0f;
     public final float C = 30.0f;
     public final float Xo = 0.0f;
@@ -160,13 +160,13 @@ public class Elipsoide extends SurfaceObject{
             GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
         }
 
-        long time = SystemClock.uptimeMillis()  % 100L;
+        /*long time = SystemClock.uptimeMillis()  % 100L;
         if(A <= 15.0 || A >= 25.0) {
             dir *= -1;
         }
         A += (dir) * time;
 
-        constroiElipsoide();
+        constroiElipsoide();*/
 
         // Let the object draw
         /** ELIPSOIDE **/
