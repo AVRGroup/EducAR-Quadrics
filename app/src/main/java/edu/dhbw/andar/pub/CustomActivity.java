@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -29,16 +31,77 @@ public class CustomActivity extends AndARActivity {
 		
 	private static int superficie = 1;
 
-	private ListView mDrawerList;
-	private ArrayAdapter<String> mAdapter;
+	/*private ListView mDrawerList;
+	private ArrayAdapter<String> mAdapter;*/
 
 	ARObject rendedObj = null;
 
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        CriaBotoes();
+
 		DesenhaSuperficie();		
 	}
+
+    public void CriaBotoes(){
+        ImageButton btnElipsoide = (ImageButton) findViewById(R.id.btn_elipsoide);
+        ImageButton btnCone = (ImageButton) findViewById(R.id.btn_cone);
+        ImageButton btnParaboloide = (ImageButton) findViewById(R.id.btn_paraboloide);
+        ImageButton btnHiperb_uma = (ImageButton) findViewById(R.id.btn_hiperb_uma);
+        ImageButton btnHiperb_duas = (ImageButton) findViewById(R.id.btn_hiperb_duas);
+        ImageButton btnParaboloide_hiperb = (ImageButton) findViewById(R.id.btn_paraboloide_hiperb);
+
+        //Evento ao clicar no ImageButton
+        btnElipsoide.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View arg0) {
+                superficie = 1;
+                DesenhaSuperficie();
+            }
+        });
+
+        btnCone.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View arg0) {
+                superficie = 2;
+                DesenhaSuperficie();
+            }
+        });
+
+        btnParaboloide.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View arg0) {
+                superficie = 3;
+                DesenhaSuperficie();
+            }
+        });
+
+        btnHiperb_uma.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View arg0) {
+                superficie = 4;
+                DesenhaSuperficie();
+            }
+        });
+
+        btnHiperb_duas.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View arg0) {
+                superficie = 5;
+                DesenhaSuperficie();
+            }
+        });
+
+        btnParaboloide_hiperb.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View arg0) {
+                superficie = 6;
+                DesenhaSuperficie();
+            }
+        });
+    }
 
     public void DesenhaSuperficie(){
 		try {
@@ -135,11 +198,11 @@ public class CustomActivity extends AndARActivity {
 	    }
 	}
 
-	private void addDrawerItems() {
+	/*private void addDrawerItems() {
 		String[] osArray = { "TESTE", "TESTE", "TESTE", "TESTE", "TESTE" };
 		mAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item_1, osArray);
 		mDrawerList.setAdapter(mAdapter);
-	}
+	}*/
 
 
 }

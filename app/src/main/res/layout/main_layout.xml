@@ -15,53 +15,54 @@
         android:layout_height="wrap_content"
         android:id="@+id/surface_menu"
         android:background="#00ffffff"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#00ffffff">
+            android:background="#00ffffff"
+            android:visibility="visible">
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/elipsoide"
+                android:id="@+id/btn_elipsoide"
                 android:src="@drawable/elipsoide"
                 android:layout_margin="0dp" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/cone"
+                android:id="@+id/btn_cone"
                 android:src="@drawable/cone"
                 android:layout_margin="0dp" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/paraboloide"
+                android:id="@+id/btn_paraboloide"
                 android:src="@drawable/paraboloide"
                 android:layout_margin="0dp" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/hiperb_uma"
+                android:id="@+id/btn_hiperb_uma"
                 android:src="@drawable/hiperb_uma"
                 android:layout_margin="0dp" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/hiperb_duas"
+                android:id="@+id/btn_hiperb_duas"
                 android:src="@drawable/hiperb_duas"
                 android:layout_margin="0dp" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/paraboloide_hiperb"
+                android:id="@+id/btn_paraboloide_hiperb"
                 android:src="@drawable/paraboloide_hiperb"
                 android:layout_margin="0dp" />
         </LinearLayout>

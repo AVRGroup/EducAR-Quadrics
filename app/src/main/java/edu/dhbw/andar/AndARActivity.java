@@ -142,10 +142,10 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
         frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(surface_menu.getVisibility() == View.VISIBLE)
+                /*if(surface_menu.getVisibility() == View.VISIBLE)
                     surface_menu.setVisibility(View.GONE);
                 if(surface_menu.getVisibility() == View.GONE)
-                    surface_menu.setVisibility(View.VISIBLE);
+                    surface_menu.setVisibility(View.VISIBLE);*/
             }
         });
 
