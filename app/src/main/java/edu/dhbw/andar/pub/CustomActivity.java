@@ -7,8 +7,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import edu.dhbw.andar.ARObject;
 import edu.dhbw.andar.AndARActivity;
@@ -25,10 +23,6 @@ import getcomp.educar.quadrics.R;
 
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.Toast;
-import android.widget.TextView;
-
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Example of an application that makes use of the AndAR toolkit.
@@ -40,9 +34,6 @@ public class CustomActivity extends AndARActivity {
 	private static int superficie = 1;
 
     private SeekBar seekBar;
-
-	/*private ListView mDrawerList;
-	private ArrayAdapter<String> mAdapter;*/
 
 	ARObject rendedObj = null;
 
@@ -62,26 +53,21 @@ public class CustomActivity extends AndARActivity {
 
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-            int progress = 10;
+            int progress = 11;
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
                 progress = progresValue;
-                rendedObj.setParameter(progress);
-                DesenhaSuperficie();
-                //Toast.makeText(getApplicationContext(), "Changing seekbar's progress", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                //Toast.makeText(getApplicationContext(), "Started tracking seekbar", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                //textView.setText("Covered: " + progress + "/" + seekBar.getMax());
-                //Toast.makeText(getApplicationContext(), "Stopped tracking seekbar", Toast.LENGTH_SHORT).show();
-
+                rendedObj.setParameter(progress);
+                rendedObj.buildSurface();
             }
         });
     }
@@ -155,7 +141,8 @@ public class CustomActivity extends AndARActivity {
 				switch(superficie) {
 				case 1:
 					rendedObj = new Elipsoide("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
-					break;
+					seekBar.setMax(30);
+                    break;
 				case 2:
 					rendedObj = new Cone("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
@@ -238,12 +225,4 @@ public class CustomActivity extends AndARActivity {
 	            return true;
 	    }
 	}
-
-	/*private void addDrawerItems() {
-		String[] osArray = { "TESTE", "TESTE", "TESTE", "TESTE", "TESTE" };
-		mAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item_1, osArray);
-		mDrawerList.setAdapter(mAdapter);
-	}*/
-
-
 }

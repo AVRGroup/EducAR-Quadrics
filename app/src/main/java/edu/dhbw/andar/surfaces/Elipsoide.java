@@ -42,10 +42,10 @@ public class Elipsoide extends SurfaceObject{
 
 		elipsoide = new SurfaceBuffer(numCoord, 0, 1);
         elipsoideWireframe = new SurfaceBuffer(numCoordWire, 1, 1);
-        constroiElipsoide();
+        buildSurface();
 	}
 	
-	public void constroiElipsoide(){
+	public void buildSurface(){
         for(float v = 0.0f; v <= Math.PI-passoV; v+= passoV){
             for(float u = 0.0f; u < 2*Math.PI-passoU; u+=passoU){
 
@@ -149,7 +149,7 @@ public class Elipsoide extends SurfaceObject{
 
     @Override
     public void setParameter(float progress){
-        this.A = progress;
+        this.C = progress;
     }
 
     @Override
@@ -176,7 +176,7 @@ public class Elipsoide extends SurfaceObject{
         }
         A += (dir) * time;*/
 
-        constroiElipsoide();
+        //buildSurface();
 
         // Let the object draw
         /** ELIPSOIDE **/

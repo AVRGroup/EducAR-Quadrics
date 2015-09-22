@@ -163,5 +163,7 @@ public abstract class ARObject {
 	public abstract float getParameter();
 
     public abstract void setParameter(float progress);
+
+	public abstract void buildSurface();
 	
 }

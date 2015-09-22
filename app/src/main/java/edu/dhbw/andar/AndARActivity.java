@@ -44,16 +44,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.SurfaceHolder.Callback;
 import android.widget.FrameLayout;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import android.widget.RelativeLayout;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.view.GravityCompat;
-import android.view.Gravity;
-import java.util.ArrayList;
-
 
 public abstract class AndARActivity extends Activity implements Callback, UncaughtExceptionHandler{
     private GLSurfaceView glSurfaceView;
@@ -70,17 +60,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
     private boolean startPreviewRightAway;
     private boolean gles20 = false;
 
-/*
-
-    ListView mDrawerList;
-    RelativeLayout mDrawerPane;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerLayout;
-
-    ArrayList<NavDrawerItem> mNavItems = new ArrayList<NavDrawerItem>();
-*/
-
-    View surface_menu;
+    private View surface_menu, seekbar_layout;
 
     public AndARActivity() {
         startPreviewRightAway = true;
@@ -95,7 +75,6 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         Thread.currentThread().setUncaughtExceptionHandler(this);
         res = getResources();
@@ -114,7 +93,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
 
         setContentView(R.layout.main_layout);
 
-        FrameLayout frame = (FrameLayout) findViewById(R.id.main_frame);
+        FrameLayout frame = (FrameLayout) findViewById(R.id.view_frame);
         previewSurface = new Preview(this);
 
         glSurfaceView = new GLSurfaceView(this);
@@ -138,23 +117,19 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
         frame.addView(previewSurface);
 
         surface_menu = (View) findViewById(R.id.surface_menu);
-
+        seekbar_layout = (View) findViewById(R.id.scale_bar);
         frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if(surface_menu.getVisibility() == View.VISIBLE)
+                if(surface_menu.getVisibility() == View.VISIBLE) {
                     surface_menu.setVisibility(View.GONE);
-                if(surface_menu.getVisibility() == View.GONE)
-                    surface_menu.setVisibility(View.VISIBLE);*/
+                    seekbar_layout.setVisibility(View.GONE);
+                }else{
+                    surface_menu.setVisibility(View.VISIBLE);
+                    seekbar_layout.setVisibility(View.VISIBLE);
+                }
             }
         });
-
-/*        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        mDrawerList = (ListView)findViewById(R.id.navList);
-        addDrawerItems();
-
-        mDrawerLayout.openDrawer(Gravity.LEFT);*/
 
         if(Config.DEBUG)
             Debug.startMethodTracing("AndAR");
@@ -425,22 +400,4 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
         }
 
     }
-
-
-/*    private void addDrawerItems() {
-
-        mNavItems.add(new NavDrawerItem(R.drawable.cone));
-        mNavItems.add(new NavDrawerItem(R.drawable.elipsoide));
-        mNavItems.add(new NavDrawerItem(R.drawable.hiperb_duas));
-        mNavItems.add(new NavDrawerItem(R.drawable.hiperb_uma));
-        mNavItems.add(new NavDrawerItem(R.drawable.parab_hip));
-        mNavItems.add(new NavDrawerItem(R.drawable.paraboloide));
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-//	    Populate the Navigtion Drawer with options
-        mDrawerList = (ListView) findViewById(R.id.navList);
-        YourAdapter adapter = new YourAdapter(this, mNavItems);
-        mDrawerList.setAdapter(adapter);
-    }*/
 }

@@ -43,10 +43,10 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 		hiperbUmaExt = new SurfaceBuffer(numCoord, 0, 1);
 		hiperbUmaWire = new SurfaceBuffer(numCoordWire, 1, 1);
 
-		constroiHiperboloide();
+		buildSurface();
 	}
 	
-	public void constroiHiperboloide(){
+	public void buildSurface(){
 		
 		for(u = -1.5f; u < 1.5f; u+=passoU){
 			for(v = 0.0f; v < 2*Math.PI; v+= passoV){

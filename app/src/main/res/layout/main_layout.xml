@@ -1,42 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/seekbar_layout">
-
-        <SeekBar
-            android:id="@+id/scale_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="50"
-            android:layout_weight="1" />
-    </LinearLayout>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/main_frame">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/main_frame"
-        android:layout_weight="1"></FrameLayout>
+        android:id="@+id/view_frame"></FrameLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/surface_menu"
+    <SeekBar
+            android:id="@+id/scale_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="50"
+        android:layout_gravity="center_horizontal|top"
         android:background="#00ffffff"
-        android:visibility="visible">
+        android:visibility="gone" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#00ffffff"
-            android:visibility="visible">
+            android:id="@+id/surface_menu"
+            android:gravity="center_horizontal|bottom"
+            android:layout_gravity="center_horizontal|bottom"
+            android:visibility="gone">
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -80,6 +69,4 @@
                 android:src="@drawable/paraboloide_hiperb"
                 android:layout_margin="0dp" />
         </LinearLayout>
-    </LinearLayout>
-
-</LinearLayout>
+</FrameLayout>

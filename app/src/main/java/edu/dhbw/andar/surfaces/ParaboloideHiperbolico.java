@@ -35,10 +35,10 @@ public class ParaboloideHiperbolico extends SurfaceObject{
         parabHipExt = new SurfaceBuffer(numCoord, 0, 1);
         parabHipInt = new SurfaceBuffer(numCoord, 0, -1);
         parabHipWire = new SurfaceBuffer(numCoordWire, 1, 1);
-		constroiParaboloideHiperbolico();
+		buildSurface();
 	}
 	
-	public void constroiParaboloideHiperbolico(){
+	public void buildSurface(){
 		
 		for(u = -4.0f; u < 4.0f; u+= passoU){
 			for(v = -4.0f; v < 4.0f; v+= passoV){

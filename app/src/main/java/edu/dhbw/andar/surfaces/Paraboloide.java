@@ -32,10 +32,10 @@ public class Paraboloide extends SurfaceObject{
         paraboloideExt = new SurfaceBuffer(numCoord, 0, 1);
         paraboloideInt = new SurfaceBuffer(numCoord, 0, -1);
         paraboloideWire = new SurfaceBuffer(numCoordWire, 1, 1);
-		constroiParaboloide();
+		buildSurface();
 	}
 	
-	public void constroiParaboloide(){
+	public void buildSurface(){
 		
 		for(theta = 0.0f; theta < 2*Math.PI-passoT+erro; theta+= passoT){
 			for(alpha = 0.0f; alpha < 2*Math.PI-passoA+erro; alpha+= passoA){

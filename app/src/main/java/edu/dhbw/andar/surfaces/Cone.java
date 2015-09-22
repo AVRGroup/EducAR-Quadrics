@@ -35,10 +35,10 @@ public class Cone extends SurfaceObject {
         coneExt = new SurfaceBuffer(numCoord, 0, 1);
         coneWire = new SurfaceBuffer(numCoordWire, 1, 1);
 
-        constroiCilindro();
+        buildSurface();
     }
 
-    public void constroiCilindro(){
+    public void buildSurface(){
 
         for(u = -25.0f; u < 25.0f; u+=passoU){
             for(v = 0.0f; v < 2*Math.PI; v+= passoV){
