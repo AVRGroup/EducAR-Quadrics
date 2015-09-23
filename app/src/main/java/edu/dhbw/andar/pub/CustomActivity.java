@@ -35,11 +35,15 @@ public class CustomActivity extends AndARActivity {
 
     private SeekBar seekBar;
 
+    private View seekbar_layout, parameter_group;
+
 	ARObject rendedObj = null;
 
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        seekBar = (SeekBar) findViewById(R.id.scale_bar);
 
         CriaBotoes();
 
@@ -49,11 +53,10 @@ public class CustomActivity extends AndARActivity {
 	}
 
     public void CriaScaleBar(){
-        seekBar = (SeekBar) findViewById(R.id.scale_bar);
 
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-            int progress = 11;
+            int progress = 0;
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
@@ -72,6 +75,16 @@ public class CustomActivity extends AndARActivity {
         });
     }
 
+    public void Visibilidade(){
+        /*seekbar_layout = (View) findViewById(R.id.scale_bar);
+
+        if(seekbar_layout.getVisibility() == View.GONE) {
+            seekbar_layout.setVisibility(View.VISIBLE);
+        }else{
+            seekbar_layout.setVisibility(View.GONE);
+        }*/
+    }
+
     public void CriaBotoes(){
         ImageButton btnElipsoide = (ImageButton) findViewById(R.id.btn_elipsoide);
         ImageButton btnCone = (ImageButton) findViewById(R.id.btn_cone);
@@ -85,6 +98,7 @@ public class CustomActivity extends AndARActivity {
             @Override
             public void onClick(View arg0) {
                 superficie = 1;
+                seekBar.setMax(50);
                 DesenhaSuperficie();
             }
         });
@@ -141,7 +155,6 @@ public class CustomActivity extends AndARActivity {
 				switch(superficie) {
 				case 1:
 					rendedObj = new Elipsoide("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
-					seekBar.setMax(30);
                     break;
 				case 2:
 					rendedObj = new Cone("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());

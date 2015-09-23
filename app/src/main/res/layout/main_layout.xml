@@ -1,72 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:id="@+id/main_frame">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/view_frame"></FrameLayout>
+        android:id="@+id/view_frame">
 
-    <SeekBar
-            android:id="@+id/scale_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="50"
-        android:layout_gravity="center_horizontal|top"
-        android:background="#00ffffff"
-        android:visibility="gone" />
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/scroll_menu"
+        android:layout_gravity="center_vertical|left"
+        android:visibility="visible"
+        android:background="#18dedede">
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/surface_menu"
-            android:gravity="center_horizontal|bottom"
-            android:layout_gravity="center_horizontal|bottom"
-            android:visibility="gone">
-
-            <ImageButton
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_elipsoide"
-                android:src="@drawable/elipsoide"
-                android:layout_margin="0dp" />
+                android:layout_height="match_parent"
+                android:id="@+id/surface_menu">
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_cone"
-                android:src="@drawable/cone"
-                android:layout_margin="0dp" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/btn_elipsoide"
+                    android:src="@drawable/elipsoide"
+                    android:layout_margin="0dp" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_paraboloide"
-                android:src="@drawable/paraboloide"
-                android:layout_margin="0dp" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/btn_cone"
+                    android:src="@drawable/cone"
+                    android:layout_margin="0dp" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_hiperb_uma"
-                android:src="@drawable/hiperb_uma"
-                android:layout_margin="0dp" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/btn_paraboloide"
+                    android:src="@drawable/paraboloide"
+                    android:layout_margin="0dp" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_hiperb_duas"
-                android:src="@drawable/hiperb_duas"
-                android:layout_margin="0dp" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/btn_hiperb_uma"
+                    android:src="@drawable/hiperb_uma"
+                    android:layout_margin="0dp" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_paraboloide_hiperb"
-                android:src="@drawable/paraboloide_hiperb"
-                android:layout_margin="0dp" />
-        </LinearLayout>
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/btn_hiperb_duas"
+                    android:src="@drawable/hiperb_duas"
+                    android:layout_margin="0dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/btn_paraboloide_hiperb"
+                    android:src="@drawable/paraboloide_hiperb"
+                    android:layout_margin="0dp" />
+            </LinearLayout>
+    </ScrollView>
+
+    <SeekBar
+        android:layout_width="446dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/scale_bar"
+        android:layout_gravity="center_horizontal|bottom"
+        android:visibility="visible" />
+
 </FrameLayout>

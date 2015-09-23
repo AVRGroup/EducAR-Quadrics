@@ -13,7 +13,7 @@
 	          android:icon="@drawable/paraboloide"/>
 	    
 	    <item android:id="@+id/parab_hip"
-	          android:icon="@drawable/parab_hip"/>
+	          android:icon="@drawable/paraboloide_hiperb"/>
 	    
 	    <item android:id="@+id/hiperb_duas"
 	          android:icon="@drawable/hiperb_duas"/>

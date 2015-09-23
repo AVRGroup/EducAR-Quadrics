@@ -49,6 +49,8 @@ public abstract class ARObject {
 	private double[] transMat = new double[16];//[3][4] array
 	private int id;
 	protected boolean initialized = false;
+
+	protected float parameter;
 	
 	/**
 	 * Create a new AR object.

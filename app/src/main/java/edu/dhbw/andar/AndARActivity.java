@@ -116,7 +116,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
         frame.addView(glSurfaceView);
         frame.addView(previewSurface);
 
-        surface_menu = (View) findViewById(R.id.surface_menu);
+        surface_menu = (View) findViewById(R.id.scroll_menu);
         seekbar_layout = (View) findViewById(R.id.scale_bar);
         frame.setOnClickListener(new View.OnClickListener() {
             @Override
