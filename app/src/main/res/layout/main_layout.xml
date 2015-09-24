@@ -78,7 +78,7 @@
     </ScrollView>
 
     <SeekBar
-        android:layout_width="@dimen/scale_bar_width"
+        android:layout_width="415dp"
         android:layout_height="wrap_content"
         android:id="@+id/scale_bar"
         android:layout_gravity="center_horizontal|bottom"
@@ -86,7 +86,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="20dp"
         android:max="40"
-        android:progress="10" />
+        android:progress="10"
+        android:layout_marginRight="20dp" />
 
     <LinearLayout
         android:orientation="vertical"

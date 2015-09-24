@@ -22,6 +22,7 @@ import getcomp.educar.quadrics.R;
 
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 import android.widget.RadioButton;
 
@@ -36,7 +37,7 @@ public class CustomActivity extends AndARActivity {
 
     private SeekBar seekBar = null;
 
-    private View seekbar_layout, parameter_group;
+    private TextView textView = null;
 
 	SurfaceObject rendedObj = null;
 
@@ -67,10 +68,10 @@ public class CustomActivity extends AndARActivity {
     public void CriaScaleBar(){
 
         seekBar = (SeekBar) findViewById(R.id.scale_bar);
-
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
             int progress = 10;
+
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
