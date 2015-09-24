@@ -39,6 +39,12 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 	public HiperboloideUmaFolha(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
 		super(name, patternName, markerWidth, markerCenter, renderer);
 
+		if(hiperbUmaInt != null){
+			hiperbUmaInt = null;
+			hiperbUmaExt = null;
+			hiperbUmaWire = null;
+		}
+
 		hiperbUmaInt = new SurfaceBuffer(numCoord, 0, -1);
 		hiperbUmaExt = new SurfaceBuffer(numCoord, 0, 1);
 		hiperbUmaWire = new SurfaceBuffer(numCoordWire, 1, 1);
@@ -47,6 +53,9 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 	}
 	
 	public void buildSurface(){
+		hiperbUmaExt.clearBuffers();
+		hiperbUmaInt.clearBuffers();
+		hiperbUmaWire.vertices.clear();
 		
 		for(u = -1.5f; u < 1.5f; u+=passoU){
 			for(v = 0.0f; v < 2*Math.PI; v+= passoV){

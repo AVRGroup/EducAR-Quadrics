@@ -29,6 +29,13 @@ public class Paraboloide extends SurfaceObject{
 
 	public Paraboloide(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
+
+        if(paraboloideExt != null){
+            paraboloideExt = null;
+            paraboloideInt = null;
+            paraboloideWire = null;
+        }
+
         paraboloideExt = new SurfaceBuffer(numCoord, 0, 1);
         paraboloideInt = new SurfaceBuffer(numCoord, 0, -1);
         paraboloideWire = new SurfaceBuffer(numCoordWire, 1, 1);
@@ -36,6 +43,9 @@ public class Paraboloide extends SurfaceObject{
 	}
 	
 	public void buildSurface(){
+        paraboloideExt.clearBuffers();
+        paraboloideInt.clearBuffers();
+        paraboloideWire.vertices.clear();
 		
 		for(theta = 0.0f; theta < 2*Math.PI-passoT+erro; theta+= passoT){
 			for(alpha = 0.0f; alpha < 2*Math.PI-passoA+erro; alpha+= passoA){

@@ -32,6 +32,12 @@ public class ParaboloideHiperbolico extends SurfaceObject{
 
 	public ParaboloideHiperbolico(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
+        if(parabHipExt != null){
+            parabHipExt = null;
+            parabHipInt = null;
+            parabHipWire = null;
+        }
+
         parabHipExt = new SurfaceBuffer(numCoord, 0, 1);
         parabHipInt = new SurfaceBuffer(numCoord, 0, -1);
         parabHipWire = new SurfaceBuffer(numCoordWire, 1, 1);
@@ -39,6 +45,9 @@ public class ParaboloideHiperbolico extends SurfaceObject{
 	}
 	
 	public void buildSurface(){
+        parabHipExt.clearBuffers();
+        parabHipInt.clearBuffers();
+        parabHipWire.vertices.clear();
 		
 		for(u = -4.0f; u < 4.0f; u+= passoU){
 			for(v = -4.0f; v < 4.0f; v+= passoV){

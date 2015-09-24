@@ -39,6 +39,10 @@ public class Elipsoide extends SurfaceObject{
 
     public Elipsoide(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
+        if(elipsoide != null){
+            elipsoide = null;
+            elipsoideWireframe = null;
+        }
 
 		elipsoide = new SurfaceBuffer(numCoord, 0, 1);
         elipsoideWireframe = new SurfaceBuffer(numCoordWire, 1, 1);
@@ -46,6 +50,9 @@ public class Elipsoide extends SurfaceObject{
 	}
 	
 	public void buildSurface(){
+        elipsoide.clearBuffers();
+        elipsoideWireframe.vertices.clear();
+
         for(float v = 0.0f; v <= Math.PI-passoV; v+= passoV){
             for(float u = 0.0f; u < 2*Math.PI-passoU; u+=passoU){
 
@@ -149,7 +156,7 @@ public class Elipsoide extends SurfaceObject{
 
     @Override
     public void setParameter(float progress){
-        this.C = progress;
+        this.A = progress;
     }
 
     @Override

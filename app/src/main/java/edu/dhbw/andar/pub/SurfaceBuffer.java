@@ -72,4 +72,10 @@ public class SurfaceBuffer {
     public int getNumIndices(){
         return numCoord/3;
     }
+
+    public void clearBuffers(){
+        this.vertices.clear();
+        this.cores.clear();
+        this.normais.clear();
+    }
 }

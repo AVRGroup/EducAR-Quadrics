@@ -31,6 +31,12 @@ public class Cone extends SurfaceObject {
     public Cone(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
 
+        if(coneExt != null){
+            coneExt = null;
+            coneInt = null;
+            coneWire = null;
+        }
+
         coneInt = new SurfaceBuffer(numCoord, 0, -1);
         coneExt = new SurfaceBuffer(numCoord, 0, 1);
         coneWire = new SurfaceBuffer(numCoordWire, 1, 1);
@@ -39,6 +45,9 @@ public class Cone extends SurfaceObject {
     }
 
     public void buildSurface(){
+        coneExt.clearBuffers();
+        coneInt.clearBuffers();
+        coneWire.vertices.clear();
 
         for(u = -25.0f; u < 25.0f; u+=passoU){
             for(v = 0.0f; v < 2*Math.PI; v+= passoV){

@@ -34,26 +34,39 @@ public class CustomActivity extends AndARActivity {
 		
 	private static int superficie = 1;
 
-    private SeekBar seekBar;
+    private SeekBar seekBar = null;
 
     private View seekbar_layout, parameter_group;
 
-	ARObject rendedObj = null;
+	SurfaceObject rendedObj = null;
+
+    SurfaceObject elipsoide, cone, paraboloide, hiperb_uma, hiperb_duas, paraboloide_hiperb;
 
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-        seekBar = (SeekBar) findViewById(R.id.scale_bar);
-
-        CriaBotoes();
+        CriaSuperficies();
 
         CriaScaleBar();
+
+        CriaBotoes();
 
 		DesenhaSuperficie();		
 	}
 
+    public void CriaSuperficies(){
+        elipsoide = new Elipsoide("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+        cone = new Cone("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+        paraboloide = new Paraboloide("paraboloide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+        hiperb_uma = new HiperboloideUmaFolha("hiperbuma", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+        hiperb_duas = new HiperboloideDuasFolhas("hiperbduas", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+        paraboloide_hiperb = new ParaboloideHiperbolico("parabhip", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+
+    }
+
     public void CriaScaleBar(){
+
+        seekBar = (SeekBar) findViewById(R.id.scale_bar);
 
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
@@ -175,25 +188,32 @@ public class CustomActivity extends AndARActivity {
 			if( super.isGLES20() ) {
 				switch(superficie) {
 				case 1:
-					rendedObj = new Elipsoide("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    rendedObj = elipsoide;
+					//rendedObj = new Elipsoide("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
                     break;
 				case 2:
-					rendedObj = new Cone("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    rendedObj = cone;
+					//rendedObj = new Cone("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 3:
-					rendedObj =  new Paraboloide("paraboloide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    rendedObj = paraboloide;
+					//rendedObj =  new Paraboloide("paraboloide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 4:
-					rendedObj = new HiperboloideUmaFolha("hiperbuma", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    rendedObj = hiperb_uma;
+					//rendedObj = new HiperboloideUmaFolha("hiperbuma", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 5:
-					rendedObj = new HiperboloideDuasFolhas("hiperbduas", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    rendedObj = hiperb_duas;
+					//rendedObj = new HiperboloideDuasFolhas("hiperbduas", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 6:
-					rendedObj =  new ParaboloideHiperbolico("parabhip", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    rendedObj = paraboloide_hiperb;
+					//rendedObj =  new ParaboloideHiperbolico("parabhip", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				default:
-					rendedObj =  new Elipsoide("test", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    rendedObj = elipsoide;
+					//rendedObj =  new Elipsoide("test", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 				}
 				
 				super.getArtoolkit().registerARObject(rendedObj);
