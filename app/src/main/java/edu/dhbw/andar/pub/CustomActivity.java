@@ -20,9 +20,10 @@ import edu.dhbw.andar.surfaces.Paraboloide;
 import edu.dhbw.andar.surfaces.ParaboloideHiperbolico;
 import getcomp.educar.quadrics.R;
 
-
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+
+import android.widget.RadioButton;
 
 /**
  * Example of an application that makes use of the AndAR toolkit.
@@ -56,7 +57,7 @@ public class CustomActivity extends AndARActivity {
 
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-            int progress = 0;
+            int progress = 10;
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
@@ -73,6 +74,27 @@ public class CustomActivity extends AndARActivity {
                 rendedObj.buildSurface();
             }
         });
+    }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.rd_a:
+                if (checked)
+                    // Pirates are the best
+                    break;
+            case R.id.rd_b:
+                if (checked)
+                    // Ninjas rule
+                    break;
+            case R.id.rd_c:
+                if (checked)
+                    // Ninjas rule
+                    break;
+        }
     }
 
     public void Visibilidade(){
@@ -98,7 +120,6 @@ public class CustomActivity extends AndARActivity {
             @Override
             public void onClick(View arg0) {
                 superficie = 1;
-                seekBar.setMax(50);
                 DesenhaSuperficie();
             }
         });
@@ -194,48 +215,5 @@ public class CustomActivity extends AndARActivity {
 		Log.e("AndAR EXCEPTION", ex.getMessage());
 		finish();
 	}	
-	
-	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.menu_layout, menu);
-		return true;
-	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-	    switch (item.getItemId()) {
-	        case R.id.cone:
-	        	superficie = 2;
-				DesenhaSuperficie();
-	            return true;
-	        case R.id.elipsoide:
-	        	superficie = 1;
-				DesenhaSuperficie();
-	            return true;
-	        case R.id.paraboloide:
-	        	superficie = 3;
-				DesenhaSuperficie();
-	            return true;
-	        case R.id.hiperb_uma:
-	        	superficie = 4;
-				DesenhaSuperficie();
-	            return true;
-	        case R.id.hiperb_duas:
-	        	superficie = 5;
-				DesenhaSuperficie();
-	            return true;
-	        case R.id.parab_hip:
-	        	superficie = 6;
-				DesenhaSuperficie();
-	            return true;
-	        default:
-	            return true;
-	    }
-	}
 }

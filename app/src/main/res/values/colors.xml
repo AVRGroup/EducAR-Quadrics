@@ -5,4 +5,9 @@
     <item name="cinza_escuro" type="color">#FF2E2E2E</item>
     <item name="cinza_claro" type="color">#FF585858</item>
     <item name="branco" type="color">#FFFFFFFF</item>
+
+    <color name="default_screen_bg">#f9f9f9</color>
+    <color name="rounded_container_bg">#222222</color>
+    <color name="rounded_container_border">#3b3f44</color>
+    <color name="light_gray_header_color">#646663</color>
 </resources>

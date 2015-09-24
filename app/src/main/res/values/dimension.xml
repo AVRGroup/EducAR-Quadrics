@@ -6,4 +6,5 @@
     <dimen name="eqn_img_height">60dp</dimen>
     <dimen name="rd_margin">5dp</dimen>
     <dimen name="surface_btn_margin">7dp</dimen>
+    <dimen name="scale_bar_width">450dp</dimen>
 </resources>

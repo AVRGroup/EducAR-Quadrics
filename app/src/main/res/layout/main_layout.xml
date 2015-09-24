@@ -78,11 +78,15 @@
     </ScrollView>
 
     <SeekBar
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/scale_bar_width"
         android:layout_height="wrap_content"
         android:id="@+id/scale_bar"
         android:layout_gravity="center_horizontal|bottom"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:max="40"
+        android:progress="10" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -90,7 +94,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/eqn_group"
         android:layout_gravity="right|top"
-        android:background="@color/cinza_escuro"
+        android:background="@drawable/background_view_rounded_single"
         android:alpha="0.7">
 
         <ImageView
@@ -115,7 +119,8 @@
                         android:textColor="@color/branco"
                         android:textSize="@dimen/txt_radio_size"
                         android:textStyle="italic"
-                        android:layout_marginRight="@dimen/rd_margin" />
+                        android:layout_marginRight="@dimen/rd_margin"
+                        android:onClick="onRadioButtonClicked" />
 
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -126,7 +131,8 @@
                         android:textSize="@dimen/txt_radio_size"
                         android:textStyle="italic"
                         android:layout_marginLeft="@dimen/rd_margin"
-                        android:layout_marginRight="@dimen/rd_margin" />
+                        android:layout_marginRight="@dimen/rd_margin"
+                        android:onClick="onRadioButtonClicked" />
 
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -136,7 +142,8 @@
                         android:textColor="@color/branco"
                         android:textSize="@dimen/txt_radio_size"
                         android:textStyle="italic"
-                        android:layout_marginLeft="@dimen/rd_margin" />
+                        android:layout_marginLeft="@dimen/rd_margin"
+                        android:onClick="onRadioButtonClicked" />
                 </RadioGroup>
 
     </LinearLayout>
