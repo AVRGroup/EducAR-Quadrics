@@ -4,4 +4,5 @@
     <item name="madeira" type="color">#FF92714C</item>
     <item name="cinza_escuro" type="color">#FF2E2E2E</item>
     <item name="cinza_claro" type="color">#FF585858</item>
+    <item name="branco" type="color">#FFFFFFFF</item>
 </resources>

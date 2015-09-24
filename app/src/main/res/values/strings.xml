@@ -25,8 +25,8 @@
     <string name="z">z²</string>
     <string name="signal">+</string>
     <string name="divisor">_</string>
-    <string name="a">A²</string>
-    <string name="b">B²</string>
-    <string name="c">C²</string>
+    <string name="a">a</string>
+    <string name="b">b</string>
+    <string name="c">c</string>
     <string name="space">   </string>
 </resources>

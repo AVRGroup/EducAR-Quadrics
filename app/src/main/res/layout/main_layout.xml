@@ -27,57 +27,58 @@
                 android:id="@+id/surface_menu">
 
                 <ImageButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/surface_btn_size"
                     android:layout_height="match_parent"
                     android:id="@+id/btn_elipsoide"
                     android:src="@drawable/elipsoide"
-                    android:layout_margin="7dp"
-                    android:background="@color/cinza_escuro" />
+                    android:layout_margin="@dimen/surface_btn_margin"
+                    android:background="@color/cinza_escuro"
+                    android:adjustViewBounds="false" />
 
                 <ImageButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/surface_btn_size"
                     android:layout_height="match_parent"
                     android:id="@+id/btn_cone"
                     android:src="@drawable/cone"
-                    android:layout_margin="7dp"
+                    android:layout_margin="@dimen/surface_btn_margin"
                     android:background="@color/cinza_escuro" />
 
                 <ImageButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/surface_btn_size"
                     android:layout_height="match_parent"
                     android:id="@+id/btn_paraboloide"
                     android:src="@drawable/paraboloide"
-                    android:layout_margin="7dp"
+                    android:layout_margin="@dimen/surface_btn_margin"
                     android:background="@color/cinza_escuro" />
 
                 <ImageButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/surface_btn_size"
                     android:layout_height="match_parent"
                     android:id="@+id/btn_hiperb_uma"
                     android:src="@drawable/hiperb_uma"
-                    android:layout_margin="7dp"
+                    android:layout_margin="@dimen/surface_btn_margin"
                     android:background="@color/cinza_escuro" />
 
                 <ImageButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/surface_btn_size"
                     android:layout_height="match_parent"
                     android:id="@+id/btn_hiperb_duas"
                     android:src="@drawable/hiperb_duas"
-                    android:layout_margin="7dp"
+                    android:layout_margin="@dimen/surface_btn_margin"
                     android:background="@color/cinza_escuro" />
 
                 <ImageButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/surface_btn_size"
                     android:layout_height="match_parent"
                     android:id="@+id/btn_paraboloide_hiperb"
                     android:src="@drawable/paraboloide_hiperb"
-                    android:layout_margin="7dp"
+                    android:layout_margin="@dimen/surface_btn_margin"
                     android:background="@color/cinza_escuro" />
             </LinearLayout>
     </ScrollView>
 
     <SeekBar
-        android:layout_width="446dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/scale_bar"
         android:layout_gravity="center_horizontal|bottom"
@@ -93,10 +94,51 @@
         android:alpha="0.7">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/eqn_img_width"
+            android:layout_height="@dimen/eqn_img_height"
             android:id="@+id/img_equation"
-            android:src="@drawable/eqn_elipsoide" />
+            android:src="@drawable/eqn_elipsoide"
+            android:layout_gravity="top" />
+
+                <RadioGroup
+                    android:layout_width="@dimen/eqn_img_width"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="bottom">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rd_a"
+                        android:text="@string/a"
+                        android:textColor="@color/branco"
+                        android:textSize="@dimen/txt_radio_size"
+                        android:textStyle="italic"
+                        android:layout_marginRight="@dimen/rd_margin" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/b"
+                        android:id="@+id/rd_b"
+                        android:textColor="@color/branco"
+                        android:textSize="@dimen/txt_radio_size"
+                        android:textStyle="italic"
+                        android:layout_marginLeft="@dimen/rd_margin"
+                        android:layout_marginRight="@dimen/rd_margin" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/c"
+                        android:id="@+id/rd_c"
+                        android:textColor="@color/branco"
+                        android:textSize="@dimen/txt_radio_size"
+                        android:textStyle="italic"
+                        android:layout_marginLeft="@dimen/rd_margin" />
+                </RadioGroup>
+
     </LinearLayout>
 
 </FrameLayout>

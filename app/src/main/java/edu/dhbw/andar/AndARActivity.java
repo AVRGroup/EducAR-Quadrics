@@ -60,7 +60,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
     private boolean startPreviewRightAway;
     private boolean gles20 = false;
 
-    private View surface_menu, seekbar_layout;
+    private View surface_menu, seekbar_layout, eqn_group;
 
     public AndARActivity() {
         startPreviewRightAway = true;
@@ -118,15 +118,18 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
 
         surface_menu = (View) findViewById(R.id.scroll_menu);
         seekbar_layout = (View) findViewById(R.id.scale_bar);
+        eqn_group = (View) findViewById(R.id.eqn_group);
         frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(surface_menu.getVisibility() == View.VISIBLE) {
                     surface_menu.setVisibility(View.GONE);
                     seekbar_layout.setVisibility(View.GONE);
+                    eqn_group.setVisibility(View.GONE);
                 }else{
                     surface_menu.setVisibility(View.VISIBLE);
                     seekbar_layout.setVisibility(View.VISIBLE);
+                    eqn_group.setVisibility(View.VISIBLE);
                 }
             }
         });
