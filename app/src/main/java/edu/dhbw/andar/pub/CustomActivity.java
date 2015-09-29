@@ -46,6 +46,7 @@ public class CustomActivity extends AndARActivity {
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
         CriaSuperficies();
 
         CriaScaleBar();
@@ -68,6 +69,10 @@ public class CustomActivity extends AndARActivity {
     public void CriaScaleBar(){
 
         seekBar = (SeekBar) findViewById(R.id.scale_bar);
+        textView = (TextView) findViewById(R.id.txt_progress);
+
+        textView.setText("Valor: " + seekBar.getProgress());
+
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
             int progress = 10;
@@ -84,6 +89,7 @@ public class CustomActivity extends AndARActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                textView.setText("Valor: " + progress);
                 rendedObj.setParameter(progress);
                 rendedObj.buildSurface();
             }
@@ -98,15 +104,15 @@ public class CustomActivity extends AndARActivity {
         switch(view.getId()) {
             case R.id.rd_a:
                 if (checked)
-                    // Pirates are the best
+                    rendedObj.index = 0;
                     break;
             case R.id.rd_b:
                 if (checked)
-                    // Ninjas rule
+                    rendedObj.index = 1;
                     break;
             case R.id.rd_c:
                 if (checked)
-                    // Ninjas rule
+                    rendedObj.index = 2;
                     break;
         }
     }

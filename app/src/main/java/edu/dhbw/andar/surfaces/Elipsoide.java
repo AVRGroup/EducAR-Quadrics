@@ -39,6 +39,10 @@ public class Elipsoide extends SurfaceObject{
 
     public Elipsoide(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
+        parameters[0] = 10.0f;
+        parameters[1] = 10.0f;
+        parameters[2] = 10.0f;
+
         if(elipsoide != null){
             elipsoide = null;
             elipsoideWireframe = null;
@@ -138,25 +142,25 @@ public class Elipsoide extends SurfaceObject{
 	}
 
 	public float coordX(float v, float u){
-		return (float) (Xo + A*Math.cos(u)*Math.sin(v));
+		return (float) (Xo + parameters[0]*Math.cos(u)*Math.sin(v));
     }
 	
 	public float coordY(float v, float u){
-        return (float) (Yo + B*Math.sin(u)*Math.sin(v));
+        return (float) (Yo + parameters[1]*Math.sin(u)*Math.sin(v));
     }
 	
 	public float coordZ(float v, float u){
-        return (float) (C + (Zo + C*Math.cos(v)));
+        return (float) (C + (Zo + parameters[2]*Math.cos(v)));
 	}
 
     @Override
     public float getParameter(){
-        return this.A;
+        return this.parameters[index];
     }
 
     @Override
     public void setParameter(float progress){
-        this.A = progress;
+        this.parameters[index] = progress;
     }
 
     @Override

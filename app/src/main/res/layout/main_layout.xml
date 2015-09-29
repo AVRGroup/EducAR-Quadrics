@@ -78,7 +78,7 @@
     </ScrollView>
 
     <SeekBar
-        android:layout_width="415dp"
+        android:layout_width="381dp"
         android:layout_height="wrap_content"
         android:id="@+id/scale_bar"
         android:layout_gravity="center_horizontal|bottom"
@@ -88,6 +88,20 @@
         android:max="40"
         android:progress="10"
         android:layout_marginRight="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/txt_progress"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="20dp"
+        android:textColor="@color/branco"
+        android:background="@drawable/background_view_rounded_single"
+        android:visibility="visible"
+        android:alpha="0.7"
+        android:padding="3dp" />
 
     <LinearLayout
         android:orientation="vertical"

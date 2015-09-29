@@ -32,6 +32,10 @@ public abstract class SurfaceObject extends ARObject{
 
     protected Vetor cor;
 
+    protected float[] parameters = new float[3];
+
+    protected int index = 0;
+
     public SurfaceObject(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter);
         mRenderer = renderer;
