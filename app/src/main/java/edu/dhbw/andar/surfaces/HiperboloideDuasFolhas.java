@@ -29,11 +29,10 @@ public class HiperboloideDuasFolhas extends SurfaceObject{
 	public final int numCoord = (slices+1)*(stacks+1)*3*6;
 	public final int numCoordWire = (slices+1)*(stacks+1)*3*8;
 	
-	public float A = 5.0f, B = 5.0f, C = 5.0f;
+	//public float A = 5.0f, B = 5.0f, C = 5.0f;
 
 	public HiperboloideDuasFolhas(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
-
         parameters[0] = 5.0f;
         parameters[1] = 5.0f;
         parameters[2] = 5.0f;

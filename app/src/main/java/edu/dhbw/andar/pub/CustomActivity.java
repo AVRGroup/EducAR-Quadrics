@@ -69,7 +69,7 @@ public class CustomActivity extends AndARActivity {
 
         textView.setText("Valor: " + seekBar.getProgress());
 
-        seekBar.setMax(rendedObj.getMaxProgress());
+        seekBar.setMax(50);
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
             int progress = rendedObj.getParameter();
