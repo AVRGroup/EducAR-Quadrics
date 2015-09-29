@@ -162,7 +162,7 @@ public abstract class ARObject {
 		}
 	}
 
-	public abstract float getParameter();
+	public abstract int getParameter();
 
     public abstract void setParameter(float progress);
 

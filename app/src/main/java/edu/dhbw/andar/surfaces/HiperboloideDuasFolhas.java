@@ -34,6 +34,12 @@ public class HiperboloideDuasFolhas extends SurfaceObject{
 	public HiperboloideDuasFolhas(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
 
+        parameters[0] = 5.0f;
+        parameters[1] = 5.0f;
+        parameters[2] = 5.0f;
+
+        max_progress = 30;
+
         if(hiperbDuasExt != null){
             hiperbDuasExt = null;
             hiperbDuasInt = null;
@@ -152,25 +158,30 @@ public class HiperboloideDuasFolhas extends SurfaceObject{
 	}
 	
 	public float coordX(float t, float u){
-		return (float) (A * Math.cos(u)*Math.sqrt((t*t)-1));
+		return (float) (parameters[0] * Math.cos(u)*Math.sqrt((t*t)-1));
 	}
 	
 	public float coordY(float t, float u){
-		return (float) (B * Math.sin(u)*Math.sqrt((t*t)-1));
+		return (float) (parameters[1] * Math.sin(u)*Math.sqrt((t*t)-1));
 	}
 	
 	public float coordZ(float t, float u){
-		return (float) (2 * C + (C * t));
+		return (float) (2 * parameters[2] + (parameters[2] * t));
 	}
 
     @Override
-    public float getParameter(){
-        return this.A;
+    public int getParameter(){
+        return (int)this.parameters[index];
+    }
+
+    @Override
+    public int getMaxProgress(){
+        return this.max_progress;
     }
 
     @Override
     public void setParameter(float progress){
-        this.A = progress;
+        this.parameters[index] = progress;
     }
 
     @Override

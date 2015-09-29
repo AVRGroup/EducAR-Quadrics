@@ -31,6 +31,12 @@ public class Cone extends SurfaceObject {
     public Cone(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
 
+        parameters[0] = 10.0f;
+        parameters[1] = 10.0f;
+        parameters[2] = 0.0f;
+
+        max_progress = 70;
+
         if(coneExt != null){
             coneExt = null;
             coneInt = null;
@@ -151,25 +157,30 @@ public class Cone extends SurfaceObject {
     }
 
     public float coordX(float v, float u){
-        return (float) (u*Math.sin(v));
+        return (float) (parameters[0]*Math.sin(parameters[1]));
     }
 
     public float coordY(float v, float u){
-        return (float) (u*Math.cos(v));
+        return (float) (parameters[0]*Math.cos(parameters[1]));
     }
 
     public float coordZ(float u){
-        return 25.0f+u;
+        return 25.0f+parameters[0];
     }
 
     @Override
-    public float getParameter(){
-        return this.u;
+    public int getParameter(){
+        return (int)this.parameters[0];
+    }
+
+    @Override
+    public int getMaxProgress(){
+        return this.max_progress;
     }
 
     @Override
     public void setParameter(float progress){
-        this.u = progress;
+        this.parameters[0] = progress;
     }
 
     @Override

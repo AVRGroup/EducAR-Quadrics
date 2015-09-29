@@ -30,6 +30,13 @@ public class Paraboloide extends SurfaceObject{
 	public Paraboloide(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
 
+        parameters[0] = 3.0f;
+        parameters[1] = 3.0f;
+        parameters[2] = 3.0f;
+
+        max_progress = 20;
+
+
         if(paraboloideExt != null){
             paraboloideExt = null;
             paraboloideInt = null;
@@ -148,21 +155,29 @@ public class Paraboloide extends SurfaceObject{
 	}
 	
 	public float coordX(float alpha, float theta){
-		return (float) (A*alpha*Math.cos(theta));
+		return (float) (parameters[0]*alpha*Math.cos(theta));
 	}
 	
 	public float coordY(float alpha, float theta){
-		return (float) (B*alpha*Math.sin(theta));
+		return (float) (parameters[1]*alpha*Math.sin(theta));
 	}
 
     @Override
-    public float getParameter(){
-        return this.A;
+    public int getParameter(){
+        return (int)parameters[index];
+    }
+
+    @Override
+    public int getMaxProgress(){
+        return this.max_progress;
     }
 
     @Override
     public void setParameter(float progress){
-        this.A = progress;
+        if(index == 2)
+            this.parameters[index] = 0.0f;
+        else
+            this.parameters[index] = progress;
     }
 
     @Override

@@ -43,6 +43,8 @@ public class Elipsoide extends SurfaceObject{
         parameters[1] = 10.0f;
         parameters[2] = 10.0f;
 
+        max_progress = 40;
+
         if(elipsoide != null){
             elipsoide = null;
             elipsoideWireframe = null;
@@ -154,13 +156,18 @@ public class Elipsoide extends SurfaceObject{
 	}
 
     @Override
-    public float getParameter(){
-        return this.parameters[index];
+    public int getParameter(){
+        return (int) this.parameters[index];
     }
 
     @Override
     public void setParameter(float progress){
         this.parameters[index] = progress;
+    }
+
+    @Override
+    public int getMaxProgress(){
+        return this.max_progress;
     }
 
     @Override

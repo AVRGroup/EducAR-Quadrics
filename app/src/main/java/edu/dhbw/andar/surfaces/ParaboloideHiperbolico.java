@@ -32,6 +32,12 @@ public class ParaboloideHiperbolico extends SurfaceObject{
 
 	public ParaboloideHiperbolico(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
+        parameters[0] = 8.0f;
+        parameters[1] = 8.0f;
+        parameters[2] = 0.0f;
+
+        max_progress = 40;
+
         if(parabHipExt != null){
             parabHipExt = null;
             parabHipInt = null;
@@ -151,25 +157,33 @@ public class ParaboloideHiperbolico extends SurfaceObject{
 	}
 	
 	public float coordX(float u, float v){
-		return (float) (A*u);
+		return (float) (parameters[0]*u);
 	}
 	
 	public float coordY(float u, float v){
-		return (float) (B*v);
+		return (float) (parameters[1]*v);
 	}
 	
 	public float coordZ(float u, float v){
-		return (float) (A+B + (u*u)-(v*v));
+		return (float) (parameters[0] + parameters[1] + (u*u)-(v*v));
 	}
 
     @Override
-    public float getParameter(){
-        return this.A;
+    public int getParameter(){
+        return (int)this.parameters[index];
+    }
+
+    @Override
+    public int getMaxProgress(){
+        return this.max_progress;
     }
 
     @Override
     public void setParameter(float progress){
-        this.A = progress;
+        if(index == 2)
+            this.parameters[index] = 0.0f;
+        else
+            this.parameters[index] = progress;
     }
 
     @Override

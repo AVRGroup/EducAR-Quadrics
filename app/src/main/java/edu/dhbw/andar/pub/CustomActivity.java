@@ -2,13 +2,9 @@ package edu.dhbw.andar.pub;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.view.View;
 
-import edu.dhbw.andar.ARObject;
 import edu.dhbw.andar.AndARActivity;
 import edu.dhbw.andar.AndARGLES20Renderer;
 import edu.dhbw.andar.exceptions.AndARException;
@@ -73,10 +69,10 @@ public class CustomActivity extends AndARActivity {
 
         textView.setText("Valor: " + seekBar.getProgress());
 
+        seekBar.setMax(rendedObj.getMaxProgress());
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-            int progress = 10;
-
+            int progress = rendedObj.getParameter();
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
