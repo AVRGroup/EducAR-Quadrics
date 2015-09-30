@@ -28,9 +28,6 @@ public class Elipsoide extends SurfaceObject{
 	public final int numCoord = (slices)*(stacks)*3*6;
 	public final int numCoordWire = (slices)*(stacks)*3*8;
 
-    public float A = 10.0f;
-    public float B = 10.0f;
-    public float C = 10.0f;
     public final float Xo = 0.0f;
     public final float Yo = 0.0f;
     public final float Zo = 0.0f;
@@ -57,7 +54,7 @@ public class Elipsoide extends SurfaceObject{
 	
 	public void buildSurface(){
         elipsoide.clearBuffers();
-        elipsoideWireframe.vertices.clear();
+        elipsoideWireframe.clearBuffers();
 
         for(float v = 0.0f; v <= Math.PI-passoV; v+= passoV){
             for(float u = 0.0f; u < 2*Math.PI-passoU; u+=passoU){
@@ -152,7 +149,7 @@ public class Elipsoide extends SurfaceObject{
     }
 	
 	public float coordZ(float v, float u){
-        return (float) (C + (Zo + parameters[2]*Math.cos(v)));
+        return (float) (parameters[2] + (Zo + parameters[2]*Math.cos(v)));
 	}
 
     @Override

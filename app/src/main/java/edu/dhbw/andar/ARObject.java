@@ -164,6 +164,8 @@ public abstract class ARObject {
 
 	public abstract int getParameter();
 
+	public abstract int getMaxProgress();
+
     public abstract void setParameter(float progress);
 
 	public abstract void buildSurface();

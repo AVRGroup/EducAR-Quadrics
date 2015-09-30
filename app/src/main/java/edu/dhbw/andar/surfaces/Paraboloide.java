@@ -20,7 +20,6 @@ public class Paraboloide extends SurfaceObject{
 	public final int stacks = 32;
 	public final int numCoord = slices*stacks*18;
 	public final int numCoordWire = slices*stacks*3*8;
-	public float A = 3.0f, B = 3.0f, C = 0.1f;
 	public float theta = 0.0f;
 	public float alpha = 0.0f;
 	public final float passoT = (float) ((2*Math.PI)/slices);
@@ -52,27 +51,27 @@ public class Paraboloide extends SurfaceObject{
 	public void buildSurface(){
         paraboloideExt.clearBuffers();
         paraboloideInt.clearBuffers();
-        paraboloideWire.vertices.clear();
+        paraboloideWire.clearBuffers();
 		
 		for(theta = 0.0f; theta < 2*Math.PI-passoT+erro; theta+= passoT){
 			for(alpha = 0.0f; alpha < 2*Math.PI-passoA+erro; alpha+= passoA){
 				
-				float x = coordX(alpha, theta), y = coordY(alpha, theta), z = (x*x+y*y)*C;
+				float x = coordX(alpha, theta), y = coordY(alpha, theta), z = (x*x+y*y)*parameters[2];
 				Vetor a = new Vetor(x, y, z);
 				
 				x = coordX(alpha, theta + passoT);
 				y = coordY(alpha, theta+passoT);
-				z = (x*x+y*y)*C;
+				z = (x*x+y*y)*parameters[2];
 				Vetor b = new Vetor(x, y, z);
 				
 				x = coordX(alpha + passoA, theta);
 				y = coordY(alpha+passoA, theta);
-				z = (x*x+y*y)*C;
+				z = (x*x+y*y)*parameters[2];
 				Vetor c = new Vetor(x, y, z);
 				
 				x = coordX(alpha+passoA, theta+passoT);
 				y = coordY(alpha+passoA, theta+passoT);
-				z = (x*x+y*y)*C;
+				z = (x*x+y*y)*parameters[2];
 				Vetor d = new Vetor(x, y, z);
 
 				paraboloideWire.preencheVertices(a);

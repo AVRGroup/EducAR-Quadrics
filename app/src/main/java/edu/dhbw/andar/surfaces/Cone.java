@@ -53,7 +53,7 @@ public class Cone extends SurfaceObject {
     public void buildSurface(){
         coneExt.clearBuffers();
         coneInt.clearBuffers();
-        coneWire.vertices.clear();
+        coneWire.clearBuffers();
 
         for(u = -25.0f; u < 25.0f; u+=passoU){
             for(v = 0.0f; v < 2*Math.PI; v+= passoV){

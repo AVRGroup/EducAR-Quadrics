@@ -21,8 +21,6 @@ public class ParaboloideHiperbolico extends SurfaceObject{
 	public final int stacks = 20;
 	public final int numCoord = slices*stacks*18;
 	public final int numCoordWire = slices*stacks*3*8;
-	
-	public float A = 8.0f, B = 8.0f;
 
 	public final float passoU = (float) ((8.0f)/slices);
 	public final float passoV = (float) ((8.0f)/stacks);
@@ -53,7 +51,7 @@ public class ParaboloideHiperbolico extends SurfaceObject{
 	public void buildSurface(){
         parabHipExt.clearBuffers();
         parabHipInt.clearBuffers();
-        parabHipWire.vertices.clear();
+        parabHipWire.clearBuffers();
 		
 		for(u = -4.0f; u < 4.0f; u+= passoU){
 			for(v = -4.0f; v < 4.0f; v+= passoV){

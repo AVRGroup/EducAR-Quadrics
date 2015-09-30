@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.ImageButton;
 import android.view.View;
 
+import edu.dhbw.andar.ARToolkit;
 import edu.dhbw.andar.AndARActivity;
 import edu.dhbw.andar.AndARGLES20Renderer;
 import edu.dhbw.andar.exceptions.AndARException;
@@ -35,6 +36,8 @@ public class CustomActivity extends AndARActivity {
 
     private TextView textView = null;
 
+    private ARToolkit art;
+
 	SurfaceObject rendedObj = null;
 
     SurfaceObject elipsoide, cone, paraboloide, hiperb_uma, hiperb_duas, paraboloide_hiperb;
@@ -43,13 +46,17 @@ public class CustomActivity extends AndARActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-        CriaSuperficies();
+        art = super.getArtoolkit();
 
-        CriaScaleBar();
+        //CriaSuperficies();
+
+
 
         CriaBotoes();
 
-		DesenhaSuperficie();		
+		DesenhaSuperficie();
+
+        CriaScaleBar();
 	}
 
     public void CriaSuperficies(){
@@ -69,7 +76,7 @@ public class CustomActivity extends AndARActivity {
 
         textView.setText("Valor: " + seekBar.getProgress());
 
-        seekBar.setMax(50);
+        seekBar.setMax(rendedObj.getMaxProgress());
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
             int progress = rendedObj.getParameter();
@@ -86,8 +93,17 @@ public class CustomActivity extends AndARActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 textView.setText("Valor: " + progress);
-                rendedObj.setParameter(progress);
-                rendedObj.buildSurface();
+                if(rendedObj != null) {
+                    try {
+                        art.unregisterARObject(rendedObj);
+                        rendedObj.setParameter(progress);
+                        rendedObj.buildSurface();
+                        art.registerARObject(rendedObj);
+                    } catch (AndARException ex){
+                        //handle the exception, that means: show the user what happened
+                        Log.e("AndAR EXCEPTION", ex.getMessage());
+                    }
+                }
             }
         });
     }
@@ -184,44 +200,44 @@ public class CustomActivity extends AndARActivity {
     public void DesenhaSuperficie(){
 		try {
             if(rendedObj != null) {
-                super.getArtoolkit().unregisterARObject(rendedObj);
+                art.unregisterARObject(rendedObj);
                 rendedObj = null;
             }
 
 			if( super.isGLES20() ) {
 				switch(superficie) {
 				case 1:
-                    rendedObj = elipsoide;
-					//rendedObj = new Elipsoide("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    //rendedObj = elipsoide;
+					rendedObj = new Elipsoide("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
                     break;
 				case 2:
-                    rendedObj = cone;
-					//rendedObj = new Cone("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    //rendedObj = cone;
+					rendedObj = new Cone("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 3:
-                    rendedObj = paraboloide;
-					//rendedObj =  new Paraboloide("paraboloide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    //rendedObj = paraboloide;
+					rendedObj =  new Paraboloide("paraboloide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 4:
-                    rendedObj = hiperb_uma;
-					//rendedObj = new HiperboloideUmaFolha("hiperbuma", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    //rendedObj = hiperb_uma;
+					rendedObj = new HiperboloideUmaFolha("hiperbuma", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 5:
-                    rendedObj = hiperb_duas;
-					//rendedObj = new HiperboloideDuasFolhas("hiperbduas", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    //rendedObj = hiperb_duas;
+					rendedObj = new HiperboloideDuasFolhas("hiperbduas", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 6:
-                    rendedObj = paraboloide_hiperb;
-					//rendedObj =  new ParaboloideHiperbolico("parabhip", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    //rendedObj = paraboloide_hiperb;
+					rendedObj =  new ParaboloideHiperbolico("parabhip", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				default:
-                    rendedObj = elipsoide;
-					//rendedObj =  new Elipsoide("test", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+                    //rendedObj = elipsoide;
+					rendedObj =  new Elipsoide("test", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 				}
-				
-				super.getArtoolkit().registerARObject(rendedObj);
+
+                art.registerARObject(rendedObj);
 			}
-		} catch (AndARException ex){
+        } catch (AndARException ex){
 			//handle the exception, that means: show the user what happened
             Log.e("AndAR EXCEPTION", ex.getMessage());
 		}

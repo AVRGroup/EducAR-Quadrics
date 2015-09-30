@@ -34,7 +34,9 @@ public abstract class SurfaceObject extends ARObject{
 
     protected float[] parameters = new float[3];
 
-    protected int index = 0, max_progress = 0;
+    protected int index;
+
+    protected int max_progress;
 
     public SurfaceObject(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter);
@@ -44,6 +46,9 @@ public abstract class SurfaceObject extends ARObject{
         simpleProgram = 0;
         muMVMatrixHandle = 0;
         muPMatrixHandle = 0;
+
+        max_progress = 0;
+        index = 0;
 
         cor = new Vetor(1.0f, 0.0f, 0.0f);
     }
@@ -129,6 +134,4 @@ public abstract class SurfaceObject extends ARObject{
      */
     @Override
     public abstract void draw( GL10 glUnused );
-
-    public abstract int getMaxProgress();
 }

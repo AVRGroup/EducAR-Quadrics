@@ -29,9 +29,6 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 	public final int numCoord = slices*(stacks+1)*3*6;
 	public final int numCoordWire = slices*(stacks+1)*3*8;
 
-	public float A = 10.0f;
-	public float B = 10.0f;
-	public float C = 10.0f;
 	public float Xo = 0.0f;
 	public float Yo = 0.0f;
 	public float Zo = 0.0f;
@@ -61,7 +58,7 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 	public void buildSurface(){
 		hiperbUmaExt.clearBuffers();
 		hiperbUmaInt.clearBuffers();
-		hiperbUmaWire.vertices.clear();
+		hiperbUmaWire.clearBuffers();
 		
 		for(u = -1.5f; u < 1.5f; u+=passoU){
 			for(v = 0.0f; v < 2*Math.PI; v+= passoV){
