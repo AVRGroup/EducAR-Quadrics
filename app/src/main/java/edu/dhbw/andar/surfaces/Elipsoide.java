@@ -185,14 +185,6 @@ public class Elipsoide extends SurfaceObject{
             GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
         }
 
-        /*long time = SystemClock.uptimeMillis()  % 100L;
-        if(A <= 15.0 || A >= 25.0) {
-            dir *= -1;
-        }
-        A += (dir) * time;*/
-
-        //buildSurface();
-
         // Let the object draw
         /** ELIPSOIDE **/
         // Pass in the position information

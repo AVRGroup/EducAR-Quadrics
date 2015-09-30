@@ -38,6 +38,8 @@ public class CustomActivity extends AndARActivity {
 
     private ARToolkit art;
 
+    private RadioButton rd_a, rd_b, rd_c;
+
 	SurfaceObject rendedObj = null;
 
     SurfaceObject elipsoide, cone, paraboloide, hiperb_uma, hiperb_duas, paraboloide_hiperb;
@@ -47,10 +49,6 @@ public class CustomActivity extends AndARActivity {
 		super.onCreate(savedInstanceState);
 
         art = super.getArtoolkit();
-
-        //CriaSuperficies();
-
-
 
         CriaBotoes();
 
@@ -77,6 +75,8 @@ public class CustomActivity extends AndARActivity {
         textView.setText("Valor: " + seekBar.getProgress());
 
         seekBar.setMax(rendedObj.getMaxProgress());
+        seekBar.setProgress(rendedObj.getParameter());
+
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
             int progress = rendedObj.getParameter();
@@ -117,26 +117,22 @@ public class CustomActivity extends AndARActivity {
             case R.id.rd_a:
                 if (checked)
                     rendedObj.index = 0;
+                    textView.setText("Valor: " + rendedObj.getParameter());
+                    seekBar.setProgress(rendedObj.getParameter());
                     break;
             case R.id.rd_b:
                 if (checked)
                     rendedObj.index = 1;
+                    textView.setText("Valor: " + rendedObj.getParameter());
+                    seekBar.setProgress(rendedObj.getParameter());
                     break;
             case R.id.rd_c:
                 if (checked)
                     rendedObj.index = 2;
+                    textView.setText("Valor: " + rendedObj.getParameter());
+                    seekBar.setProgress(rendedObj.getParameter());
                     break;
         }
-    }
-
-    public void Visibilidade(){
-        /*seekbar_layout = (View) findViewById(R.id.scale_bar);
-
-        if(seekbar_layout.getVisibility() == View.GONE) {
-            seekbar_layout.setVisibility(View.VISIBLE);
-        }else{
-            seekbar_layout.setVisibility(View.GONE);
-        }*/
     }
 
     public void CriaBotoes(){
@@ -147,11 +143,17 @@ public class CustomActivity extends AndARActivity {
         ImageButton btnHiperb_duas = (ImageButton) findViewById(R.id.btn_hiperb_duas);
         ImageButton btnParaboloide_hiperb = (ImageButton) findViewById(R.id.btn_paraboloide_hiperb);
 
+        rd_a = (RadioButton)findViewById(R.id.rd_a);
+        rd_b = (RadioButton)findViewById(R.id.rd_b);
+        rd_c = (RadioButton)findViewById(R.id.rd_c);
+
+
         //Evento ao clicar no ImageButton
         btnElipsoide.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View arg0) {
                 superficie = 1;
+                rd_c.setVisibility(View.VISIBLE);
                 DesenhaSuperficie();
             }
         });
@@ -160,6 +162,7 @@ public class CustomActivity extends AndARActivity {
             @Override
             public void onClick(View arg0) {
                 superficie = 2;
+                rd_c.setVisibility(View.GONE);
                 DesenhaSuperficie();
             }
         });
@@ -168,6 +171,7 @@ public class CustomActivity extends AndARActivity {
             @Override
             public void onClick(View arg0) {
                 superficie = 3;
+                rd_c.setVisibility(View.GONE);
                 DesenhaSuperficie();
             }
         });
@@ -176,6 +180,7 @@ public class CustomActivity extends AndARActivity {
             @Override
             public void onClick(View arg0) {
                 superficie = 4;
+                rd_c.setVisibility(View.VISIBLE);
                 DesenhaSuperficie();
             }
         });
@@ -184,6 +189,7 @@ public class CustomActivity extends AndARActivity {
             @Override
             public void onClick(View arg0) {
                 superficie = 5;
+                rd_c.setVisibility(View.VISIBLE);
                 DesenhaSuperficie();
             }
         });
@@ -192,6 +198,7 @@ public class CustomActivity extends AndARActivity {
             @Override
             public void onClick(View arg0) {
                 superficie = 6;
+                rd_c.setVisibility(View.GONE);
                 DesenhaSuperficie();
             }
         });
@@ -207,31 +214,24 @@ public class CustomActivity extends AndARActivity {
 			if( super.isGLES20() ) {
 				switch(superficie) {
 				case 1:
-                    //rendedObj = elipsoide;
 					rendedObj = new Elipsoide("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
                     break;
 				case 2:
-                    //rendedObj = cone;
 					rendedObj = new Cone("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 3:
-                    //rendedObj = paraboloide;
 					rendedObj =  new Paraboloide("paraboloide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 4:
-                    //rendedObj = hiperb_uma;
 					rendedObj = new HiperboloideUmaFolha("hiperbuma", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 5:
-                    //rendedObj = hiperb_duas;
 					rendedObj = new HiperboloideDuasFolhas("hiperbduas", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				case 6:
-                    //rendedObj = paraboloide_hiperb;
 					rendedObj =  new ParaboloideHiperbolico("parabhip", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 					break;
 				default:
-                    //rendedObj = elipsoide;
 					rendedObj =  new Elipsoide("test", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
 				}
 
