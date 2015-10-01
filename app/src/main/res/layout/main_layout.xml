@@ -85,7 +85,6 @@
         android:visibility="visible"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="20dp"
-        android:max="40"
         android:progress="10"
         android:layout_marginRight="20dp" />
 

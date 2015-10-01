@@ -31,9 +31,9 @@ public class Paraboloide extends SurfaceObject{
 
         parameters[0] = 3.0f;
         parameters[1] = 3.0f;
-        parameters[2] = 3.0f;
+        parameters[2] = 0.1f;
 
-        max_progress = 20;
+        max_progress = 12;
 
 
         if(paraboloideExt != null){
@@ -56,22 +56,22 @@ public class Paraboloide extends SurfaceObject{
 		for(theta = 0.0f; theta < 2*Math.PI-passoT+erro; theta+= passoT){
 			for(alpha = 0.0f; alpha < 2*Math.PI-passoA+erro; alpha+= passoA){
 				
-				float x = coordX(alpha, theta), y = coordY(alpha, theta), z = (x*x+y*y)*parameters[2];
+				float x = coordX(alpha, theta), y = coordY(alpha, theta), z = ((x*x+y*y)*parameters[2]);
 				Vetor a = new Vetor(x, y, z);
 				
 				x = coordX(alpha, theta + passoT);
 				y = coordY(alpha, theta+passoT);
-				z = (x*x+y*y)*parameters[2];
+				z = ((x*x+y*y)*parameters[2]);
 				Vetor b = new Vetor(x, y, z);
 				
 				x = coordX(alpha + passoA, theta);
 				y = coordY(alpha+passoA, theta);
-				z = (x*x+y*y)*parameters[2];
+				z = ((x*x+y*y)*parameters[2]);
 				Vetor c = new Vetor(x, y, z);
 				
 				x = coordX(alpha+passoA, theta+passoT);
 				y = coordY(alpha+passoA, theta+passoT);
-				z = (x*x+y*y)*parameters[2];
+				z = ((x*x+y*y)*parameters[2]);
 				Vetor d = new Vetor(x, y, z);
 
 				paraboloideWire.preencheVertices(a);
@@ -173,9 +173,6 @@ public class Paraboloide extends SurfaceObject{
 
     @Override
     public void setParameter(float progress){
-        if(index == 2)
-            this.parameters[index] = 0.0f;
-        else
             this.parameters[index] = progress;
     }
 

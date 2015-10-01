@@ -155,8 +155,10 @@ public class CustomActivity extends AndARActivity {
                 superficie = 1;
                 rd_c.setVisibility(View.VISIBLE);
                 eqn_img.setImageResource(R.drawable.eqn_elipsoide);
-                textView.setText("Valor: " + rendedObj.getParameter());
                 DesenhaSuperficie();
+                textView.setText("Valor: " + rendedObj.getParameter());
+                seekBar.setProgress(rendedObj.getParameter());
+                seekBar.setMax(rendedObj.getMaxProgress());
             }
         });
 
@@ -166,8 +168,10 @@ public class CustomActivity extends AndARActivity {
                 superficie = 2;
                 rd_c.setVisibility(View.GONE);
                 eqn_img.setImageResource(R.drawable.eqn_cone);
-                textView.setText("Valor: " + rendedObj.getParameter());
                 DesenhaSuperficie();
+                textView.setText("Valor: " + rendedObj.getParameter());
+                seekBar.setProgress(rendedObj.getParameter());
+                seekBar.setMax(rendedObj.getMaxProgress());
             }
         });
 
@@ -177,8 +181,10 @@ public class CustomActivity extends AndARActivity {
                 superficie = 3;
                 rd_c.setVisibility(View.GONE);
                 eqn_img.setImageResource(R.drawable.eqn_paraboloide);
-                textView.setText("Valor: " + rendedObj.getParameter());
                 DesenhaSuperficie();
+                textView.setText("Valor: " + rendedObj.getParameter());
+                seekBar.setProgress(rendedObj.getParameter());
+                seekBar.setMax(rendedObj.getMaxProgress());
             }
         });
 
@@ -188,8 +194,10 @@ public class CustomActivity extends AndARActivity {
                 superficie = 4;
                 rd_c.setVisibility(View.VISIBLE);
                 eqn_img.setImageResource(R.drawable.eqn_hiperb_uma);
-                textView.setText("Valor: " + rendedObj.getParameter());
                 DesenhaSuperficie();
+                textView.setText("Valor: " + rendedObj.getParameter());
+                seekBar.setProgress(rendedObj.getParameter());
+                seekBar.setMax(rendedObj.getMaxProgress());
             }
         });
 
@@ -199,8 +207,10 @@ public class CustomActivity extends AndARActivity {
                 superficie = 5;
                 rd_c.setVisibility(View.VISIBLE);
                 eqn_img.setImageResource(R.drawable.eqn_hiperb_duas);
-                textView.setText("Valor: " + rendedObj.getParameter());
                 DesenhaSuperficie();
+                textView.setText("Valor: " + rendedObj.getParameter());
+                seekBar.setProgress(rendedObj.getParameter());
+                seekBar.setMax(rendedObj.getMaxProgress());
             }
         });
 
@@ -210,8 +220,10 @@ public class CustomActivity extends AndARActivity {
                 superficie = 6;
                 rd_c.setVisibility(View.GONE);
                 eqn_img.setImageResource(R.drawable.eqn_paraboloide_hiperb);
-                textView.setText("Valor: " + rendedObj.getParameter());
                 DesenhaSuperficie();
+                textView.setText("Valor: " + rendedObj.getParameter());
+                seekBar.setProgress(rendedObj.getParameter());
+                seekBar.setMax(rendedObj.getMaxProgress());
             }
         });
     }
@@ -245,7 +257,7 @@ public class CustomActivity extends AndARActivity {
 					break;
 				default:
 					rendedObj =  new Elipsoide("test", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
-				}
+                }
 
                 art.registerARObject(rendedObj);
 			}
