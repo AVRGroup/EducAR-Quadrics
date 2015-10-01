@@ -84,7 +84,7 @@ public class ARToolkit {
 	 * TODO: registering a object with the same pattern twice will not work, as arloadpatt will create different IDs for the same pattern, and the detecting function will return only the first id as being detected. we need to store patt load id's in an hash -> loadpatt as a native function returning the ID -> pass this id to the object registering function.
 	 * @param arobject The object that shell be registered.
 	 */
-	public synchronized void registerARObject(ARObject arobject) 
+	public synchronized void registerARObject(ARObject arobject)
 		throws AndARException{	
 		if(arobjects.contains(arobject)) 
 			return;//don't register the same object twice
@@ -109,10 +109,16 @@ public class ARToolkit {
 	public synchronized void unregisterARObject(ARObject arobject) {
 		if(arobjects.contains(arobject)) {
             //remove from the native library
+            Log.v("TESTE", "" + arobject.getId() + " " + arobjects.size());
+
             removeObject(arobject.getId());
 
+			Log.v("TESTE", arobject.getPatternName());
+
             arobjects.remove(arobject);
-		}
+            Log.v("TESTE", "executou");
+		}else
+            Log.v("TESTE", "Nao contem o objeto");
 	}
 	
 	/**

@@ -163,7 +163,7 @@ public class HiperboloideDuasFolhas extends SurfaceObject{
 	}
 	
 	public float coordZ(float t, float u){
-		return (float) (2 * parameters[2] + (parameters[2] * t));
+		return (float) ((4 * parameters[2]) + (parameters[2] * t));
 	}
 
     @Override

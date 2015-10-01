@@ -19,9 +19,9 @@ public class Cone extends SurfaceObject {
     public final int slices = 30;
     public final int stacks = 30;
 
-    public float t, u;
+    public float t = -2.0f, u = 0.0f;
 
-    public final float passoT = (float) ((51.0f)/stacks);
+    public final float passoT = (float) ((50.0f)/stacks);
     public final float passoU = (float) ((2*Math.PI)/slices);
 
     public final int numCoord = (slices+1)*(stacks+1)*3*6;
@@ -30,8 +30,8 @@ public class Cone extends SurfaceObject {
     public Cone(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
 
-        parameters[0] = 5.0f;
-        parameters[1] = 5.0f;
+        parameters[0] = 1.0f;
+        parameters[1] = 1.0f;
         parameters[2] = 1.0f;
 
         max_progress = 10;
@@ -60,14 +60,14 @@ public class Cone extends SurfaceObject {
                 float x = coordX(t, u), y = coordY(t, u), z = coordZ(t, u);
                 Vetor a = new Vetor(x, y, z);
 
-                x = coordX(t, u + passoU);
-                y = coordY(t, u + passoU);
-                z = coordZ(t, u + passoU);
-                Vetor b = new Vetor(x, y, z);
-
                 x = coordX(t + passoT, u);
                 y = coordY(t + passoT, u);
                 z = coordZ(t + passoT, u);
+                Vetor b = new Vetor(x, y, z);
+
+                x = coordX(t, u + passoU);
+                y = coordY(t, u + passoU);
+                z = coordZ(t, u + passoU);
                 Vetor c = new Vetor(x, y, z);
 
                 x = coordX(t + passoT, u + passoU);
@@ -156,15 +156,15 @@ public class Cone extends SurfaceObject {
     }
 
     public float coordX(float t, float u){
-        return (float) (parameters[0]*t*Math.sin(u));
+        return (float) (t*Math.sin(u));
     }
 
     public float coordY(float t, float u){
-        return (float) (parameters[1]*t*Math.cos(u));
+        return (float) (t*Math.cos(u));
     }
 
     public float coordZ(float t, float u){
-        return (float) 25.0f+(parameters[2]*t);
+        return (float) (25.0f + t);
     }
 
     @Override

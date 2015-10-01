@@ -134,7 +134,8 @@
                         android:textSize="@dimen/txt_radio_size"
                         android:textStyle="italic"
                         android:layout_marginRight="@dimen/rd_margin"
-                        android:onClick="onRadioButtonClicked" />
+                        android:onClick="onRadioButtonClicked"
+                        android:checked="true" />
 
                     <RadioButton
                         android:layout_width="wrap_content"

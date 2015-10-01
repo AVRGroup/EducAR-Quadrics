@@ -594,14 +594,17 @@ int list_empty(const list_t *restrict l) {
 int list_locate(const list_t *restrict l, const void *data) {
     struct list_entry_s *el;
     int pos = 0;
-    
+
     if (l->attrs.comparator != NULL) {
         /* use comparator */
+        __android_log_print(ANDROID_LOG_VERBOSE, "EDUCAR", "IF");
         for (el = l->head_sentinel->next; el != l->tail_sentinel; el = el->next, pos++) {
             if (l->attrs.comparator(data, el->data) == 0) break;
+
         }
     } else {
         /* compare references */
+        __android_log_print(ANDROID_LOG_VERBOSE, "EDUCAR", "ELSE");
         for (el = l->head_sentinel->next; el != l->tail_sentinel; el = el->next, pos++) {
             if (el->data == data) break;
         }
