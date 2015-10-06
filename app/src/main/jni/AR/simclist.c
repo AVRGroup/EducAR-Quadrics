@@ -35,6 +35,7 @@
 #include <sys/stat.h>   /* for open()'s access modes S_IRUSR etc */
 #include <limits.h>
 #include <stdint.h>
+#include <android/log.h>
 
 
 /* use rand() in place of srand()? */
@@ -597,14 +598,14 @@ int list_locate(const list_t *restrict l, const void *data) {
 
     if (l->attrs.comparator != NULL) {
         /* use comparator */
-        __android_log_print(ANDROID_LOG_VERBOSE, "EDUCAR", "IF");
+        __android_log_print(ANDROID_LOG_DEBUG, "TESTE", "IF");
         for (el = l->head_sentinel->next; el != l->tail_sentinel; el = el->next, pos++) {
             if (l->attrs.comparator(data, el->data) == 0) break;
 
         }
     } else {
         /* compare references */
-        __android_log_print(ANDROID_LOG_VERBOSE, "EDUCAR", "ELSE");
+        __android_log_print(ANDROID_LOG_DEBUG, "TESTE", "ELSE");
         for (el = l->head_sentinel->next; el != l->tail_sentinel; el = el->next, pos++) {
             if (el->data == data) break;
         }
