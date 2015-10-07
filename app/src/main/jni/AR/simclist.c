@@ -382,7 +382,6 @@ static inline struct list_entry_s *list_findpos(const list_t *restrict l, int po
 void *list_extract_at(list_t *restrict l, unsigned int pos) {
     struct list_entry_s *tmp;
     void *data;
-    
     if (l->iter_active || pos >= l->numels) return NULL;
 
     tmp = list_findpos(l, pos);
@@ -465,7 +464,7 @@ int list_delete(list_t *restrict l, const void *data) {
 int list_delete_at(list_t *restrict l, unsigned int pos) {
     struct list_entry_s *delendo;
 
-
+    __android_log_print(ANDROID_LOG_VERBOSE, "TESTE", "Iter: %d, Pos: %d, Numels: %d", l->iter_active, pos, l->numels);
     if (l->iter_active || pos >= l->numels)
         return -1;
     __android_log_write(ANDROID_LOG_INFO,"TESTE","DELETE AT ELSE");
