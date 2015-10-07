@@ -452,11 +452,11 @@ int list_delete(list_t *restrict l, const void *data) {
 	pos = list_locate(l, data);
 	if (pos < 0)
 		return -1;
-
+    __android_log_write(ANDROID_LOG_INFO,"TESTE","LOCATE OK");
 	r = list_delete_at(l, pos);
 	if (r < 0)
 		return -1;
-
+    __android_log_write(ANDROID_LOG_INFO,"TESTE","DELETE AT OK");
     assert(list_repOk(l));
 
 	return 0;
@@ -466,7 +466,9 @@ int list_delete_at(list_t *restrict l, unsigned int pos) {
     struct list_entry_s *delendo;
 
 
-    if (l->iter_active || pos >= l->numels) return -1;
+    if (l->iter_active || pos >= l->numels)
+        return -1;
+    __android_log_write(ANDROID_LOG_INFO,"TESTE","DELETE AT ELSE");
 
     delendo = list_findpos(l, pos);
 

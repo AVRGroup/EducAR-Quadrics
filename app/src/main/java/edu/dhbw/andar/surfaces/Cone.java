@@ -19,10 +19,11 @@ public class Cone extends SurfaceObject {
     public final int slices = 30;
     public final int stacks = 30;
 
-    public float t = -2.0f, u = 0.0f;
+    public final float passoU = (float) ((50.0f)/stacks);
+    public final float passoV = (float) ((2*Math.PI)/slices);
 
-    public final float passoT = (float) ((50.0f)/stacks);
-    public final float passoU = (float) ((2*Math.PI)/slices);
+    public float u = -2.0f;
+    public float v = 0.0f;
 
     public final int numCoord = (slices+1)*(stacks+1)*3*6;
     public final int numCoordWire = (slices+1)*(stacks+1)*3*8;
@@ -54,25 +55,25 @@ public class Cone extends SurfaceObject {
         coneInt.clearBuffers();
         coneWire.clearBuffers();
 
-        for(t = -25.0f; u < 25.0f; t += passoT){
-            for(u = 0.0f; u < 2*Math.PI; u += passoU){
+        for(u = -25.0f; u < 25.0f; u+=passoU){
+            for(v = 0.0f; v < 2*Math.PI; v+= passoV){
 
-                float x = coordX(t, u), y = coordY(t, u), z = coordZ(t, u);
+                float x = coordX(v, u), y = coordY(v, u), z = coordZ(v, u);
                 Vetor a = new Vetor(x, y, z);
 
-                x = coordX(t + passoT, u);
-                y = coordY(t + passoT, u);
-                z = coordZ(t + passoT, u);
+                x = coordX(v+passoV, u);
+                y = coordY(v+passoV, u);
+                z = coordZ(v+passoV, u);
                 Vetor b = new Vetor(x, y, z);
 
-                x = coordX(t, u + passoU);
-                y = coordY(t, u + passoU);
-                z = coordZ(t, u + passoU);
+                x = coordX(v, u+passoU);
+                y = coordY(v, u+passoU);
+                z = coordZ(v, u+passoU);
                 Vetor c = new Vetor(x, y, z);
 
-                x = coordX(t + passoT, u + passoU);
-                y = coordY(t + passoT, u + passoU);
-                z = coordZ(t + passoT, u + passoU);
+                x = coordX(v+passoV, u+passoU);
+                y = coordY(v+passoV, u+passoU);
+                z = coordZ(v+passoV, u+passoU);
                 Vetor d = new Vetor(x, y, z);
 
                 coneWire.preencheVertices(a);
@@ -155,16 +156,19 @@ public class Cone extends SurfaceObject {
         coneWire.vertices.position(0);
     }
 
-    public float coordX(float t, float u){
-        return (float) (t*Math.sin(u));
+    public float coordX(float v, float u){
+        return (float) (parameters[0]*(u*Math.sin(v)));
+
     }
 
-    public float coordY(float t, float u){
-        return (float) (t*Math.cos(u));
+    public float coordY(float v, float u){
+        return (float) (parameters[1]*(u*Math.cos(v)));
+
     }
 
-    public float coordZ(float t, float u){
-        return (float) (25.0f + t);
+    public float coordZ(float v, float u){
+        return (float) 25.0f + (parameters[0]*u);
+
     }
 
     @Override
@@ -179,10 +183,7 @@ public class Cone extends SurfaceObject {
 
     @Override
     public void setParameter(float progress){
-        if(index == 2)
-            this.parameters[index] = 0.0f;
-        else
-            this.parameters[index] = progress;
+        this.parameters[index] = progress;
     }
 
     @Override

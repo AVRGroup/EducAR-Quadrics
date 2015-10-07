@@ -259,7 +259,6 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_addObject
  //TODO release globalref
 JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_removeObject
   (JNIEnv *env, jobject artoolkit, jint objectID) {
-  __android_log_write(ANDROID_LOG_INFO,"AR native","SEU CU");
 	if(list_delete(&objects,&objectID) != 0) {
 		//failed to delete -> throw error
 		jclass exc = (*env)->FindClass( env, "edu/dhbw/andar/exceptions/AndARException" );  
