@@ -37,7 +37,7 @@ public class CustomActivity extends AndARActivity {
     private SeekBar seekBar = null;
     private TextView textView = null;
 
-    private RadioButton rd_c;
+    private RadioButton rd_c, rd_a;
     private ImageView eqn_img;
 
 
@@ -144,6 +144,7 @@ public class CustomActivity extends AndARActivity {
         ImageButton btnHiperb_duas = (ImageButton) findViewById(R.id.btn_hiperb_duas);
         ImageButton btnParaboloide_hiperb = (ImageButton) findViewById(R.id.btn_paraboloide_hiperb);
 
+        rd_a = (RadioButton)findViewById(R.id.rd_a);
         rd_c = (RadioButton)findViewById(R.id.rd_c);
         eqn_img = (ImageView)findViewById(R.id.img_equation);
 
@@ -154,6 +155,7 @@ public class CustomActivity extends AndARActivity {
             public void onClick(View arg0) {
                 superficie = 1;
                 rd_c.setVisibility(View.VISIBLE);
+                rd_a.setChecked(true);
                 eqn_img.setImageResource(R.drawable.eqn_elipsoide);
                 DesenhaSuperficie();
                 textView.setText("Valor: " + rendedObj.getParameter());
@@ -167,6 +169,7 @@ public class CustomActivity extends AndARActivity {
             public void onClick(View arg0) {
                 superficie = 2;
                 rd_c.setVisibility(View.GONE);
+                rd_a.setChecked(true);
                 eqn_img.setImageResource(R.drawable.eqn_cone);
                 DesenhaSuperficie();
                 textView.setText("Valor: " + rendedObj.getParameter());
@@ -180,6 +183,7 @@ public class CustomActivity extends AndARActivity {
             public void onClick(View arg0) {
                 superficie = 3;
                 rd_c.setVisibility(View.GONE);
+                rd_a.setChecked(true);
                 eqn_img.setImageResource(R.drawable.eqn_paraboloide);
                 DesenhaSuperficie();
                 textView.setText("Valor: " + rendedObj.getParameter());
@@ -193,6 +197,7 @@ public class CustomActivity extends AndARActivity {
             public void onClick(View arg0) {
                 superficie = 4;
                 rd_c.setVisibility(View.VISIBLE);
+                rd_a.setChecked(true);
                 eqn_img.setImageResource(R.drawable.eqn_hiperb_uma);
                 DesenhaSuperficie();
                 textView.setText("Valor: " + rendedObj.getParameter());
@@ -206,6 +211,7 @@ public class CustomActivity extends AndARActivity {
             public void onClick(View arg0) {
                 superficie = 5;
                 rd_c.setVisibility(View.VISIBLE);
+                rd_a.setChecked(true);
                 eqn_img.setImageResource(R.drawable.eqn_hiperb_duas);
                 DesenhaSuperficie();
                 textView.setText("Valor: " + rendedObj.getParameter());
@@ -219,6 +225,7 @@ public class CustomActivity extends AndARActivity {
             public void onClick(View arg0) {
                 superficie = 6;
                 rd_c.setVisibility(View.GONE);
+                rd_a.setChecked(true);
                 eqn_img.setImageResource(R.drawable.eqn_paraboloide_hiperb);
                 DesenhaSuperficie();
                 textView.setText("Valor: " + rendedObj.getParameter());

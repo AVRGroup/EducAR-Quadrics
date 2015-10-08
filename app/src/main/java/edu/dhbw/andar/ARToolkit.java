@@ -163,7 +163,7 @@ public class ARToolkit {
 	/**
 	 * detect the markers in the frame
 	 * @param in the image 
-	 * @param matrix the transformation matrix for each marker, will be locked right before the trans matrix will be altered
+	 * @param transMatMonitor the transformation matrix for each marker, will be locked right before the trans matrix will be altered
 	 * @return number of markers
 	 */
 	private native int artoolkit_detectmarkers(byte[] in, Object transMatMonitor);
