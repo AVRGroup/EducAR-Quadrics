@@ -73,9 +73,9 @@ ARParam         cparam;
 //the opengl para matrix
 extern float   gl_cpara[16];
 //A list of AR objects
-list_t objects;
+Object *objects;
 //A list of cached pattern IDs
-list_t* patternIDs = NULL;
+patternID *patternIDs = NULL;
 
 //END DATASTRUCTURES
 
@@ -111,22 +111,17 @@ int getPatternIDFromList(const char *filename) {
 #endif	
 		return -1;
 	}
-	list_iterator_start(patternIDs);
-	while (list_iterator_hasnext(patternIDs)) { 
-		patternID * currPatt = (patternID *)list_iterator_next(patternIDs);
 #ifdef DEBUG_LOGGING
-		__android_log_print(ANDROID_LOG_INFO,"AR native","current pattern fiel: %s",currPatt->filename);
+		__android_log_print(ANDROID_LOG_INFO,"AR native","current pattern fiel: %s",patternIDs->filename);
 #endif
-		if(strcmp(filename, currPatt->filename)==0) {
+		if(strcmp(filename, patternIDs->filename)==0) {
 #ifdef DEBUG_LOGGING
 		__android_log_write(ANDROID_LOG_INFO,"AR native","found pattern in list");
 #endif
-			id = currPatt->id;
+			id = patternIDs->id;
 			break;
 		}
 	}
-	list_iterator_stop(patternIDs); 
-	
 #ifdef DEBUG_LOGGING
 		if(id==-1)
 		__android_log_print(ANDROID_LOG_INFO,"AR native","found no pattern in the list for file %s",filename);
@@ -148,20 +143,16 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1init__
 		__android_log_write(ANDROID_LOG_INFO,"AR native","initializing artoolkit");
 #endif
 	//initialize the list of objects
-	list_init(&objects);
-	//set the comperator function:
-	list_attributes_comparator(&objects, objectcomparator);
+	objects = (Object*) malloc(sizeof(Object));
 	//Intialize the list of pattern IDs
 	//It might already be initialized, as the native library doesn't get unloaded after the java application finished
 	//The pattern IDs will be cached during multiple invocation of the Java application(AndAR)
 	if(patternIDs==NULL) {
-		patternIDs = (list_t*) malloc(sizeof(list_t));
+		patternIDs = (patternID*) malloc(sizeof(patternID));
 		if(patternIDs == NULL) {
 #ifdef DEBUG_LOGGING
 		__android_log_write(ANDROID_LOG_INFO,"AR native","list of patterns is null after init!!");
 #endif	
-		} else {
-			list_init(patternIDs);
 		}
 	}	
 #ifdef DEBUG_LOGGING
@@ -226,12 +217,14 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_addObject
 			__android_log_print(ANDROID_LOG_INFO,"AR native","loaded marker with ID %d from file: %s", newObject->id, cPatternFile);
 	#endif
 				//add object to the list
-				list_append(&objects, newObject);
+				*objects = *newObject;
+				objects = newObject;
 				patternID* newPatternID = (patternID *)malloc(sizeof(patternID));
 				if(newPatternID != NULL) {
 					newPatternID->filename = strdup(cPatternFile);
 					newPatternID->id = newObject->id;
-					list_append(patternIDs, newPatternID);
+					*patternIDs = *newPatternID;
+					patternIDs = newPatternID;
 				}
 			}
 		} else {
@@ -239,9 +232,14 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_addObject
 			__android_log_print(ANDROID_LOG_INFO,"AR native","loaded marker with ID %d from cached pattern ID", newObject->id, cPatternFile);
 	#endif
 				//add object to the list
-				list_append(&objects, newObject);
+				objects = newObject;
 		}
 	}
+	free(newObject);
+	newObject = NULL;
+	free(newPatternID);
+	newPatternID = NULL;
+
 	//release the marker center array
 	(*env)->ReleaseDoubleArrayElements(env, center, centerArr, 0);
 	(*env)->ReleaseStringUTFChars( env, patternFile, cPatternFile);
@@ -259,22 +257,14 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_addObject
  //TODO release globalref
 JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_removeObject
   (JNIEnv *env, jobject artoolkit, jint objectID) {
-	if(list_delete(&objects,&objectID) != 0) {
+    free(objects);
+    objects = NULL;
+	if(objects != NULL) {
 		//failed to delete -> throw error
 		jclass exc = (*env)->FindClass( env, "edu/dhbw/andar/exceptions/AndARException" );  
 		if ( exc != NULL ) 
 			(*env)->ThrowNew( env, exc, "could not delete object from native array" );
 	}
-#ifdef DEBUG_LOGGING
-	__android_log_write(ANDROID_LOG_INFO,"AR native","array of objects still containing the following elements:");
-	list_iterator_start(&objects);        /* starting an iteration "session" */
-    while (list_iterator_hasnext(&objects)) { /* tell whether more values available */
-        Object* curObject = (Object *)list_iterator_next(&objects);     /* get the next value */
-		__android_log_print(ANDROID_LOG_INFO,"AR native","name: %s", curObject->name);
-		__android_log_print(ANDROID_LOG_INFO,"AR native","id: %s", curObject->id);
-	}
-    list_iterator_stop(&objects);
-#endif
 }
 
 /**
@@ -392,11 +382,8 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
 #ifdef DEBUG_LOGGING
         __android_log_write(ANDROID_LOG_INFO,"AR native","done detecting markers, going to iterate over markers now");
 #endif
-	//iterate over objects:
-	list_iterator_start(&objects);        /* starting an iteration "session" */
-	int itCount = 0;
-    while (list_iterator_hasnext(&objects)) { /* tell whether more values available */
-        curObject = (Object *)list_iterator_next(&objects);     /* get the next value */
+        *curObject = *objects;
+        curObject = objects;
 #ifdef DEBUG_LOGGING
 		__android_log_print(ANDROID_LOG_INFO,"AR native","now handling object with id %d, in %d iteration",curObject->name, itCount);
 #endif
@@ -533,7 +520,6 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
         __android_log_write(ANDROID_LOG_INFO,"AR native","done releasing lock");
 #endif
     }
-    list_iterator_stop(&objects);         /* starting the iteration "session" */
 #ifdef DEBUG_LOGGING
         __android_log_write(ANDROID_LOG_INFO,"AR native","releasing image array");
 #endif
@@ -541,6 +527,9 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
 #ifdef DEBUG_LOGGING
         __android_log_write(ANDROID_LOG_INFO,"AR native","releasing image array");
 #endif
+    free(curObject);
+    curObject = NULL;
+
     return marker_num;
 }
 
