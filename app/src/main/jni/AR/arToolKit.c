@@ -73,7 +73,7 @@ ARParam         cparam;
 //the opengl para matrix
 extern float   gl_cpara[16];
 //A list of AR objects
-Object *objects;
+Object *objects = NULL;
 //A list of cached pattern IDs
 patternID *patternIDs = NULL;
 
@@ -119,13 +119,13 @@ int getPatternIDFromList(const char *filename) {
 		__android_log_write(ANDROID_LOG_INFO,"AR native","found pattern in list");
 #endif
 			id = patternIDs->id;
-			break;
 		}
-	}
+
 #ifdef DEBUG_LOGGING
 		if(id==-1)
 		__android_log_print(ANDROID_LOG_INFO,"AR native","found no pattern in the list for file %s",filename);
 #endif
+    __android_log_write(ANDROID_LOG_INFO,"AR native","getPatternIDFromList ok!");
 	return id;
 }
 
@@ -158,6 +158,7 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1init__
 #ifdef DEBUG_LOGGING
 		__android_log_write(ANDROID_LOG_INFO,"AR native","finished initializing ARToolkit");
 #endif
+    __android_log_write(ANDROID_LOG_INFO,"AR native","artoolkit_init ok!");
   }
 
 /**
@@ -235,14 +236,12 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_addObject
 				objects = newObject;
 		}
 	}
-	free(newObject);
-	newObject = NULL;
-	free(newPatternID);
-	newPatternID = NULL;
 
 	//release the marker center array
 	(*env)->ReleaseDoubleArrayElements(env, center, centerArr, 0);
 	(*env)->ReleaseStringUTFChars( env, patternFile, cPatternFile);
+
+	__android_log_write(ANDROID_LOG_INFO,"AR native","addObject ok!");
   }
   
 /**
@@ -385,9 +384,8 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
         *curObject = *objects;
         curObject = objects;
 #ifdef DEBUG_LOGGING
-		__android_log_print(ANDROID_LOG_INFO,"AR native","now handling object with id %d, in %d iteration",curObject->name, itCount);
+		__android_log_print(ANDROID_LOG_INFO,"AR native","now handling object with id %d",curObject->name);
 #endif
-		itCount++;
 		// //get field ID'		
 		if(visibleField == NULL) {
 			if(arObjectClass == NULL) {
@@ -423,7 +421,6 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
 #ifdef DEBUG_LOGGING
 		__android_log_write(ANDROID_LOG_INFO,"AR native","error: either visibleField or glMatrixField or transMatField null");
 #endif
-			continue;
 		}
 		
 		 // check for object visibility 
@@ -454,7 +451,6 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
 #ifdef DEBUG_LOGGING
 			__android_log_print(ANDROID_LOG_INFO,"AR native","object %d  not visible, with marker ID %d",curObject->name,curObject->id);
 #endif
-			continue;
 		}
 		//object visible
 		
@@ -473,21 +469,18 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
 #ifdef DEBUG_LOGGING
         __android_log_write(ANDROID_LOG_INFO,"AR native","failed to fetch the matrix arrays objects");
 #endif
-			continue;//something went wrong
 		}
 		float *glMatrix = (*env)->GetFloatArrayElements(env, glMatrixArrayObj, JNI_FALSE);
 		if(glMatrix == NULL ) {
 #ifdef DEBUG_LOGGING
         __android_log_write(ANDROID_LOG_INFO,"AR native","failed to fetch the matrix arrays");
 #endif
-			continue;//something went wrong
 		}
 		double* transMat = (*env)->GetDoubleArrayElements(env, transMatArrayObj, JNI_FALSE);
 		if(transMat == NULL) {
 #ifdef DEBUG_LOGGING
         __android_log_write(ANDROID_LOG_INFO,"AR native","failed to fetch the matrix arrays");
 #endif
-			continue;//something went wrong
 		}
 #ifdef DEBUG_LOGGING
         __android_log_write(ANDROID_LOG_INFO,"AR native","calculating trans mat now");
@@ -519,7 +512,7 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
 #ifdef DEBUG_LOGGING
         __android_log_write(ANDROID_LOG_INFO,"AR native","done releasing lock");
 #endif
-    }
+
 #ifdef DEBUG_LOGGING
         __android_log_write(ANDROID_LOG_INFO,"AR native","releasing image array");
 #endif
@@ -527,9 +520,7 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
 #ifdef DEBUG_LOGGING
         __android_log_write(ANDROID_LOG_INFO,"AR native","releasing image array");
 #endif
-    free(curObject);
-    curObject = NULL;
-
+    __android_log_write(ANDROID_LOG_INFO,"AR native","detectmarkers ok");
     return marker_num;
 }
 
