@@ -111,7 +111,7 @@ public class ARToolkit {
             //remove from the native library
             Log.v("TESTE", "" + arobject.getId() + " " + arobjects.size());
 
-            removeObject(arobject.getId());
+            removeObject(arobject.getId(),  transMatMonitor);
 
 			Log.v("TESTE", arobject.getPatternName());
 
@@ -143,7 +143,7 @@ public class ARToolkit {
 	 * Remove the object from the list of registered objects.
 	 * @param id the id of the object.
 	 */
-	private native void removeObject(int id);
+	private native void removeObject(int id, Object monitor);
 	
 	/**
 	 * Do some basic initialization, like creating data structures.

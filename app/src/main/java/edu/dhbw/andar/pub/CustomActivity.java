@@ -43,8 +43,6 @@ public class CustomActivity extends AndARActivity {
 
 	SurfaceObject rendedObj = null;
 
-    SurfaceObject elipsoide, cone, paraboloide, hiperb_uma, hiperb_duas, paraboloide_hiperb;
-
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,16 +55,6 @@ public class CustomActivity extends AndARActivity {
 
         CriaScaleBar();
 	}
-
-    public void CriaSuperficies(){
-        elipsoide = new Elipsoide("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
-        cone = new Cone("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
-        paraboloide = new Paraboloide("paraboloide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
-        hiperb_uma = new HiperboloideUmaFolha("hiperbuma", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
-        hiperb_duas = new HiperboloideDuasFolhas("hiperbduas", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
-        paraboloide_hiperb = new ParaboloideHiperbolico("parabhip", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
-
-    }
 
     public void CriaScaleBar(){
 
