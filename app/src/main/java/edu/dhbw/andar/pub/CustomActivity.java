@@ -226,7 +226,9 @@ public class CustomActivity extends AndARActivity {
     public void DesenhaSuperficie(){
 		try {
             if(rendedObj != null) {
+                Log.v("Monitor", "Nao chamou Unregister ainda");
                 art.unregisterARObject(rendedObj);
+                Log.v("Monitor", "Chamou o Unregister");
                 rendedObj = null;
             }
 

@@ -108,6 +108,7 @@ public class ARToolkit {
 	
 	public synchronized void unregisterARObject(ARObject arobject) {
 		if(arobjects.contains(arobject)) {
+
             //remove from the native library
             Log.v("TESTE", "" + arobject.getId() + " " + arobjects.size());
 
