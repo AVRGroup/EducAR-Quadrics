@@ -1,21 +1,17 @@
- /**
+/**
 	Copyright (C) 2009  Tobias Domhan
-
     This file is part of AndOpenGLCam.
-
     AndObjViewer is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     AndObjViewer is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with AndObjViewer.  If not, see <http://www.gnu.org/licenses/>.
-
+ 
  */
 /*
  * arToolKit.c
@@ -35,7 +31,6 @@
 #include <stdlib.h>
 #include <simclist.h>
 #include <string.h>
-#include <stdbool.h>
 //END IMPORTS
 
 //DATASTRUCTURES
@@ -73,13 +68,11 @@ ARParam         cparam;
 
 //the opengl para matrix
 extern float   gl_cpara[16];
-
 //A list of AR objects
-volatile Object *marker;
-volatile bool wait = false;
+Object* markerObject;
 
 //A list of cached pattern IDs
-patternID *patternIDs;
+patternID* patternIDs;
 
 //END DATASTRUCTURES
 
@@ -106,16 +99,12 @@ int objectcomparator(const void *a, const void *b) {
  */
 int getPatternIDFromList(const char *filename) {
 	int id = -1;
-
 	if(patternIDs == NULL) {
 		return -1;
 	}
 
-		if(strcmp(filename, patternIDs->filename)==0) {
-			id = patternIDs->id;
-		}
+	id = patternIDs->id;
 
-    __android_log_write(ANDROID_LOG_INFO,"AR native","getPatternIDFromList ok!");
 	return id;
 }
 
@@ -130,16 +119,11 @@ int getPatternIDFromList(const char *filename) {
 JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1init__
   (JNIEnv * env, jobject object) {
 
-	//initialize the list of objects
-	marker = NULL;
+	    markerObject = (Object*)malloc(sizeof(Object));
 
 	//Intialize the list of pattern IDs
-	//It might already be initialized, as the native library doesn't get unloaded after the java application finished
-	//The pattern IDs will be cached during multiple invocation of the Java application(AndAR)
+	    patternIDs = (patternID*)malloc(sizeof(patternID));
 
-	patternIDs = (patternID*)malloc(sizeof(patternID));
-
-    __android_log_write(ANDROID_LOG_INFO,"AR native","artoolkit_init ok!");
   }
 
 /**
@@ -149,7 +133,7 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1init__
  * @param patternName the fileName of the pattern
  * @param markerWidth the width of the object
  * @param markerCenter the center of the object
- */
+ */  
 /*
  * Class:     edu_dhbw_andar_ARToolkit
  * Method:    addObject
@@ -159,23 +143,19 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_addObject
   (JNIEnv * env, jobject artoolkit, jint name, jobject obj, jstring patternFile, jdouble width, jdoubleArray center) {
 	Object* newObject;
 	jdouble* centerArr;
-
-	patternIDs->id = 0;
-    strcpy(patternIDs->filename, (*env)->GetStringUTFChars( env, patternFile, NULL ));
-
 	centerArr = (*env)->GetDoubleArrayElements(env, center, NULL);
-	const char *cPatternFile = (*env)->GetStringUTFChars( env, patternFile, NULL );
+	const char *cPatternFile = (*env)->GetStringUTFChars( env, patternFile, NULL ); 
 	if (centerArr == NULL) {
 		//could not retrieve the java array
-		jclass exc = (*env)->FindClass( env, "edu/dhbw/andar/exceptions/AndARException" );
-		if ( exc != NULL )
-			(*env)->ThrowNew( env, exc, "could not retrieve array of the marker center in native code." );
+		jclass exc = (*env)->FindClass( env, "edu/dhbw/andar/exceptions/AndARException" );  
+		if ( exc != NULL ) 
+			(*env)->ThrowNew( env, exc, "could not retrieve array of the marker center in native code." ); 
 	}
 	if((newObject = (Object *)malloc(sizeof(Object))) == NULL) {
 		//something went wrong with allocating -> throw error
-		jclass exc = (*env)->FindClass( env, "edu/dhbw/andar/exceptions/AndARException" );
-		if ( exc != NULL )
-			(*env)->ThrowNew( env, exc, "could not allocate memory for new object." );
+		jclass exc = (*env)->FindClass( env, "edu/dhbw/andar/exceptions/AndARException" );  
+		if ( exc != NULL ) 
+			(*env)->ThrowNew( env, exc, "could not allocate memory for new object." ); 
 	} else {
 		//ok object allocated, now fill the struct with data
 
@@ -185,7 +165,6 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_addObject
 		newObject->marker_center[0] = (double) centerArr[0];
 		newObject->marker_center[1] = (double) centerArr[1];
 		newObject->objref = (*env)->NewGlobalRef(env, obj);
-
 		//search the list of pattern IDs for a pattern matching the given filename
 		//this is needed as the native library doesn't get unloaded after the Java application finished
 		//and multiple invocations of arLoadPatt with the same pattern file will result in incorrect IDs
@@ -194,43 +173,30 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_addObject
 				//failed to read the pattern file
 				//release the object and throw an exception
 				free(newObject);
-				jclass exc = (*env)->FindClass( env, "edu/dhbw/andar/exceptions/AndARException" );
-				if ( exc != NULL )
+				jclass exc = (*env)->FindClass( env, "edu/dhbw/andar/exceptions/AndARException" );  
+				if ( exc != NULL ) 
 					(*env)->ThrowNew( env, exc, "could not read pattern file for object." );
 			} else {
+
 				//add object to the list
-				__android_log_write(ANDROID_LOG_ERROR,"Monitor","addObject esta esperando");
-				while(wait);
-				wait = true;
-				__android_log_write(ANDROID_LOG_ERROR,"Monitor","addObject entrou");
-				marker = (Object*)malloc(sizeof(Object));
-				*marker = *newObject;
-				wait = false;
-				__android_log_write(ANDROID_LOG_ERROR,"Monitor","addObject saiu");
+				*markerObject = *newObject;
+				patternID* newPatternID = (patternID *)malloc(sizeof(patternID));
+				if(newPatternID != NULL) {
+					newPatternID->filename = strdup(cPatternFile);
+					newPatternID->id = newObject->id;
+					*patternIDs = *newPatternID;
+				}
 			}
 		} else {
 				//add object to the list
-				__android_log_write(ANDROID_LOG_ERROR,"Monitor","addObject esta esperando");
-                while(wait);
-                wait = true;
-                __android_log_write(ANDROID_LOG_ERROR,"Monitor","addObject entrou");
-                marker = (Object*)malloc(sizeof(Object));
-                *marker = *newObject;
-                wait = false;
-                __android_log_write(ANDROID_LOG_ERROR,"Monitor","addObject saiu");
+				*markerObject = *newObject;
 		}
 	}
-
-	free(newObject);
-	newObject = NULL;
-
 	//release the marker center array
 	(*env)->ReleaseDoubleArrayElements(env, center, centerArr, 0);
 	(*env)->ReleaseStringUTFChars( env, patternFile, cPatternFile);
-
-	__android_log_write(ANDROID_LOG_INFO,"AR native","addObject ok!");
   }
-
+  
 /**
  * Remove the object from the list of registered objects.
  * @param id the id of the object.
@@ -242,15 +208,10 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_addObject
  */
  //TODO release globalref
 JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_removeObject
-  (JNIEnv *env, jobject artoolkit, jint objectID) {
-    __android_log_write(ANDROID_LOG_ERROR,"Monitor","removeObject esperando");
-    while(wait);
-    wait = true;
-    __android_log_write(ANDROID_LOG_ERROR,"Monitor","removeObject entrou");
-    free(marker);
-    marker = NULL;
-    wait = false;
-    __android_log_write(ANDROID_LOG_ERROR,"Monitor","removeObject saiu");
+  (JNIEnv *env, jobject artoolkit, jint objectID, jobject obj) {
+
+    markerObject->objref = (*env)->NewGlobalRef(env, obj);
+
 }
 
 /**
@@ -268,9 +229,9 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_removeObject
 JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1init__Ljava_lang_String_2IIII
   (JNIEnv *env, jobject object, jstring calibFile, jint imageWidth, jint imageHeight, jint screenWidth, jint screenHeight) {
     ARParam  wparam;
-	const char *cparam_name = (*env)->GetStringUTFChars( env, calibFile, NULL );
+	const char *cparam_name = (*env)->GetStringUTFChars( env, calibFile, NULL ); 
 
-
+	
     xsize = imageHeight;
     ysize = imageHeight;
     printf("Image size (x,y) = (%d,%d)\n", xsize, ysize);
@@ -278,16 +239,11 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1init__Ljava_lang
     /* set the initial camera parameters */
     if( arParamLoad(cparam_name, 1, &wparam) < 0 ) {
 	__android_log_write(ANDROID_LOG_ERROR,"AR native","Camera parameter load error !!");
-	    jclass exc = (*env)->FindClass( env, "edu/dhbw/andar/exceptions/AndARRuntimeException" );
-		if ( exc != NULL )
-			(*env)->ThrowNew( env, exc, "Camera parameter load error !!" );
+	    jclass exc = (*env)->FindClass( env, "edu/dhbw/andar/exceptions/AndARRuntimeException" );  
+		if ( exc != NULL ) 
+			(*env)->ThrowNew( env, exc, "Camera parameter load error !!" ); 
         //exit(EXIT_FAILURE);
     }
-#ifdef DEBUG_LOGGING
-    else {
-        __android_log_write(ANDROID_LOG_INFO,"AR native","Camera parameter loaded successfully !!");
-    }
-#endif
     arParamChangeSize( &wparam, imageWidth, imageHeight, &cparam );
     arInitCparam( &cparam );
     printf("*** Camera Parameter ***\n");
@@ -295,7 +251,7 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1init__Ljava_lang
 
     //initialize openGL stuff
     argInit( &cparam, 1.0, 0, screenWidth, screenHeight, 0 );
-
+	
 	//gl_cpara
 	jclass arObjectClass = (*env)->FindClass(env, "edu/dhbw/andar/ARObject");
 	if (arObjectClass != NULL) {
@@ -307,17 +263,17 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1init__Ljava_lang
 				int i=0;
 				for(i=0;i<16;i++)
 					glCamMatrix[i] = gl_cpara[i];
-				(*env)->ReleaseFloatArrayElements(env, glCameraMatrixObj, glCamMatrix, 0);
+				(*env)->ReleaseFloatArrayElements(env, glCameraMatrixObj, glCamMatrix, 0); 
 			}
 		}
 	}
-
+	
 	(*env)->ReleaseStringUTFChars( env, calibFile, cparam_name);
 }
 
 /**
  * detect the markers in the given frame.
- * @param in the image
+ * @param in the image 
  * @param matrix the transformation matrix for each marker, will be locked right before the trans matrix will be altered
  * @return number of markers
  */
@@ -333,6 +289,7 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
     double 	    *matrixPtr;
     int             marker_num;
     int             j, k=-1;
+	Object* curObject;
 
     /* grab a vide frame */
     dataPtr = (*env)->GetByteArrayElements(env, image, JNI_FALSE);
@@ -342,9 +299,9 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
     /* detect the markers in the video frame */
     if( arDetectMarker(dataPtr, thresh, &marker_info, &marker_num) < 0 ) {
 	__android_log_write(ANDROID_LOG_ERROR,"AR native","arDetectMarker failed!!");
-		jclass exc = (*env)->FindClass( env, "edu/dhbw/andar/exceptions/AndARException" );
-		if ( exc != NULL )
-			(*env)->ThrowNew( env, exc, "failed to detect marker" );
+		jclass exc = (*env)->FindClass( env, "edu/dhbw/andar/exceptions/AndARException" );  
+		if ( exc != NULL ) 
+			(*env)->ThrowNew( env, exc, "failed to detect marker" ); 
     }
 
 
@@ -353,31 +310,17 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
     cur_marker_id = k;
     argConvGlpara(patt_trans, gl_para);
     (*env)->MonitorExit(env, transMatMonitor);*/
-
+	
 	static jfieldID visibleField = NULL;
 	static jfieldID glMatrixField = NULL;
 	static jfieldID transMatField = NULL;
 	jclass arObjectClass = NULL;
 	jfloatArray glMatrixArrayObj = NULL;
 	jdoubleArray transMatArrayObj = NULL;
-        Object* curObject = (Object*)malloc(sizeof(Object));
 
-        __android_log_write(ANDROID_LOG_ERROR,"Monitor","detectMark_1 esperando");
-		while(wait);
-		wait = true;
-		if(marker == NULL){
-		    wait = false;
-		    __android_log_write(ANDROID_LOG_ERROR,"Monitor","detectMark_1 saiu");
-		    return 0;
-		}
-		__android_log_write(ANDROID_LOG_ERROR,"Monitor","detectMark_1 entrou");
+	curObject = markerObject;
 
-		*curObject = *marker;
-		wait = false;
-		__android_log_write(ANDROID_LOG_ERROR,"Monitor","detectMark_1 saiu");
-
-
-		// //get field ID'
+		// //get field ID'		
 		if(visibleField == NULL) {
 			if(arObjectClass == NULL) {
 				if(curObject->objref != NULL)
@@ -409,10 +352,9 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
 
 		if(visibleField == NULL || glMatrixField == NULL || transMatField == NULL) {
 			//something went wrong..
-
 		}
-
-		 // check for object visibility
+		
+		 // check for object visibility 
 		k = -1;
 		for( j = 0; j < marker_num; j++ ) {
 
@@ -422,7 +364,6 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
 
 				}
 				else if( marker_info[k].cf < marker_info[j].cf )  {
-
 					k = j;
 				}
 			}
@@ -431,30 +372,25 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
 			//object not visible
 			curObject->contF = 0;
 			(*env)->SetBooleanField(env, curObject->objref, visibleField, JNI_FALSE);
-
 		}
 		//object visible
-
+		
 		//lock the object
-
 		(*env)->MonitorEnter(env, curObject->objref);
 
 		//access the arrays of the current object
 		glMatrixArrayObj = (*env)->GetObjectField(env, curObject->objref, glMatrixField);
 		transMatArrayObj = (*env)->GetObjectField(env, curObject->objref, transMatField);
 		if(transMatArrayObj == NULL || glMatrixArrayObj == NULL) {
-
 		}
 		float *glMatrix = (*env)->GetFloatArrayElements(env, glMatrixArrayObj, JNI_FALSE);
 		if(glMatrix == NULL ) {
-
 		}
 		double* transMat = (*env)->GetDoubleArrayElements(env, transMatArrayObj, JNI_FALSE);
 		if(transMat == NULL) {
-
 		}
 
-		// get the transformation between the marker and the real camera
+		// get the transformation between the marker and the real camera 
 		if( curObject->contF == 0 ) {
 			arGetTransMat(&marker_info[k], curObject->marker_center, curObject->marker_width, transMat);
 		} else {
@@ -462,35 +398,19 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_artoolkit_1detectmarkers
 		}
 		curObject->contF = 1;
 
-        __android_log_write(ANDROID_LOG_ERROR,"Monitor","detectMark_2 esperando");
-		while(wait);
-		wait = true;
-		if(marker == NULL){
-            wait = false;
-            __android_log_write(ANDROID_LOG_ERROR,"Monitor","detectMark_2 saiu");
-            return 0;
-        }
-		__android_log_write(ANDROID_LOG_ERROR,"Monitor","detectMark_2 entrou");
-		*marker = *curObject;
-		wait = false;
-		__android_log_write(ANDROID_LOG_ERROR,"Monitor","detectMark_2 saiu");
-
-
 		argConvGlpara(transMat, glMatrix);
 		//argConvGlpara(patt_trans, gl_para);
 
-		(*env)->ReleaseFloatArrayElements(env, glMatrixArrayObj, glMatrix, 0);
-		(*env)->ReleaseDoubleArrayElements(env, transMatArrayObj, transMat, 0);
-
+		(*env)->ReleaseFloatArrayElements(env, glMatrixArrayObj, glMatrix, 0); 
+		(*env)->ReleaseDoubleArrayElements(env, transMatArrayObj, transMat, 0); 
+		
 		(*env)->SetBooleanField(env, curObject->objref, visibleField, JNI_TRUE);
 
 		//release the lock on the object
 		(*env)->MonitorExit(env, curObject->objref);
 
 
-    (*env)->ReleaseByteArrayElements(env, image, dataPtr, 0);
-
-    __android_log_write(ANDROID_LOG_INFO,"AR native","detectmarkers ok");
+    (*env)->ReleaseByteArrayElements(env, image, dataPtr, 0); 
 
     return marker_num;
 }
@@ -534,5 +454,3 @@ JNIEXPORT jint JNICALL Java_edu_dhbw_andar_ARToolkit_arUtilMatMul
 	(*env)->ReleaseDoubleArrayElements(env, result, resPtr, 0);
 	return retval;
   }
-
-

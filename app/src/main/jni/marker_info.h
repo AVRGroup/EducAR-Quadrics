@@ -21,7 +21,7 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_addObject
  * Signature: (I)V
  */
 JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_removeObject
-  (JNIEnv *, jobject, jint);
+  (JNIEnv *, jobject, jint, jobject);
 
 /*
  * Class:     edu_dhbw_andar_ARToolkit

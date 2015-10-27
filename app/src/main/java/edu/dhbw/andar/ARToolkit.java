@@ -112,7 +112,7 @@ public class ARToolkit {
             //remove from the native library
             Log.v("TESTE", "" + arobject.getId() + " " + arobjects.size());
 
-            removeObject(arobject.getId(),  transMatMonitor);
+            removeObject(arobject.getId(),  arobject);
 
 			Log.v("TESTE", arobject.getPatternName());
 
