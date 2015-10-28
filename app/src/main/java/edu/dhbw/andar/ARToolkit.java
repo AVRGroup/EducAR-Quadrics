@@ -104,6 +104,17 @@ public class ARToolkit {
 			throw new AndARException(e.getMessage());
 		}		
 	}
+
+	public synchronized void changeObject(ARObject arobject) {
+		if(arobjects.contains(arobject)) {
+
+			//change on the native library
+			changeNativeObject(arobject);
+
+			//remove from Java Vector
+			arobjects.remove(arobject);
+		}
+	}
 	
 	
 	public synchronized void unregisterARObject(ARObject arobject) {
@@ -145,6 +156,12 @@ public class ARToolkit {
 	 * @param id the id of the object.
 	 */
 	private native void removeObject(int id, Object monitor);
+
+	/**
+	 * Remove the object from the list of registered objects.
+	 * @param obj the object.
+	 */
+	private native void changeNativeObject(ARObject obj);
 	
 	/**
 	 * Do some basic initialization, like creating data structures.

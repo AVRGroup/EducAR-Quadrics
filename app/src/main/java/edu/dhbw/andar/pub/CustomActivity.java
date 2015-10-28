@@ -51,7 +51,7 @@ public class CustomActivity extends AndARActivity {
 
         CriaBotoes();
 
-		DesenhaSuperficie();
+        SelecionaSuperficie();
 
         CriaScaleBar();
 	}
@@ -145,7 +145,7 @@ public class CustomActivity extends AndARActivity {
                 rd_c.setVisibility(View.VISIBLE);
                 rd_a.setChecked(true);
                 eqn_img.setImageResource(R.drawable.eqn_elipsoide);
-                DesenhaSuperficie();
+                SelecionaSuperficie();
                 textView.setText("Valor: " + rendedObj.getParameter());
                 seekBar.setProgress(rendedObj.getParameter());
                 seekBar.setMax(rendedObj.getMaxProgress());
@@ -159,7 +159,7 @@ public class CustomActivity extends AndARActivity {
                 rd_c.setVisibility(View.GONE);
                 rd_a.setChecked(true);
                 eqn_img.setImageResource(R.drawable.eqn_cone);
-                DesenhaSuperficie();
+                SelecionaSuperficie();
                 textView.setText("Valor: " + rendedObj.getParameter());
                 seekBar.setProgress(rendedObj.getParameter());
                 seekBar.setMax(rendedObj.getMaxProgress());
@@ -173,7 +173,7 @@ public class CustomActivity extends AndARActivity {
                 rd_c.setVisibility(View.GONE);
                 rd_a.setChecked(true);
                 eqn_img.setImageResource(R.drawable.eqn_paraboloide);
-                DesenhaSuperficie();
+                SelecionaSuperficie();
                 textView.setText("Valor: " + rendedObj.getParameter());
                 seekBar.setProgress(rendedObj.getParameter());
                 seekBar.setMax(rendedObj.getMaxProgress());
@@ -187,7 +187,7 @@ public class CustomActivity extends AndARActivity {
                 rd_c.setVisibility(View.VISIBLE);
                 rd_a.setChecked(true);
                 eqn_img.setImageResource(R.drawable.eqn_hiperb_uma);
-                DesenhaSuperficie();
+                SelecionaSuperficie();
                 textView.setText("Valor: " + rendedObj.getParameter());
                 seekBar.setProgress(rendedObj.getParameter());
                 seekBar.setMax(rendedObj.getMaxProgress());
@@ -201,7 +201,7 @@ public class CustomActivity extends AndARActivity {
                 rd_c.setVisibility(View.VISIBLE);
                 rd_a.setChecked(true);
                 eqn_img.setImageResource(R.drawable.eqn_hiperb_duas);
-                DesenhaSuperficie();
+                SelecionaSuperficie();
                 textView.setText("Valor: " + rendedObj.getParameter());
                 seekBar.setProgress(rendedObj.getParameter());
                 seekBar.setMax(rendedObj.getMaxProgress());
@@ -215,7 +215,7 @@ public class CustomActivity extends AndARActivity {
                 rd_c.setVisibility(View.GONE);
                 rd_a.setChecked(true);
                 eqn_img.setImageResource(R.drawable.eqn_paraboloide_hiperb);
-                DesenhaSuperficie();
+                SelecionaSuperficie();
                 textView.setText("Valor: " + rendedObj.getParameter());
                 seekBar.setProgress(rendedObj.getParameter());
                 seekBar.setMax(rendedObj.getMaxProgress());
@@ -223,11 +223,11 @@ public class CustomActivity extends AndARActivity {
         });
     }
 
-    public void DesenhaSuperficie(){
+    public void SelecionaSuperficie(){
 		try {
             if(rendedObj != null) {
                 Log.v("Monitor", "Nao chamou Unregister ainda");
-                art.unregisterARObject(rendedObj);
+                art.changeObject(rendedObj);
                 Log.v("Monitor", "Chamou o Unregister");
                 rendedObj = null;
             }

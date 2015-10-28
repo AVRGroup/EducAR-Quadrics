@@ -214,6 +214,19 @@ JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_removeObject
 
 }
 
+/*
+ * Class:     edu_dhbw_andar_ARToolkit
+ * Method:    changeNativeObject
+ * Signature: (I)V
+ */
+ //TODO release globalref
+JNIEXPORT void JNICALL Java_edu_dhbw_andar_ARToolkit_changeNativeObject
+  (JNIEnv *env, jobject artoolkit,jobject obj) {
+
+    markerObject->objref = (*env)->NewGlobalRef(env, obj);
+
+}
+
 /**
  * Do initialization specific to the image/screen dimensions.
  * @param imageWidth width of the image data

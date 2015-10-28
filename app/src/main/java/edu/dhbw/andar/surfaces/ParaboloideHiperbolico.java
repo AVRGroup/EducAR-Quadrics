@@ -178,10 +178,7 @@ public class ParaboloideHiperbolico extends SurfaceObject{
 
     @Override
     public void setParameter(float progress){
-        if(index == 2)
-            this.parameters[index] = 0.0f;
-        else
-            this.parameters[index] = progress;
+        this.parameters[index] = progress;
     }
 
     @Override
