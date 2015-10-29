@@ -24,6 +24,7 @@ public class Cone extends SurfaceObject {
 
     public float u = -2.0f;
     public float v = 0.0f;
+    public float zMin = 0.0f;
 
     public final int numCoord = (slices+1)*(stacks+1)*3*6;
     public final int numCoordWire = (slices+1)*(stacks+1)*3*8;
@@ -57,6 +58,10 @@ public class Cone extends SurfaceObject {
 
         for(u = -25.0f; u < 25.0f; u+=passoU){
             for(v = 0.0f; v < 2*Math.PI; v+= passoV){
+
+                if(u == -25.0f && v == 0.0f){
+                    zMin = coordZ(v, u);
+                }
 
                 float x = coordX(v, u), y = coordY(v, u), z = coordZ(v, u);
                 Vetor a = new Vetor(x, y, z);
@@ -154,6 +159,7 @@ public class Cone extends SurfaceObject {
         coneExt.cores.position(0);
         coneInt.cores.position(0);
         coneWire.vertices.position(0);
+        zMin = 0.0f;
     }
 
     public float coordX(float v, float u){
@@ -167,7 +173,7 @@ public class Cone extends SurfaceObject {
     }
 
     public float coordZ(float v, float u){
-        return (float) 25.0f + (parameters[0]*u);
+        return (zMin - (parameters[0]*u));
 
     }
 

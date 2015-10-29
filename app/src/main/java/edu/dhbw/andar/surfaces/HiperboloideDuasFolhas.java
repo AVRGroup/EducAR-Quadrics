@@ -25,6 +25,7 @@ public class HiperboloideDuasFolhas extends SurfaceObject{
 	
 	public float u = 0.0f;
 	public float t = -3.0f;
+    public float zMin = 0.0f;
 		
 	public final int numCoord = (slices+1)*(stacks+1)*3*6;
 	public final int numCoordWire = (slices+1)*(stacks+1)*3*8;
@@ -56,6 +57,10 @@ public class HiperboloideDuasFolhas extends SurfaceObject{
 		
 		for(t = -5.0f; t <= 5.0f; t+= passoT){
 			for(u = 0.0f; u <= 2*Math.PI; u+=passoU){
+
+                if(t == -5.0f && u == 0.0f){
+                    zMin = coordZ(t, u);
+                }
 				
 				float x = coordX(t, u), y = coordY(t, u), z = coordZ(t, u);
 				Vetor a = new Vetor(x, y, z);
@@ -152,6 +157,7 @@ public class HiperboloideDuasFolhas extends SurfaceObject{
         hiperbDuasExt.cores.position(0);
         hiperbDuasInt.cores.position(0);
         hiperbDuasWire.vertices.position(0);
+        zMin = 0.0f;
 	}
 	
 	public float coordX(float t, float u){
@@ -163,7 +169,7 @@ public class HiperboloideDuasFolhas extends SurfaceObject{
 	}
 	
 	public float coordZ(float t, float u){
-		return (float) ((4 * parameters[2]) + (parameters[2] * t));
+		return (zMin - (parameters[2] * t));
 	}
 
     @Override
