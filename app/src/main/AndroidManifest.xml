@@ -1,35 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="getcomp.educar.quadrics"
-      android:versionName="1.2" android:versionCode="6">
+    package="getcomp.educar.quadrics"
+    android:versionCode="6"
+    android:versionName="1.2" >
 
-<uses-permission android:name="android.permission.CAMERA"/>
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-feature android:name="android.hardware.camera" />
-<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
-<supports-screens android:smallScreens="true" 
-                  android:normalScreens="true"
-                  android:largeScreens="true" 
-                  android:anyDensity="true" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
-    <application  android:description="@string/about" android:label="@string/app_name" android:icon="@drawable/ic_launcher" android:theme="@android:style/Theme.Light">
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" />
+
+    <application
+        android:description="@string/about"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Light" >
         <activity
             android:name="edu.dhbw.andar.pub.Splash"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:label="@string/app_name" android:clearTaskOnLaunch="true" android:screenOrientation="landscape" android:name="edu.dhbw.andar.pub.CustomActivity" android:noHistory="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        <activity
+            android:name="edu.dhbw.andar.pub.CustomActivity"
+            android:clearTaskOnLaunch="true"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
-        <activity android:label="@string/app_name" android:clearTaskOnLaunch="true" android:screenOrientation="portrait" android:name="edu.dhbw.andar.pub.HelpActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        <activity
+            android:name="edu.dhbw.andar.pub.HelpActivity"
+            android:clearTaskOnLaunch="true"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
-
+        <activity
+            android:name="edu.dhbw.andar.pub.About_Activity"
+            android:label="@string/title_activity_about_" >
+        </activity>
     </application>
-</manifest> 
+
+</manifest>

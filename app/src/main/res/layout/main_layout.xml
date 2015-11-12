@@ -74,7 +74,15 @@
                     android:src="@drawable/paraboloide_hiperb"
                     android:layout_margin="@dimen/surface_btn_margin"
                     android:background="@color/cinza_escuro" />
-            </LinearLayout>
+
+            <ImageButton
+                android:layout_width="@dimen/surface_btn_size"
+                android:layout_height="match_parent"
+                android:id="@+id/btn_help"
+                android:src="@drawable/help"
+                android:layout_margin="@dimen/surface_btn_margin"
+                android:background="@color/cinza_escuro"/>
+        </LinearLayout>
     </ScrollView>
 
     <SeekBar

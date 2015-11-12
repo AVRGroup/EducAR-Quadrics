@@ -29,4 +29,11 @@
     <string name="b">b</string>
     <string name="c">c</string>
     <string name="space">   </string>
+    <string name="title_activity_help_interno">HelpInterno</string>
+
+    <string name="help_interno">Ajuda</string>
+    <string name="title_activity_about_">About_Activity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="helpTitle">Ajuda</string>
+    <string name="sobre">Sobre</string>
 </resources>

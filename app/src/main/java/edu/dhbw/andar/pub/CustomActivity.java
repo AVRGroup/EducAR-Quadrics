@@ -1,5 +1,6 @@
 package edu.dhbw.andar.pub;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
@@ -131,6 +132,7 @@ public class CustomActivity extends AndARActivity {
         ImageButton btnHiperb_uma = (ImageButton) findViewById(R.id.btn_hiperb_uma);
         ImageButton btnHiperb_duas = (ImageButton) findViewById(R.id.btn_hiperb_duas);
         ImageButton btnParaboloide_hiperb = (ImageButton) findViewById(R.id.btn_paraboloide_hiperb);
+        ImageButton btnHelp = (ImageButton)findViewById(R.id.btn_help);
 
         rd_a = (RadioButton)findViewById(R.id.rd_a);
         rd_c = (RadioButton)findViewById(R.id.rd_c);
@@ -219,6 +221,15 @@ public class CustomActivity extends AndARActivity {
                 textView.setText("Valor: " + rendedObj.getParameter());
                 seekBar.setProgress(rendedObj.getParameter());
                 seekBar.setMax(rendedObj.getMaxProgress());
+            }
+        });
+
+        btnHelp.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View arg0) {
+                Intent intent = new Intent();
+                intent.setClass(CustomActivity.this, About_Activity.class);
+                startActivity(intent);
             }
         });
     }
