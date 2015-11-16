@@ -13,12 +13,13 @@
     <string name="instructions">Instruções</string>
     <string name="instructions_um">1. Baixe o marcador, imprima ou abra o arquivo em algum outro dispositivo que permita a visualização da imagem, como celular ou tablet.</string>
     <string name="instructions_dois">2. Aponte o seu dispositivo para o marcador de modo que ele esteja completamente visível na imagem da câmera.</string>
-    <string name="instructions_tres">3. Toque na tela para exibir o menu de troca das superfícies. Recomendamos que oculte o marcador para fazer a troca.</string>
+    <string name="instructions_tres">3. Toque na tela para exibir ou ocultar o menu de troca das superfícies, bem como o menu de alteração dos parâmetros.</string>
+    <string name="instructions_quatro">4. Para cada superfície selecione o parâmetro que deseja alterar, em seguida arraste a barra de progresso para alterar.</string>
     <string name="exit">Sair</string>
-    <string name="about">EducAR - Quadrics é desenvolvido por Lidiane Teixeira Pereira com a colaboração de Igor Couto, Douglas Coelho e contribuições de Jorge Moreira e Matheus Oliveira sob a orientação de Rodrigo Luis de Souza da Silva como um projeto do GETComp (Grupo de Educação Tutorial do Curso de Ciência da Computação).</string>
+    <string name="about">EducAR - Quadrics é desenvolvido por Lidiane Teixeira Pereira com a colaboração de Igor Couto, Douglas Coelho e contribuições de Jorge Moreira e Matheus Marques sob a orientação de Rodrigo Luis de Souza da Silva como um projeto do GETComp (Grupo de Educação Tutorial do Curso de Ciência da Computação) da Universidade Federal de Juiz de Fora.</string>
     <string name="contact">Contato: educar.getcomp@gmail.com</string>
     <string name="not_show_again">Não mostrar novamente</string>
-    <string name="link_marcador">Link para download do marcador: http://goo.gl/souy1h</string>
+    <string name="link_marcador">Link para download do marcador: http://bit.ly/marcadorEducar</string>
 
     <string name="x">x²</string>
     <string name="y">y²</string>
@@ -36,4 +37,5 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="helpTitle">Ajuda</string>
     <string name="sobre">Sobre</string>
+    <string name="title_activity_sobre">SobreActivity</string>
 </resources>

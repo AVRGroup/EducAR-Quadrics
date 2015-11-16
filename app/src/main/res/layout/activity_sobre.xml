@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="edu.dhbw.andar.pub.SobreActivity"
+    android:padding="0dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/sobre"
+        android:id="@+id/txtSobreTitle"
+        android:textSize="24dp"
+        android:background="#05a851"
+        android:padding="8dp"
+        android:textColor="@color/branco"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:layout_margin="0dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView3"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_above="@+id/linearLayout"
+        android:layout_below="@+id/txtSobreTitle" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="1"
+                android:layout_margin="10dp">
+
+                <ImageView
+                    android:layout_width="161dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/getcomp"
+                    android:src="@drawable/getcomp"
+                    android:padding="10dp"
+                    android:layout_gravity="left"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:layout_width="161dp"
+                    android:layout_height="84dp"
+                    android:id="@+id/ufjf"
+                    android:src="@drawable/universidade_federal_de_juiz_de_fora_ufjf"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/about"
+                android:paddingTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp"
+                android:textSize="@dimen/txt_help_size"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/contact"
+                android:id="@+id/contato"
+                android:padding="10dp"
+                android:gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:textSize="17dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:background="#05a851"
+        android:id="@+id/linearLayout"
+        android:layout_margin="0dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@android:string/ok"
+            android:id="@+id/txtOk"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="20dp"
+            android:textColor="@color/branco"
+            android:onClick="ajudaOKOnClick" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -7,4 +7,5 @@
     <dimen name="rd_margin">5dp</dimen>
     <dimen name="surface_btn_margin">7dp</dimen>
     <dimen name="scale_bar_width">450dp</dimen>
+    <dimen name="txt_help_size">20dp</dimen>
 </resources>

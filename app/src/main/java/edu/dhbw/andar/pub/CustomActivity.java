@@ -230,6 +230,7 @@ public class CustomActivity extends AndARActivity {
                 Intent intent = new Intent();
                 intent.setClass(CustomActivity.this, About_Activity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

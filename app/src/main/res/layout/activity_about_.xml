@@ -13,38 +13,208 @@
         android:layout_margin="0dp"
         android:textSize="24dp"
         android:background="#05a851"
-        android:padding="5dp"
+        android:padding="8dp"
         android:textColor="@color/branco"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView2"
+        android:layout_below="@+id/txtHelpTitle"
+        android:layout_above="@+id/linearLayout"
+        android:layout_marginBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/linlayout"
+            android:layout_weight="1"
+            android:layout_below="@+id/txtHelpTitle"
+            android:layout_marginTop="10dp"
+            android:layout_above="@+id/linearLayout"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+
+            <TextView
+                android:id="@+id/part1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/instructions_um"
+                android:textSize="@dimen/txt_help_size"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/link_marcador"
+                android:id="@+id/textView"
+                android:paddingTop="5dp"
+                android:textSize="17dp"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:id="@+id/marker"
+                android:scaleType="fitCenter"
+                android:src="@drawable/marcador"
+                android:layout_gravity="center_horizontal|top"
+                android:padding="10dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/part2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="0dp"
+                android:text="@string/instructions_dois"
+                android:textSize="@dimen/txt_help_size"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/focus"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/foco" />
+
+            <TextView
+                android:id="@+id/part3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="0dp"
+                android:text="@string/instructions_tres"
+                android:textSize="@dimen/txt_help_size"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eqn_group"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/background_view_rounded_single"
+                android:alpha="0.7"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="@dimen/eqn_img_width"
+                    android:layout_height="@dimen/eqn_img_height"
+                    android:id="@+id/img_equation"
+                    android:src="@drawable/eqn_elipsoide"
+                    android:layout_gravity="top" />
+
+                <RadioGroup
+                    android:layout_width="@dimen/eqn_img_width"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="bottom">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rd_a"
+                        android:text="@string/a"
+                        android:textColor="@color/branco"
+                        android:textSize="@dimen/txt_radio_size"
+                        android:textStyle="italic"
+                        android:layout_marginRight="@dimen/rd_margin"
+                        android:onClick="onRadioButtonClicked"
+                        android:checked="true" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/b"
+                        android:id="@+id/rd_b"
+                        android:textColor="@color/branco"
+                        android:textSize="@dimen/txt_radio_size"
+                        android:textStyle="italic"
+                        android:layout_marginLeft="@dimen/rd_margin"
+                        android:layout_marginRight="@dimen/rd_margin"
+                        android:onClick="onRadioButtonClicked" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/c"
+                        android:id="@+id/rd_c"
+                        android:textColor="@color/branco"
+                        android:textSize="@dimen/txt_radio_size"
+                        android:textStyle="italic"
+                        android:layout_marginLeft="@dimen/rd_margin"
+                        android:onClick="onRadioButtonClicked" />
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/part4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="0dp"
+                android:text="@string/instructions_quatro"
+                android:textSize="@dimen/txt_help_size"
+                android:layout_weight="1" />
+
+            <SeekBar
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBar"
+                android:visibility="visible"
+                android:layout_gravity="center_horizontal"
+                android:clickable="false"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:background="#05a851">
+        android:background="#05a851"
+        android:id="@+id/linearLayout">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/sobre"
             android:id="@+id/txtSobre"
             android:layout_weight="1"
             android:padding="5dp"
             android:gravity="center_vertical|center_horizontal"
             android:textColor="@color/branco"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:onClick="ajudaSobreOnClick" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@android:string/ok"
             android:id="@+id/txtOk"
             android:layout_weight="1"
             android:padding="5dp"
             android:gravity="center_vertical|center_horizontal"
             android:textSize="20dp"
-            android:textColor="@color/branco" />
+            android:textColor="@color/branco"
+            android:onClick="ajudaOKOnClick" />
+
     </LinearLayout>
 
 </RelativeLayout>
