@@ -52,11 +52,21 @@
         </activity>
         <activity
             android:name="edu.dhbw.andar.pub.About_Activity"
-            android:label="@string/title_activity_about_" >
+            android:label="@string/title_activity_about_"
+            android:parentActivityName="edu.dhbw.andar.pub.CustomActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.dhbw.andar.pub.CustomActivity" />>
         </activity>
         <activity
             android:name="edu.dhbw.andar.pub.SobreActivity"
-            android:label="@string/title_activity_sobre" >
+            android:label="@string/title_activity_sobre"
+            android:parentActivityName="edu.dhbw.andar.pub.About_Activity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.dhbw.andar.pub.About_Activity" />>
         </activity>
     </application>
 

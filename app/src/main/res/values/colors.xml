@@ -10,4 +10,6 @@
     <color name="rounded_container_bg">#222222</color>
     <color name="rounded_container_border">#3b3f44</color>
     <color name="light_gray_header_color">#646663</color>
+    <color name="green_bar">#05a851</color>
+    <color name="grey_bar">#FFB8B8B8</color>
 </resources>

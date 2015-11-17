@@ -2,6 +2,8 @@ package edu.dhbw.andar.pub;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,23 +24,32 @@ public class About_Activity extends Activity {
 
         setContentView(R.layout.activity_about_);
 
-        sobre = (TextView)findViewById(R.id.txtSobre);
-        ok = (TextView)findViewById(R.id.txtOk);
+        sobre = (TextView)findViewById(R.id.btnSobre);
+        ok = (TextView)findViewById(R.id.btnOk);
     }
 
     public void ajudaOKOnClick(View v){
-        ok.setBackgroundColor(getResources().getColor(R.color.cinza_claro));
         Intent mainActivityIntent = new Intent();
         mainActivityIntent.setClass(About_Activity.this, CustomActivity.class);
         startActivity(mainActivityIntent);
-        finish();
+        //finish();
     }
 
     public void ajudaSobreOnClick(View v){
-        sobre.setBackgroundColor(getResources().getColor(R.color.cinza_claro));
         Intent sobreActivityIntent = new Intent();
         sobreActivityIntent.setClass(About_Activity.this, SobreActivity.class);
         startActivity(sobreActivityIntent);
-        finish();
+        //finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Id correspondente ao botão Up/Home da actionbar
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

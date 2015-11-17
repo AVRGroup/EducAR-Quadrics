@@ -12,9 +12,9 @@
         android:id="@+id/txtHelpTitle"
         android:layout_margin="0dp"
         android:textSize="24dp"
-        android:background="#05a851"
+        android:background="@color/grey_bar"
         android:padding="8dp"
-        android:textColor="@color/branco"
+        android:textColor="@android:color/black"
         android:layout_alignParentTop="true"
         android:gravity="center_vertical" />
 
@@ -23,8 +23,7 @@
         android:layout_height="match_parent"
         android:id="@+id/scrollView2"
         android:layout_below="@+id/txtHelpTitle"
-        android:layout_above="@+id/linearLayout"
-        android:layout_marginBottom="20dp">
+        android:layout_above="@+id/linearLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -126,37 +125,34 @@
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/rd_a"
+                        android:id="@+id/rd_a2"
                         android:text="@string/a"
                         android:textColor="@color/branco"
                         android:textSize="@dimen/txt_radio_size"
                         android:textStyle="italic"
                         android:layout_marginRight="@dimen/rd_margin"
-                        android:onClick="onRadioButtonClicked"
                         android:checked="true" />
 
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/b"
-                        android:id="@+id/rd_b"
+                        android:id="@+id/rd_b2"
                         android:textColor="@color/branco"
                         android:textSize="@dimen/txt_radio_size"
                         android:textStyle="italic"
                         android:layout_marginLeft="@dimen/rd_margin"
-                        android:layout_marginRight="@dimen/rd_margin"
-                        android:onClick="onRadioButtonClicked" />
+                        android:layout_marginRight="@dimen/rd_margin" />
 
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/c"
-                        android:id="@+id/rd_c"
+                        android:id="@+id/rd_c2"
                         android:textColor="@color/branco"
                         android:textSize="@dimen/txt_radio_size"
                         android:textStyle="italic"
-                        android:layout_marginLeft="@dimen/rd_margin"
-                        android:onClick="onRadioButtonClicked" />
+                        android:layout_marginLeft="@dimen/rd_margin" />
                 </RadioGroup>
 
             </LinearLayout>
@@ -178,7 +174,9 @@
                 android:visibility="visible"
                 android:layout_gravity="center_horizontal"
                 android:clickable="false"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:paddingTop="5dp"
+                android:paddingBottom="20dp" />
 
         </LinearLayout>
     </ScrollView>
@@ -188,32 +186,24 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:background="#05a851"
         android:id="@+id/linearLayout">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <Button
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/sobre"
-            android:id="@+id/txtSobre"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:textColor="@color/branco"
-            android:textSize="20dp"
-            android:onClick="ajudaSobreOnClick" />
+            android:id="@+id/btnSobre"
+            android:onClick="ajudaSobreOnClick"
+            android:layout_weight="1" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <Button
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@android:string/ok"
-            android:id="@+id/txtOk"
+            android:id="@+id/btnOk"
             android:layout_weight="1"
-            android:padding="5dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:textSize="20dp"
-            android:textColor="@color/branco"
             android:onClick="ajudaOKOnClick" />
+
 
     </LinearLayout>
 

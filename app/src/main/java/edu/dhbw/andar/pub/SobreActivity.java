@@ -3,6 +3,8 @@ package edu.dhbw.andar.pub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,15 +26,25 @@ public class SobreActivity extends Activity {
 
         setContentView(R.layout.activity_sobre);
 
-        ok = (TextView)findViewById(R.id.txtOk);
+        ok = (TextView)findViewById(R.id.btnOK2);
     }
 
     public void ajudaOKOnClick(View v){
-        ok.setBackgroundColor(getResources().getColor(R.color.cinza_claro));
         Intent mainActivityIntent = new Intent();
         mainActivityIntent.setClass(SobreActivity.this, CustomActivity.class);
         startActivity(mainActivityIntent);
-        finish();
+        //finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Id correspondente ao botão Up/Home da actionbar
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
