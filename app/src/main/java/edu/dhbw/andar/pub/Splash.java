@@ -30,12 +30,7 @@ public class Splash extends AndARActivity implements Runnable {
     }
 
     public void run() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Intent intent;
-        if(prefs.getBoolean("firstLaunch", true))
-            intent = new Intent(getApplicationContext(), HelpActivity.class);
-        else
-            intent = new Intent(getApplicationContext(), CustomActivity.class);
+        Intent intent = new Intent(getApplicationContext(), CustomActivity.class);
         startActivity(intent);
         finish();
     }

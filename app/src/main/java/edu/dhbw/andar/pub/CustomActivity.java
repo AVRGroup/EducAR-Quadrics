@@ -3,6 +3,7 @@ package edu.dhbw.andar.pub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.view.View;
 
@@ -19,6 +20,7 @@ import edu.dhbw.andar.surfaces.ParaboloideHiperbolico;
 import getcomp.educar.quadrics.R;
 
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -44,6 +46,8 @@ public class CustomActivity extends AndARActivity {
 
 	SurfaceObject rendedObj = null;
 
+    RelativeLayout Help, About, Draw;
+
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,7 +59,19 @@ public class CustomActivity extends AndARActivity {
         SelecionaSuperficie();
 
         CriaScaleBar();
+
+        CriaLayouts();
 	}
+
+    public void CriaLayouts(){
+        Help = (RelativeLayout)findViewById(R.id.help_layout);
+        About = (RelativeLayout)findViewById(R.id.about_layout);
+        Draw = (RelativeLayout)findViewById(R.id.draw_layout);
+
+        Help.setVisibility(View.GONE);
+        About.setVisibility(View.GONE);
+        Draw.setVisibility(View.VISIBLE);
+    }
 
     public void CriaScaleBar(){
 
@@ -83,13 +99,13 @@ public class CustomActivity extends AndARActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 textView.setText("Valor: " + progress);
-                if(rendedObj != null) {
+                if (rendedObj != null) {
                     try {
                         art.unregisterARObject(rendedObj);
                         rendedObj.setParameter(progress);
                         rendedObj.buildSurface();
                         art.registerARObject(rendedObj);
-                    } catch (AndARException ex){
+                    } catch (AndARException ex) {
                         //handle the exception, that means: show the user what happened
                         Log.e("AndAR EXCEPTION", ex.getMessage());
                     }
@@ -227,10 +243,8 @@ public class CustomActivity extends AndARActivity {
         btnHelp.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View arg0) {
-                Intent intent = new Intent();
-                intent.setClass(CustomActivity.this, About_Activity.class);
-                startActivity(intent);
-                //finish();
+                Help.setVisibility(View.VISIBLE);
+                About.setVisibility(View.GONE);
             }
         });
     }
@@ -275,6 +289,21 @@ public class CustomActivity extends AndARActivity {
             Log.e("AndAR EXCEPTION", ex.getMessage());
 		}
 	}
+
+    public void ajudaOKOnClick(View v){
+        Help.setVisibility(View.GONE);
+        About.setVisibility(View.GONE);
+    }
+
+    public void ajudaSobreOnClick(View v){
+        Help.setVisibility(View.GONE);
+        About.setVisibility(View.VISIBLE);
+    }
+
+    public void SobreOKOnClick(View v){
+        Help.setVisibility(View.GONE);
+        About.setVisibility(View.GONE);
+    }
 
 	/**
 	 * Inform the user about exceptions that occurred in background threads.

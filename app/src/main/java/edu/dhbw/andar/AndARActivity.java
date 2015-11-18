@@ -37,6 +37,7 @@ import android.hardware.Camera;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Debug;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -67,7 +68,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
     }
 
     public AndARActivity(boolean startPreviewRightAway) {
-        this.startPreviewRightAway = startPreviewRightAway;
+        this.startPreviewRightAway = true;
     }
 
 
@@ -75,7 +76,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.v("ONCREATE", "CHAMEEEI");
         Thread.currentThread().setUncaughtExceptionHandler(this);
         res = getResources();
 
@@ -212,7 +213,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
     @Override
     protected void onResume() {
         mPausing = false;
-        glSurfaceView.onResume();
+        this.glSurfaceView.onResume();
         super.onResume();
     }
 

@@ -85,7 +85,8 @@ public class ARToolkit {
 	 * @param arobject The object that shell be registered.
 	 */
 	public synchronized void registerARObject(ARObject arobject)
-		throws AndARException{	
+		throws AndARException{
+		Log.v("AROBJECTS","Tamanho "+ arobjects.size());
 		if(arobjects.contains(arobject)) 
 			return;//don't register the same object twice
 		try {
