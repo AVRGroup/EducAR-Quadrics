@@ -151,26 +151,6 @@ public abstract class ARGLES20Object extends ARObject {
 		if( ssbb[3] < 0.0f ) ssbb[3] = 0.0f; if( ssbb[3] > 1.0f ) ssbb[3] = 1.0f;
 		return ssbb;
 	}
-
-	/**
-	 * Generates a cubemap for this object and puts it in graphics memory
-	 * @param vertices A float array of vertices: [x][y][z][x][y][z]...
-	 */
-	public void GenerateCubemap( float[] vertices ) {
-		float[] aabb = GraphicsUtil.calcAABB( vertices );
-		//Log.d("ARGLES20Object", "AABB: Min: ( " + aabb[0] + ", " + aabb[1] + ", " + aabb[2] + " ), Max: ( " + aabb[3] + ", " + aabb[4] + ", " + aabb[5] + " ) " );
-		float[] ssbb = calcSSBB( aabb );
-		//Log.d("ARGLES20Object", "SSBB: Min: ( " + ssbb[0] + ", " + ssbb[1] + " ), Max: ( " + ssbb[2] + ", " + ssbb[3] + ") " );
-		float[] ssbbverts = {
-				ssbb[0], ssbb[1], 0.0f,
-				ssbb[2], ssbb[1], 0.0f,
-				ssbb[0], ssbb[3], 0.0f,
-				ssbb[2], ssbb[3], 0.0f
-		};
-		//mRenderer.mDebugDraw.debugTriangleStrip( ssbbverts );
-		mRenderer.generateCubemap( ssbb );
-	}
-	
 	
 	/**
 	 * Implement this method and setup GL to render your object here

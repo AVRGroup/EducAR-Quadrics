@@ -21,6 +21,8 @@ public abstract class SurfaceObject extends ARObject{
     protected float[] mMVMatrix = new float[16]; // ModelView Matrix
     protected float[] mPMatrix = new float[16]; // Projection Matrix
 
+    protected final int buffers[] = new int[1];
+
     /** This will be used to pass in model position information. */
     protected int mPositionHandle;
 
@@ -51,6 +53,8 @@ public abstract class SurfaceObject extends ARObject{
         index = 0;
 
         cor = new Vetor(1.0f, 0.0f, 0.0f);
+
+        GLES20.glGenBuffers(1, buffers, 0);
     }
 
     /**
