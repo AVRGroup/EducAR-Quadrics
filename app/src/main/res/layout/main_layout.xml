@@ -431,7 +431,8 @@
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
             android:layout_below="@+id/txtSobreTitle"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:layout_above="@+id/linearLayout3">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -441,25 +442,27 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:weightSum="1"
                     android:layout_margin="10dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_gravity="center_horizontal">
 
                     <ImageView
-                        android:layout_width="161dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="172dp"
+                        android:layout_height="96dp"
                         android:id="@+id/getcomp"
                         android:src="@drawable/getcomp"
-                        android:padding="10dp"
-                        android:layout_weight="1" />
+                        android:padding="10dp" />
 
                     <ImageView
-                        android:layout_width="161dp"
-                        android:layout_height="84dp"
+                        android:layout_width="146dp"
+                        android:layout_height="match_parent"
                         android:id="@+id/ufjf"
                         android:src="@drawable/universidade_federal_de_juiz_de_fora_ufjf"
-                        android:layout_weight="1" />
+                        android:padding="10dp"
+                        android:layout_weight="0.28" />
                 </LinearLayout>
 
                 <TextView
