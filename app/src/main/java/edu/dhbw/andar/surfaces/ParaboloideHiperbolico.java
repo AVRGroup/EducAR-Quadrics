@@ -21,7 +21,6 @@ public class ParaboloideHiperbolico extends SurfaceObject{
 	public final int stacks = 20;
 	public final int numCoord = slices*stacks*18;
 	public final int numCoordWire = slices*stacks*3*8;
-    public final int numCoordCor = slices*stacks*4*6;
 
 	public final float passoU = (float) ((8.0f)/slices);
 	public final float passoV = (float) ((8.0f)/stacks);
@@ -43,9 +42,9 @@ public class ParaboloideHiperbolico extends SurfaceObject{
             parabHipWire = null;
         }
 
-        parabHipExt = new SurfaceBuffer(numCoord, numCoordCor, 0, 1);
-        parabHipInt = new SurfaceBuffer(numCoord, numCoordCor, 0, -1);
-        parabHipWire = new SurfaceBuffer(numCoordWire, numCoordCor, 1, 1);
+        parabHipExt = new SurfaceBuffer(numCoord, 0, 1);
+        parabHipInt = new SurfaceBuffer(numCoord, 0, -1);
+        parabHipWire = new SurfaceBuffer(numCoordWire, 1, 1);
 		buildSurface();
 	}
 	

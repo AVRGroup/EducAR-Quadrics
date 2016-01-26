@@ -28,7 +28,6 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 		
 	public final int numCoord = slices*(stacks+1)*3*6;
 	public final int numCoordWire = slices*(stacks+1)*3*8;
-	public final int numCoordCor = slices*(stacks+1)*4*6;
 
 	public float Xo = 0.0f;
 	public float Yo = 0.0f;
@@ -49,9 +48,9 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 			hiperbUmaWire = null;
 		}
 
-		hiperbUmaInt = new SurfaceBuffer(numCoord, numCoordCor, 0, -1);
-		hiperbUmaExt = new SurfaceBuffer(numCoord, numCoordCor, 0, 1);
-		hiperbUmaWire = new SurfaceBuffer(numCoordWire, numCoordCor, 1, 1);
+		hiperbUmaInt = new SurfaceBuffer(numCoord, 0, -1);
+		hiperbUmaExt = new SurfaceBuffer(numCoord, 0, 1);
+		hiperbUmaWire = new SurfaceBuffer(numCoordWire, 1, 1);
 
 		buildSurface();
 	}

@@ -21,16 +21,26 @@ package edu.dhbw.andar;
 
 
 import java.io.Writer;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.concurrent.locks.ReentrantLock;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
 import edu.dhbw.andar.interfaces.OpenGLRenderer;
 import edu.dhbw.andar.interfaces.PreviewFrameSink;
+
+
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
+import android.graphics.Bitmap.Config;
+import android.opengl.GLDebugHelper;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 
@@ -41,6 +51,9 @@ import android.util.Log;
  */
 public class AndARRenderer implements Renderer, PreviewFrameSink{
 	protected Resources res;
+	protected boolean DEBUG = false;
+	protected int textureName;
+	protected float[] square;
 	protected float[] textureCoords = new float[] {
 			// Camera preview
 			 0.0f, 0.625f,
@@ -63,6 +76,7 @@ public class AndARRenderer implements Renderer, PreviewFrameSink{
 	protected FloatBuffer ambientLightBuffer = makeFloatBuffer(ambientlight);
 	
 	protected FloatBuffer textureBuffer;
+	protected FloatBuffer squareBuffer;
 	protected boolean frameEnqueued = false;
 	protected boolean takeScreenshot = false;
 	protected Bitmap screenshot;
@@ -89,7 +103,9 @@ public class AndARRenderer implements Renderer, PreviewFrameSink{
 	
 	/**
 	 * the default constructer
+	 * @param int the {@link PixelFormat} of the Camera preview
 	 * @param res Resources
+	 * @param customRenderer non AR renderer, may be null
 	 */
 	public AndARRenderer(Resources res, ARToolkit markerInfo, AndARActivity activity)  {
 		this.res = res;
@@ -104,6 +120,44 @@ public class AndARRenderer implements Renderer, PreviewFrameSink{
 
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);		
+		
+		if(DEBUG)
+			gl = (GL10) GLDebugHelper.wrap(gl, GLDebugHelper.CONFIG_CHECK_GL_ERROR, log);
+		setupDraw2D(gl);
+		gl.glDisable(GL10.GL_DEPTH_TEST);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		gl.glDisable(GL10.GL_LIGHTING);
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, textureName);
+		//load new preview frame as a texture, if needed
+		if (frameEnqueued) {
+			frameLock.lock();
+			if(!isTextureInitialized) {
+				initializeTexture(gl);
+			} else {
+				//just update the image
+				//can we just update a portion(non power of two)?...seems to work
+				gl.glTexSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, previewFrameWidth, previewFrameHeight,
+						mode, GL10.GL_UNSIGNED_BYTE, frameData);
+			}
+			frameLock.unlock();
+			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
+			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+			frameEnqueued = false;
+		}
+		
+		gl.glColor4f(1, 1, 1, 1f);	
+		//draw camera preview frame:
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		
+		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);		
+		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, squareBuffer);
+		
+		//draw camera square
+		gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+		
+		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 
 		if(customRenderer != null)
 			customRenderer.setupEnv(gl);
@@ -120,6 +174,12 @@ public class AndARRenderer implements Renderer, PreviewFrameSink{
 		
 		if(customRenderer != null)
 			customRenderer.draw(gl);
+		
+		//take a screenshot, if desired
+		if(takeScreenshot) {
+			takeScreenshot = false;
+			captureScreenshot(gl);		
+		}
 	}
 
 	/* 
@@ -127,8 +187,16 @@ public class AndARRenderer implements Renderer, PreviewFrameSink{
 	 */
 
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		//TODO handle landscape view
 		gl.glViewport(0, 0, width, height);
 		aspectRatio = (float)width/(float)height;
+		setupDraw2D(gl);		
+		square = new float[] { 	-100f*aspectRatio, -100.0f, -1f,
+				 100f*aspectRatio, -100.0f, -1f,
+				-100f*aspectRatio, 100.0f, -1f,
+				 100f*aspectRatio, 100.0f, -1f };
+		
+		squareBuffer = makeFloatBuffer(square);		
 		markerInfo.setScreenSize(width, height);
 		screenHeight = height;
 		screenWidth = width;
@@ -139,13 +207,75 @@ public class AndARRenderer implements Renderer, PreviewFrameSink{
 	 */
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		gl.glClearColor(0,0,0,0);
+		gl.glClearDepthf(1.0f);
+		//enable textures:
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		
+		int[] textureNames = new int[1];
+		//generate texture names:
+		gl.glGenTextures(1, textureNames, 0);
+		textureName = textureNames[0];
+		
+		textureBuffer = makeFloatBuffer(textureCoords);
 
+		
+		//register unchaught exception handler
 		Thread.currentThread().setUncaughtExceptionHandler(activity);
 		
 		markerInfo.initGL(gl);
 		if(customRenderer != null)
 			customRenderer.initGL(gl);
+	}
+	
+	/**
+	 * Take a screenshot, if desired
+	 * http://www.anddev.org/how_to_get_opengl_screenshot__useful_programing_hint-t829.html
+	 * @param gl The gl context
+	 */
+	protected void captureScreenshot(GL10 gl) {
+		int[] tmp = new int[screenHeight*screenWidth];
+		int[] screenshot = new int[screenHeight*screenWidth];
+		Buffer screenshotBuffer = IntBuffer.wrap(tmp);
+		screenshotBuffer.position(0);
+		copyScreenToBuffer(gl, screenshotBuffer);
+		for(int i=0; i<screenHeight; i++) {
+			// remember, that OpenGL bitmap is incompatible with Android bitmap and so, some correction needed.      
+			for(int j=0; j<screenWidth; j++) { 
+				int pix=tmp[i*screenWidth+j]; 
+				int pb=(pix>>16)&0xff; 
+				int pr=(pix<<16)&0x00ff0000; 
+				int pix1=(pix&0xff00ff00) | pr | pb; 
+				screenshot[(screenHeight-i-1)*screenWidth+j]=pix1;
+			} 
+		}  
+		this.screenshot = Bitmap.createBitmap(screenshot, screenWidth, screenHeight, Config.RGB_565);
+		screenshotTaken = true;
+		//wake up the waiting method
+		synchronized (screenshotMonitor) {
+			screenshotMonitor.notifyAll();
+		}	
+	}
+	
+	/**
+	 * Wrapper for glReadPixels
+	 * @param gl The gl context
+	 * @param sb The screen buffer
+	 */
+	protected void copyScreenToBuffer(GL10 gl, Buffer sb) {
+		gl.glReadPixels(0,0,screenWidth,screenHeight, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, sb);
+	}
+	
+	/**
+	 * Setup OpenGL to draw in 2D.
+	 */
+	private void setupDraw2D(GL10 gl) {
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glLoadIdentity();
+		gl.glOrthof(-100.0f*aspectRatio, 100.0f*aspectRatio, -100.0f, 100.0f, 1.0f, -1.0f);
+		
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();
 	}
 	
 	/**
@@ -161,6 +291,7 @@ public class AndARRenderer implements Renderer, PreviewFrameSink{
 		fb.position(0);
 		return fb;
 	}
+
 
 	/* (non-Javadoc)
 	 * @see edu.dhbw.andopenglcam.interfaces.PreviewFrameSink#setNextFrame(java.nio.ByteBuffer)
@@ -200,6 +331,24 @@ public class AndARRenderer implements Renderer, PreviewFrameSink{
 				 ((float)realWidth)/textureSize, 0.0f			 
 			};		
 		textureBuffer= makeFloatBuffer(textureCoords);		
+	}
+	
+	private void initializeTexture (GL10 gl) {
+		byte[] frame;
+		switch(mode) {
+		default:
+			mode = GL10.GL_RGB;
+		case GL10.GL_RGB:
+			frame = new byte[textureSize*textureSize*3];
+			break;
+		case GL10.GL_LUMINANCE:
+			frame = new byte[textureSize*textureSize];
+			break;
+		}
+		gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, mode, textureSize,
+				textureSize, 0, mode, GL10.GL_UNSIGNED_BYTE ,
+				ByteBuffer.wrap(frame));
+		isTextureInitialized = true;		
 	}
 	
 	/**

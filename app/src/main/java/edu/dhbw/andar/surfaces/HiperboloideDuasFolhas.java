@@ -29,7 +29,6 @@ public class HiperboloideDuasFolhas extends SurfaceObject{
 		
 	public final int numCoord = (slices+1)*(stacks+1)*3*6;
 	public final int numCoordWire = (slices+1)*(stacks+1)*3*8;
-    public final int numCoordCor = (slices+1)*(stacks+1)*4*6;
 
 	public HiperboloideDuasFolhas(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
@@ -45,9 +44,9 @@ public class HiperboloideDuasFolhas extends SurfaceObject{
             hiperbDuasWire = null;
         }
 
-        hiperbDuasExt = new SurfaceBuffer(numCoord, numCoordCor, 0, 1);
-        hiperbDuasInt = new SurfaceBuffer(numCoord, numCoordCor, 0, -1);
-        hiperbDuasWire= new SurfaceBuffer(numCoordWire, numCoordCor, 1, 1);
+        hiperbDuasExt = new SurfaceBuffer(numCoord, 0, 1);
+        hiperbDuasInt = new SurfaceBuffer(numCoord, 0, -1);
+        hiperbDuasWire= new SurfaceBuffer(numCoordWire, 1, 1);
 		buildSurface();
 	}
 	

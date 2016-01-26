@@ -17,7 +17,6 @@ import edu.dhbw.andar.surfaces.HiperboloideDuasFolhas;
 import edu.dhbw.andar.surfaces.HiperboloideUmaFolha;
 import edu.dhbw.andar.surfaces.Paraboloide;
 import edu.dhbw.andar.surfaces.ParaboloideHiperbolico;
-import edu.dhbw.andar.surfaces.Triangle;
 import getcomp.educar.quadrics.R;
 
 import android.widget.ImageView;
@@ -262,7 +261,7 @@ public class CustomActivity extends AndARActivity {
 			if( super.isGLES20() ) {
 				switch(superficie) {
 				case 1:
-					rendedObj = new Triangle("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
+					rendedObj = new Elipsoide("elipsoide", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());
                     break;
 				case 2:
 					rendedObj = new Cone("cone", "avr.patt", 50.0, new double[]{0,0}, (AndARGLES20Renderer) super.getRenderer());

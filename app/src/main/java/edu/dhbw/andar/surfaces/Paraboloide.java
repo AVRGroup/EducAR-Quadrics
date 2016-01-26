@@ -20,7 +20,6 @@ public class Paraboloide extends SurfaceObject{
 	public final int stacks = 32;
 	public final int numCoord = slices*stacks*18;
 	public final int numCoordWire = slices*stacks*3*8;
-    public final int numCoordCor = slices*stacks*4*6;
 	public float theta = 0.0f;
 	public float alpha = 0.0f;
 	public final float passoT = (float) ((2*Math.PI)/slices);
@@ -43,9 +42,9 @@ public class Paraboloide extends SurfaceObject{
             paraboloideWire = null;
         }
 
-        paraboloideExt = new SurfaceBuffer(numCoord, numCoordCor, 0, 1);
-        paraboloideInt = new SurfaceBuffer(numCoord, numCoordCor, 0, -1);
-        paraboloideWire = new SurfaceBuffer(numCoordWire, numCoordCor, 1, 1);
+        paraboloideExt = new SurfaceBuffer(numCoord, 0, 1);
+        paraboloideInt = new SurfaceBuffer(numCoord, 0, -1);
+        paraboloideWire = new SurfaceBuffer(numCoordWire, 1, 1);
 		buildSurface();
 	}
 	

@@ -28,7 +28,6 @@ public class Cone extends SurfaceObject {
 
     public final int numCoord = (slices+1)*(stacks+1)*3*6;
     public final int numCoordWire = (slices+1)*(stacks+1)*3*8;
-    public final int numCoordCor = (slices+1)*(stacks+1)*4*6;
 
     public Cone(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
@@ -45,9 +44,9 @@ public class Cone extends SurfaceObject {
             coneWire = null;
         }
 
-        coneInt = new SurfaceBuffer(numCoord, numCoordCor, 0, -1);
-        coneExt = new SurfaceBuffer(numCoord, numCoordCor, 0, 1);
-        coneWire = new SurfaceBuffer(numCoordWire, numCoordCor, 1, 1);
+        coneInt = new SurfaceBuffer(numCoord, 0, -1);
+        coneExt = new SurfaceBuffer(numCoord, 0, 1);
+        coneWire = new SurfaceBuffer(numCoordWire, 1, 1);
 
         buildSurface();
     }

@@ -33,7 +33,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ConfigurationInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -77,6 +76,7 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v("ONCREATE", "CHAMEEEI");
         Thread.currentThread().setUncaughtExceptionHandler(this);
         res = getResources();
 
@@ -109,9 +109,6 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
         }
 
         cameraHandler = new CameraPreviewHandler(glSurfaceView, renderer, res, artoolkit, camStatus);
-        //glSurfaceView.setZOrderOnTop(true);
-        glSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        glSurfaceView.getHolder().setFormat(PixelFormat.RGBA_8888);
         glSurfaceView.setRenderer(renderer);
         glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         glSurfaceView.getHolder().addCallback(this);

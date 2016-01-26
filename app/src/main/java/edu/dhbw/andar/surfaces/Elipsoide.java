@@ -27,7 +27,6 @@ public class Elipsoide extends SurfaceObject{
 
     public final int numCoord = (slices)*(stacks)*3*6;
     public final int numCoordWire = (slices)*(stacks)*3*8;
-    public final int numCoordCor = (slices)*(stacks)*4*6;
 
     public final float Xo = 0.0f;
     public final float Yo = 0.0f;
@@ -48,8 +47,8 @@ public class Elipsoide extends SurfaceObject{
             elipsoideWireframe = null;
         }
 
-        elipsoide = new SurfaceBuffer(numCoord, numCoordCor, 0, 1);
-        elipsoideWireframe = new SurfaceBuffer(numCoordWire, numCoordCor, 1, 1);
+        elipsoide = new SurfaceBuffer(numCoord, 0, 1);
+        elipsoideWireframe = new SurfaceBuffer(numCoordWire, 1, 1);
         buildSurface();
     }
 

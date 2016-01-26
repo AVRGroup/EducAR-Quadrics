@@ -13,16 +13,14 @@ public class SurfaceBuffer {
     public FloatBuffer normais;
     public FloatBuffer cores;
     public int numCoord;
-    public int numCoordCor;
     public int fatorNormal;
     public int modeloWireframe;
 
-    public SurfaceBuffer(int numCoord, int numCoordCor, int modeloWireframe, int fatorNormal){
+    public SurfaceBuffer(int numCoord, int modeloWireframe, int fatorNormal){
         //Necessario ter uma variavel na classe para o metodo getNumIndices()
         this.numCoord = numCoord;
         this.fatorNormal = fatorNormal;
         this.modeloWireframe = modeloWireframe;
-        this.numCoordCor = numCoordCor;
         //Verifica se esta sendo construido um modelo solido ou wireframe
         if(modeloWireframe == 0){
             vertices=allocateFloatBuffer(numCoord*4);
@@ -52,7 +50,6 @@ public class SurfaceBuffer {
         this.cores.put(cor.x);
         this.cores.put(cor.y);
         this.cores.put(cor.z);
-        //this.cores.put(1.0f);
     }
 
     public void preencheNormais(Vetor normal) {
