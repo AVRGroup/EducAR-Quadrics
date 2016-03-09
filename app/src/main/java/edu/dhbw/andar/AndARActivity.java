@@ -76,7 +76,6 @@ public abstract class AndARActivity extends Activity implements Callback, Uncaug
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("ONCREATE", "CHAMEEEI");
         Thread.currentThread().setUncaughtExceptionHandler(this);
         res = getResources();
 

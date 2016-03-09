@@ -86,7 +86,6 @@ public class ARToolkit {
 	 */
 	public synchronized void registerARObject(ARObject arobject)
 		throws AndARException{
-		Log.v("AROBJECTS","Tamanho "+ arobjects.size());
 		if(arobjects.contains(arobject)) 
 			return;//don't register the same object twice
 		try {
@@ -120,18 +119,10 @@ public class ARToolkit {
 	
 	public synchronized void unregisterARObject(ARObject arobject) {
 		if(arobjects.contains(arobject)) {
-
-            //remove from the native library
-            Log.v("TESTE", "" + arobject.getId() + " " + arobjects.size());
-
             removeObject(arobject.getId(),  arobject);
 
-			Log.v("TESTE", arobject.getPatternName());
-
             arobjects.remove(arobject);
-            Log.v("TESTE", "executou");
-		}else
-            Log.v("TESTE", "Nao contem o objeto");
+		}
 	}
 	
 	/**

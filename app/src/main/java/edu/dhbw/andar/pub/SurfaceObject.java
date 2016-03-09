@@ -30,7 +30,7 @@ public abstract class SurfaceObject extends ARObject{
     /** This will be used to pass in model normal information. */
     protected int mNormalHandle;
 
-    protected Vetor cor;
+    protected Vetor cor, color;
 
     protected float[] parameters = new float[3];
 
@@ -51,6 +51,7 @@ public abstract class SurfaceObject extends ARObject{
         index = 0;
 
         cor = new Vetor(1.0f, 0.0f, 0.0f);
+        color = new Vetor(1.0f, 0.0f, 0.0f, 1.0f);
     }
 
     /**

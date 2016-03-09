@@ -2,7 +2,7 @@ package edu.dhbw.andar.pub;
 
 public class Vetor {
 	
-	public float x0, y0, z0, x, y, z;
+	public float x0, y0, z0, x, y, z, alpha;
 	
 	public Vetor(float x, float y, float z){
 		x0 = 0.0f;
@@ -12,6 +12,17 @@ public class Vetor {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+
+	public Vetor(float x, float y, float z, float alpha){
+		x0 = 0.0f;
+		y0 = 0.0f;
+		z0 = 0.0f;
+
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.alpha = alpha;
 	}
 	
 	public Vetor(Vetor v){
@@ -89,6 +100,8 @@ public class Vetor {
 	public float getZ(){
 		return this.z0+this.z;
 	}
+
+	public float getAlpha(){ return this.alpha; }
 	
 	public void imprimeVetor(){
 		System.out.println("x " + this.x + "y" + this.y + "z" + this.z);
