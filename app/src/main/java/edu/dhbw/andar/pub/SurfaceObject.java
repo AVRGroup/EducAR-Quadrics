@@ -2,6 +2,10 @@ package edu.dhbw.andar.pub;
 
 import android.opengl.GLES20;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import edu.dhbw.andar.ARObject;
@@ -18,8 +22,6 @@ public abstract class SurfaceObject extends ARObject{
     protected int simpleProgram;
     protected int muMVMatrixHandle;
     protected int muPMatrixHandle;
-    protected float[] mMVMatrix = new float[16]; // ModelView Matrix
-    protected float[] mPMatrix = new float[16]; // Projection Matrix
 
     /** This will be used to pass in model position information. */
     protected int mPositionHandle;
@@ -37,6 +39,13 @@ public abstract class SurfaceObject extends ARObject{
     protected int index;
 
     protected int max_progress;
+
+    protected static final int POSITION_DATA_SIZE = 3;
+    protected static final int COLOR_DATA_SIZE = 4;
+    protected static final int NORMAL_DATA_SIZE = 3;
+    protected static final int BYTES_PER_FLOAT = 4;
+
+    protected final int stride = (POSITION_DATA_SIZE + COLOR_DATA_SIZE + NORMAL_DATA_SIZE)*BYTES_PER_FLOAT;//(coords por vertices + coords por cor)*bytes por floats
 
     public SurfaceObject(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter);
@@ -116,7 +125,7 @@ public abstract class SurfaceObject extends ARObject{
     @Override
     public void init( GL10 glUnused ) {
         setProgram( vertexProgramPath(1), fragmentProgramPath(1), 1);
-        setProgram( vertexProgramPath(0), fragmentProgramPath(0), 0);
+        //setProgram( vertexProgramPath(0), fragmentProgramPath(0), 0);
 
         mPositionHandle = GLES20.glGetAttribLocation(myProgram, "aPosition");
         GraphicsUtil.checkGlError("glGetAttribLocation aPosition");
@@ -125,8 +134,16 @@ public abstract class SurfaceObject extends ARObject{
         }
 
         mColorHandle = GLES20.glGetAttribLocation(myProgram, "a_Color");
+        GraphicsUtil.checkGlError("glGetAttribLocation aColor");
+        if (mColorHandle == -1) {
+            throw new RuntimeException("Could not get attrib location for aColor");
+        }
 
         mNormalHandle = GLES20.glGetAttribLocation(myProgram, "a_Normal");
+        GraphicsUtil.checkGlError("glGetAttribLocation aNormal");
+        if (mNormalHandle == -1) {
+            throw new RuntimeException("Could not get attrib location for aNormal");
+        }
     }
 
     /**
@@ -135,4 +152,23 @@ public abstract class SurfaceObject extends ARObject{
      */
     @Override
     public abstract void draw( GL10 glUnused );
+
+    protected void preenche(FloatBuffer buffer , Vetor pos, Vetor cor, Vetor normal){
+        buffer.put(pos.getX());
+        buffer.put(pos.getY());
+        buffer.put(pos.getZ());
+        buffer.put(cor.getX());
+        buffer.put(cor.getY());
+        buffer.put(cor.getZ());
+        buffer.put(cor.getAlpha());
+        buffer.put(normal.getX());
+        buffer.put(normal.getY());
+        buffer.put(normal.getZ());
+    }
+
+    protected static FloatBuffer allocateFloatBuffer(int capacity){
+        ByteBuffer vbb = ByteBuffer.allocateDirect(capacity);
+        vbb.order(ByteOrder.nativeOrder());
+        return vbb.asFloatBuffer();
+    }
 }

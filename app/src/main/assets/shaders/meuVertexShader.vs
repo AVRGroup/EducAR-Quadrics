@@ -35,6 +35,7 @@ void main(void){
 	v_Color[0] = v_Color[0]+Ispec[0];
 	v_Color[1] = v_Color[1]+Ispec[1];
 	v_Color[2] = v_Color[2]+Ispec[2];
+	v_Color[3] = v_Color[3];
 	mat4 mvpmatrix = uPMatrix * uMVMatrix;
    // gl_Position is a special variable used to store the final position.
    // Multiply the vertex by the matrix to get the final point in normalized screen coordinates.
