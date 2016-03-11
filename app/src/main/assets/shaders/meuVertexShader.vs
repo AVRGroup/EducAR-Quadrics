@@ -21,7 +21,7 @@ void main(void){
    // pointing in the same direction then it will get max illumination.
 	float diffuse = max(dot(modelViewNormal, lightVector), 0.1);
    // Attenuate the light based on distance.
-   /*diffuse = diffuse * (10.0 / (1.0 + (0.25 * distance)));*/
+   //diffuse = diffuse * (10.0 / (1.0 + (0.25 * distance)));
     v = vec3(uMVMatrix * aPosition);
     N = modelViewNormal;
 	vec3 L = normalize(modelViewLight.xyz - v);
@@ -35,7 +35,6 @@ void main(void){
 	v_Color[0] = v_Color[0]+Ispec[0];
 	v_Color[1] = v_Color[1]+Ispec[1];
 	v_Color[2] = v_Color[2]+Ispec[2];
-	v_Color[3] = v_Color[3];
 	mat4 mvpmatrix = uPMatrix * uMVMatrix;
    // gl_Position is a special variable used to store the final position.
    // Multiply the vertex by the matrix to get the final point in normalized screen coordinates.

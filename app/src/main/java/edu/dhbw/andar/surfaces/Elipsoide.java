@@ -86,10 +86,10 @@ public class Elipsoide extends SurfaceObject{
                 normalT2.normaliza();
 
                 preenche(buffer, a, color, normalT1);
-                preenche(buffer, b, color, normalT1);
                 preenche(buffer, c, color, normalT1);
-                preenche(buffer, c, color, normalT2);
+                preenche(buffer, b, color, normalT1);
                 preenche(buffer, b, color, normalT2);
+                preenche(buffer, c, color, normalT2);
                 preenche(buffer, d, color, normalT2);
             }
         }
