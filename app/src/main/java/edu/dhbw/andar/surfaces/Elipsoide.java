@@ -13,8 +13,6 @@ import java.nio.FloatBuffer;
 
 public class Elipsoide extends SurfaceObject{
 
-    public FloatBuffer buffer;
-
     //Tem que ser multiplo de 3 para fechar a superficie
     public final int slices = 24;
     public final int stacks = 24;
@@ -26,10 +24,6 @@ public class Elipsoide extends SurfaceObject{
     public final float Yo = 0.0f;
     public final float Zo = 0.0f;
 
-    final int buffers[] = new int[1];
-
-    public int capacity = (POSITION_DATA_SIZE + COLOR_DATA_SIZE + NORMAL_DATA_SIZE)*6*(slices)*(stacks)*BYTES_PER_FLOAT;
-
     public Elipsoide(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
         parameters[0] = 25.0f;
@@ -37,6 +31,8 @@ public class Elipsoide extends SurfaceObject{
         parameters[2] = 25.0f;
 
         max_progress = 45;
+
+        capacity = (POSITION_DATA_SIZE + COLOR_DATA_SIZE + NORMAL_DATA_SIZE)*6*(slices)*(stacks)*BYTES_PER_FLOAT;
 
         buffer = allocateFloatBuffer(capacity);
 
@@ -141,10 +137,9 @@ public class Elipsoide extends SurfaceObject{
             GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
         }
 
-        /** CRIAÇÃO DOS BUFFERS **/
-        GLES20.glGenBuffers(1, buffers, 0);
+
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, buffer.capacity() * BYTES_PER_FLOAT, buffer, GLES20.GL_DYNAMIC_DRAW);
+        GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, 0, buffer.capacity() * BYTES_PER_FLOAT, buffer);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
         buffer.clear();

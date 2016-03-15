@@ -107,4 +107,12 @@ public class Vetor {
 		System.out.println("x " + this.x + "y" + this.y + "z" + this.z);
 	}
 
+	public Vetor neg(){
+		Vetor ret = new Vetor();
+		ret.x = this.x*-1;
+		ret.y = this.y*-1;
+		ret.z = this.z*-1;
+		return ret;
+	}
+
 }

@@ -47,6 +47,10 @@ public abstract class SurfaceObject extends ARObject{
 
     protected final int stride = (POSITION_DATA_SIZE + COLOR_DATA_SIZE + NORMAL_DATA_SIZE)*BYTES_PER_FLOAT;//(coords por vertices + coords por cor)*bytes por floats
 
+    protected FloatBuffer buffer;
+    protected final int buffers[] = new int[1];
+    protected int capacity;
+
     public SurfaceObject(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter);
         mRenderer = renderer;
@@ -144,6 +148,12 @@ public abstract class SurfaceObject extends ARObject{
         if (mNormalHandle == -1) {
             throw new RuntimeException("Could not get attrib location for aNormal");
         }
+
+        /** CRIAÇÃO DOS BUFFERS **/
+        GLES20.glGenBuffers(1, buffers, 0);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, buffer.capacity() * BYTES_PER_FLOAT, buffer, GLES20.GL_DYNAMIC_DRAW);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
     }
 
     /**

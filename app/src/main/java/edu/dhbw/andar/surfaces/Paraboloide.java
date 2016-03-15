@@ -12,19 +12,12 @@ import edu.dhbw.andar.util.GraphicsUtil;
 
 public class Paraboloide extends SurfaceObject{
 
-	SurfaceBuffer paraboloideExt;
-    SurfaceBuffer paraboloideInt;
-    SurfaceBuffer paraboloideWire;
-
 	public final int slices = 32;
 	public final int stacks = 32;
-	public final int numCoord = slices*stacks*18;
-	public final int numCoordWire = slices*stacks*3*8;
 	public float theta = 0.0f;
 	public float alpha = 0.0f;
 	public final float passoT = (float) ((2*Math.PI)/slices);
-	public final float passoA = (float) ((2*Math.PI)/stacks);
-	public final float erro = 0.05f;
+	public final float passoA = (float) ((Math.PI)/stacks);
 
 	public Paraboloide(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
@@ -36,25 +29,16 @@ public class Paraboloide extends SurfaceObject{
         max_progress = 12;
 
 
-        if(paraboloideExt != null){
-            paraboloideExt = null;
-            paraboloideInt = null;
-            paraboloideWire = null;
-        }
+        capacity = (POSITION_DATA_SIZE + COLOR_DATA_SIZE + NORMAL_DATA_SIZE)*6*2*(slices)*(stacks)*BYTES_PER_FLOAT;
 
-        paraboloideExt = new SurfaceBuffer(numCoord, 0, 1);
-        paraboloideInt = new SurfaceBuffer(numCoord, 0, -1);
-        paraboloideWire = new SurfaceBuffer(numCoordWire, 1, 1);
+        buffer = allocateFloatBuffer(capacity);
+
 		buildSurface();
 	}
 	
 	public void buildSurface(){
-        paraboloideExt.clearBuffers();
-        paraboloideInt.clearBuffers();
-        paraboloideWire.clearBuffers();
-		
-		for(theta = 0.0f; theta < 2*Math.PI-passoT+erro; theta+= passoT){
-			for(alpha = 0.0f; alpha < 2*Math.PI-passoA+erro; alpha+= passoA){
+		for(theta = 0.0f; theta < Math.PI-passoT; theta+= passoT){
+			for(alpha = 0.0f; alpha < 2*Math.PI-passoA; alpha+= passoA){
 				
 				float x = coordX(alpha, theta), y = coordY(alpha, theta), z = ((x*x+y*y)*parameters[2]);
 				Vetor a = new Vetor(x, y, z);
@@ -74,83 +58,43 @@ public class Paraboloide extends SurfaceObject{
 				z = ((x*x+y*y)*parameters[2]);
 				Vetor d = new Vetor(x, y, z);
 
-				paraboloideWire.preencheVertices(a);
-                paraboloideWire.preencheVertices(b);
+                //Normal do primeiro triangulo
+                Vetor ab = new Vetor();
+                ab = ab.subtracao(b, a);
 
-                paraboloideWire.preencheVertices(b);
-                paraboloideWire.preencheVertices(d);
+                Vetor bc = new Vetor();
+                bc = bc.subtracao(c, a);
 
-				paraboloideWire.preencheVertices(d);
-                paraboloideWire.preencheVertices(c);
+                Vetor normalT1 = bc.vetorial(ab);
+                normalT1.normaliza();
 
-				paraboloideWire.preencheVertices(c);
-                paraboloideWire.preencheVertices(a);
+                //Normal do segundo triangulo
+                Vetor cb = new Vetor();
+                cb = cb.subtracao(c, d);
 
-				//Normal para dentro, paraboloide interno
-                //Primeiro triangulo (inferior)
-                paraboloideInt.preencheVertices(a);
-                paraboloideInt.preencheVertices(c);
-                paraboloideInt.preencheVertices(b);
+                Vetor bd = new Vetor();
+                bd = bd.subtracao(b, d);
 
-                //Segundo triangulo (superior)
-                paraboloideInt.preencheVertices(d);
-                paraboloideInt.preencheVertices(b);
-                paraboloideInt.preencheVertices(c);
+                Vetor normalT2 = bd.vetorial(cb);
+                normalT2.normaliza();
 
-				//Normal para fora, paraboloide externo
-                //Primeiro triangulo (inferior)
-                paraboloideExt.preencheVertices(a);
-                paraboloideExt.preencheVertices(b);
-                paraboloideExt.preencheVertices(c);
+                //Normal para dentro, paraboloide interno
+                preenche(buffer, a, color, normalT1.neg());
+                preenche(buffer, c, color, normalT1.neg());
+                preenche(buffer, b, color, normalT1.neg());
+                preenche(buffer, b, color, normalT2.neg());
+                preenche(buffer, c, color, normalT2.neg());
+                preenche(buffer, d, color, normalT2.neg());
 
-                //Segundo triangulo (superior)
-                paraboloideExt.preencheVertices(c);
-                paraboloideExt.preencheVertices(b);
-                paraboloideExt.preencheVertices(d);
-
-                for (int i = 0; i < 6; i++){
-                    paraboloideExt.preencheCores(cor);
-                    paraboloideInt.preencheCores(cor);
-                }
-
-				//Normal do primeiro triangulo
-				Vetor ab = new Vetor();			
-				ab = ab.subtracao(a, b);
-				
-				Vetor bc = new Vetor();
-				bc = bc.subtracao(b, c);
-				
-				Vetor normalT1 = ab.vetorial(bc);
-				normalT1.normaliza();
-
-                for(int j = 0; j < 3; j++) {
-                    paraboloideExt.preencheNormais(normalT1);
-                    paraboloideInt.preencheNormais(normalT1);
-                }
-				
-				//Normal do segundo triangulo
-				Vetor cb = new Vetor();			
-				cb = cb.subtracao(c, b);
-				
-				Vetor bd = new Vetor();
-				bd = bd.subtracao(b, d);
-				
-				Vetor normalT2 = cb.vetorial(bd);
-				normalT2.normaliza();
-
-                for(int j = 0; j < 3; j++) {
-                    paraboloideExt.preencheNormais(normalT2);
-                    paraboloideInt.preencheNormais(normalT2);
-                }
+                //Normal para fora, paraboloide externo
+                preenche(buffer, a, color, normalT1);
+                preenche(buffer, c, color, normalT1);
+                preenche(buffer, b, color, normalT1);
+                preenche(buffer, b, color, normalT2);
+                preenche(buffer, c, color, normalT2);
+                preenche(buffer, d, color, normalT2);
 			}
-		}				
-		paraboloideExt.vertices.position(0);
-        paraboloideInt.vertices.position(0);
-        paraboloideExt.normais.position(0);
-        paraboloideInt.normais.position(0);
-        paraboloideExt.cores.position(0);
-        paraboloideInt.cores.position(0);
-        paraboloideWire.vertices.position(0);
+		}
 	}
 	
 	public float coordX(float alpha, float theta){
@@ -194,74 +138,26 @@ public class Paraboloide extends SurfaceObject{
             GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
         }
 
-        // Let the object draw
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
+        GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, 0, buffer.capacity() * BYTES_PER_FLOAT, buffer);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-        /** PARABOLOIDE EXTERNO **/
-        // Pass in the position information
-        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
-                false, 0, paraboloideExt.getVertices()); // 3 = Size of the position data in elements.
-
+        /** DESENHO A PARTIR DO BUFFER **/
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
         GLES20.glEnableVertexAttribArray(mPositionHandle);
+        GLES20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, stride, 0);
 
-        // Pass in the color information
-        //aten??o para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
-        GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false,
-                0, paraboloideExt.getCores());
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
         GLES20.glEnableVertexAttribArray(mColorHandle);
+        GLES20.glVertexAttribPointer(mColorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, stride, POSITION_DATA_SIZE * BYTES_PER_FLOAT);
 
-        // Pass in the normal information
-        GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, true,
-                0, paraboloideExt.getNormals());
-
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
         GLES20.glEnableVertexAttribArray(mNormalHandle);
+        GLES20.glVertexAttribPointer(mNormalHandle, NORMAL_DATA_SIZE, GLES20.GL_FLOAT, false, stride, (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT);
 
-        // Desenha elipsoide
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, paraboloideExt.getNumIndices());
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-        /** PARABOLOIDE INTERNO **/
-        // Pass in the position information
-        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
-                false, 0, paraboloideInt.getVertices()); // 3 = Size of the position data in elements.
-
-        GLES20.glEnableVertexAttribArray(mPositionHandle);
-
-        // Pass in the color information
-        //aten??o para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
-        GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false,
-                0, paraboloideInt.getCores());
-        GLES20.glEnableVertexAttribArray(mColorHandle);
-
-        // Pass in the normal information
-        GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, true,
-                0, paraboloideInt.getNormals());
-
-        GLES20.glEnableVertexAttribArray(mNormalHandle);
-
-        // Desenha elipsoide
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, paraboloideInt.getNumIndices());
-
-        // Ensure we're using the program we need
-        GLES20.glUseProgram(myProgram2);
-
-        if( glCameraMatrixBuffer != null) {
-            // Transform to where the marker is
-            GLES20.glUniformMatrix4fv(muMVMatrixHandle, 1, false, glMatrix, 0);
-            GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
-            GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
-            GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
-        }
-
-        /** PARABOLOIDE WIREFRAME**/
-        // Pass in the position information
-        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
-                false, 0, paraboloideWire.getVertices()); // 3 = Size of the position data in elements.
-
-        GLES20.glEnableVertexAttribArray(mPositionHandle);
-
-        GLES20.glLineWidth(2.0f);
-
-        // Desenha elipsoide
-        GLES20.glDrawArrays(GLES20.GL_LINES, 0, paraboloideWire.getNumIndices());
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, capacity/stride);
     }
 
 }

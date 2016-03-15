@@ -13,10 +13,6 @@ import edu.dhbw.andar.util.GraphicsUtil;
 
 public class HiperboloideUmaFolha extends SurfaceObject{
 
-	public SurfaceBuffer hiperbUmaExt;
-	public SurfaceBuffer hiperbUmaInt;
-	public SurfaceBuffer hiperbUmaWire;
-
 	public final int slices = 30;
 	public final int stacks = 30;
 
@@ -25,9 +21,6 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 	
 	public float u = -1.5f;
 	public float v = 0.0f;
-		
-	public final int numCoord = slices*(stacks+1)*3*6;
-	public final int numCoordWire = slices*(stacks+1)*3*8;
 
 	public float Xo = 0.0f;
 	public float Yo = 0.0f;
@@ -42,24 +35,14 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 
         max_progress = 40;
 
-		if(hiperbUmaInt != null){
-			hiperbUmaInt = null;
-			hiperbUmaExt = null;
-			hiperbUmaWire = null;
-		}
+		capacity = (POSITION_DATA_SIZE + COLOR_DATA_SIZE + NORMAL_DATA_SIZE)*6*2*(slices+1)*(stacks+1)*BYTES_PER_FLOAT;
 
-		hiperbUmaInt = new SurfaceBuffer(numCoord, 0, -1);
-		hiperbUmaExt = new SurfaceBuffer(numCoord, 0, 1);
-		hiperbUmaWire = new SurfaceBuffer(numCoordWire, 1, 1);
+		buffer = allocateFloatBuffer(capacity);
 
 		buildSurface();
 	}
 	
 	public void buildSurface(){
-		hiperbUmaExt.clearBuffers();
-		hiperbUmaInt.clearBuffers();
-		hiperbUmaWire.clearBuffers();
-		
 		for(u = -1.5f; u < 1.5f; u+=passoU){
 			for(v = 0.0f; v < 2*Math.PI; v+= passoV){
 				
@@ -81,45 +64,6 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 				z = coordZ(v+passoV, u+passoU);
 				Vetor d = new Vetor(x, y, z);
 
-				hiperbUmaWire.preencheVertices(a);
-				hiperbUmaWire.preencheVertices(b);
-
-				hiperbUmaWire.preencheVertices(b);
-				hiperbUmaWire.preencheVertices(d);
-
-				hiperbUmaWire.preencheVertices(d);
-				hiperbUmaWire.preencheVertices(c);
-
-				hiperbUmaWire.preencheVertices(c);
-				hiperbUmaWire.preencheVertices(a);
-
-				//Normal para fora, paraboloide externo
-				//Primeiro triangulo (inferior)
-				hiperbUmaExt.preencheVertices(a);
-				hiperbUmaExt.preencheVertices(b);
-				hiperbUmaExt.preencheVertices(c);
-
-				//Segundo triangulo (superior)
-				hiperbUmaExt.preencheVertices(c);
-				hiperbUmaExt.preencheVertices(b);
-				hiperbUmaExt.preencheVertices(d);
-
-				//Normal para dentro, paraboloide interno
-				//Primeiro triangulo (inferior)
-				hiperbUmaInt.preencheVertices(a);
-				hiperbUmaInt.preencheVertices(c);
-				hiperbUmaInt.preencheVertices(b);
-
-				//Segundo triangulo (superior)
-				hiperbUmaInt.preencheVertices(b);
-				hiperbUmaInt.preencheVertices(c);
-				hiperbUmaInt.preencheVertices(d);
-
-				for (int i = 0; i < 6; i++){
-					hiperbUmaExt.preencheCores(cor);
-					hiperbUmaInt.preencheCores(cor);
-				}
-
 				//Normal do primeiro triangulo
 				Vetor ab = new Vetor();			
 				ab = ab.subtracao(a, b);
@@ -129,11 +73,6 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 				
 				Vetor normalT1 = ab.vetorial(bc);
 				normalT1.normaliza();
-
-				for(int j = 0; j < 3; j++) {
-					hiperbUmaExt.preencheNormais(normalT1);
-					hiperbUmaInt.preencheNormais(normalT1);
-				}
 				
 				//Normal do segundo triangulo
 				Vetor cb = new Vetor();
@@ -145,19 +84,23 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 				Vetor normalT2 = cb.vetorial(bd);
 				normalT2.normaliza();
 
-				for(int j = 0; j < 3; j++) {
-					hiperbUmaExt.preencheNormais(normalT2);
-					hiperbUmaInt.preencheNormais(normalT2);
-				}
+				//Normal para fora, paraboloide externo
+				preenche(buffer, a, color, normalT1);
+				preenche(buffer, b, color, normalT1);
+				preenche(buffer, c, color, normalT1);
+				preenche(buffer, c, color, normalT2);
+				preenche(buffer, b, color, normalT2);
+				preenche(buffer, d, color, normalT2);
+
+				//Normal para dentro, paraboloide interno
+				preenche(buffer, a, color, normalT1.neg());
+				preenche(buffer, c, color, normalT1.neg());
+				preenche(buffer, b, color, normalT1.neg());
+				preenche(buffer, b, color, normalT2.neg());
+				preenche(buffer, c, color, normalT2.neg());
+				preenche(buffer, d, color, normalT2.neg());
 			}
 		}
-		hiperbUmaExt.vertices.position(0);
-		hiperbUmaInt.vertices.position(0);
-		hiperbUmaExt.normais.position(0);
-		hiperbUmaInt.normais.position(0);
-		hiperbUmaExt.cores.position(0);
-		hiperbUmaInt.cores.position(0);
-		hiperbUmaWire.vertices.position(0);
 	}
 	
 	public float coordX(float v, float u){
@@ -205,73 +148,28 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 			GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
 		}
 
-		// Let the object draw
+		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
+		GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, 0, buffer.capacity() * BYTES_PER_FLOAT, buffer);
+		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-		/** HIPERBOLOIDE UMA FOLHA EXTERNO **/
-		// Pass in the position information
-		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
-				false, 0, hiperbUmaExt.getVertices()); // 3 = Size of the position data in elements.
+		buffer.clear();
+		GLES20.glDisableVertexAttribArray(0);
 
+		/** DESENHO A PARTIR DO BUFFER **/
+		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
 		GLES20.glEnableVertexAttribArray(mPositionHandle);
+		GLES20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, stride, 0);
 
-		// Pass in the color information
-		//aten??o para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
-		GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false,
-				0, hiperbUmaExt.getCores());
+		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
 		GLES20.glEnableVertexAttribArray(mColorHandle);
+		GLES20.glVertexAttribPointer(mColorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, stride, POSITION_DATA_SIZE * BYTES_PER_FLOAT);
 
-		// Pass in the normal information
-		GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, true,
-				0, hiperbUmaExt.getNormals());
-
+		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
 		GLES20.glEnableVertexAttribArray(mNormalHandle);
+		GLES20.glVertexAttribPointer(mNormalHandle, NORMAL_DATA_SIZE, GLES20.GL_FLOAT, false, stride, (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT);
 
-		// Desenha elipsoide
-		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, hiperbUmaExt.getNumIndices());
+		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-		/** HIPERBOLOIDE UMA FOLHA INTERNO **/
-		// Pass in the position information
-		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
-				false, 0, hiperbUmaInt.getVertices()); // 3 = Size of the position data in elements.
-
-		GLES20.glEnableVertexAttribArray(mPositionHandle);
-
-		// Pass in the color information
-		//aten??o para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
-		GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false,
-				0, hiperbUmaInt.getCores());
-		GLES20.glEnableVertexAttribArray(mColorHandle);
-
-		// Pass in the normal information
-		GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, true,
-				0, hiperbUmaInt.getNormals());
-
-		GLES20.glEnableVertexAttribArray(mNormalHandle);
-
-		// Desenha elipsoide
-		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, hiperbUmaInt.getNumIndices());
-
-		// Ensure we're using the program we need
-		GLES20.glUseProgram(myProgram2);
-
-		if( glCameraMatrixBuffer != null) {
-			// Transform to where the marker is
-			GLES20.glUniformMatrix4fv(muMVMatrixHandle, 1, false, glMatrix, 0);
-			GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
-			GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
-			GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
-		}
-
-		/** HIPERBOLOIDE UMA FOLHA WIREFRAME**/
-		// Pass in the position information
-		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT,
-				false, 0, hiperbUmaWire.getVertices()); // 3 = Size of the position data in elements.
-
-		GLES20.glEnableVertexAttribArray(mPositionHandle);
-
-        GLES20.glLineWidth(2.0f);
-
-		// Desenha elipsoide
-		GLES20.glDrawArrays(GLES20.GL_LINES, 0, hiperbUmaWire.getNumIndices());
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, capacity/stride);
 	}
 }
