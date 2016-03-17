@@ -101,6 +101,7 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 				preenche(buffer, d, color, normalT2.neg());
 			}
 		}
+		buffer.position(0);
 	}
 	
 	public float coordX(float v, float u){

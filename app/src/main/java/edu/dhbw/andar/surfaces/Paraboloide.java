@@ -17,7 +17,8 @@ public class Paraboloide extends SurfaceObject{
 	public float theta = 0.0f;
 	public float alpha = 0.0f;
 	public final float passoT = (float) ((2*Math.PI)/slices);
-	public final float passoA = (float) ((Math.PI)/stacks);
+	public final float passoA = (float) ((2*Math.PI)/stacks);
+    public final float erro = 0.05f;
 
 	public Paraboloide(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter, renderer);
@@ -37,8 +38,8 @@ public class Paraboloide extends SurfaceObject{
 	}
 	
 	public void buildSurface(){
-		for(theta = 0.0f; theta < Math.PI-passoT; theta+= passoT){
-			for(alpha = 0.0f; alpha < 2*Math.PI-passoA; alpha+= passoA){
+		for(theta = 0.0f; theta < 2*Math.PI-passoT+erro; theta+= passoT){
+			for(alpha = 0.0f; alpha < 2*Math.PI-passoA+erro; alpha+= passoA){
 				
 				float x = coordX(alpha, theta), y = coordY(alpha, theta), z = ((x*x+y*y)*parameters[2]);
 				Vetor a = new Vetor(x, y, z);
@@ -60,41 +61,42 @@ public class Paraboloide extends SurfaceObject{
 
                 //Normal do primeiro triangulo
                 Vetor ab = new Vetor();
-                ab = ab.subtracao(b, a);
+                ab = ab.subtracao(a, b);
 
                 Vetor bc = new Vetor();
-                bc = bc.subtracao(c, a);
+                bc = bc.subtracao(b, c);
 
-                Vetor normalT1 = bc.vetorial(ab);
+                Vetor normalT1 = ab.vetorial(bc);
                 normalT1.normaliza();
 
                 //Normal do segundo triangulo
                 Vetor cb = new Vetor();
-                cb = cb.subtracao(c, d);
+                cb = cb.subtracao(c, b);
 
                 Vetor bd = new Vetor();
                 bd = bd.subtracao(b, d);
 
-                Vetor normalT2 = bd.vetorial(cb);
+                Vetor normalT2 = cb.vetorial(bd);
                 normalT2.normaliza();
+
+                //Normal para fora, paraboloide externo
+                preenche(buffer, a, color, normalT1);
+                preenche(buffer, b, color, normalT1);
+                preenche(buffer, c, color, normalT1);
+                preenche(buffer, c, color, normalT2);
+                preenche(buffer, b, color, normalT2);
+                preenche(buffer, d, color, normalT2);
 
                 //Normal para dentro, paraboloide interno
                 preenche(buffer, a, color, normalT1.neg());
                 preenche(buffer, c, color, normalT1.neg());
                 preenche(buffer, b, color, normalT1.neg());
+                preenche(buffer, d, color, normalT2.neg());
                 preenche(buffer, b, color, normalT2.neg());
                 preenche(buffer, c, color, normalT2.neg());
-                preenche(buffer, d, color, normalT2.neg());
-
-                //Normal para fora, paraboloide externo
-                preenche(buffer, a, color, normalT1);
-                preenche(buffer, c, color, normalT1);
-                preenche(buffer, b, color, normalT1);
-                preenche(buffer, b, color, normalT2);
-                preenche(buffer, c, color, normalT2);
-                preenche(buffer, d, color, normalT2);
 			}
 		}
+        buffer.position(0);
 	}
 	
 	public float coordX(float alpha, float theta){
@@ -157,7 +159,7 @@ public class Paraboloide extends SurfaceObject{
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, capacity/stride);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, (capacity/stride)*2);
     }
 
 }
