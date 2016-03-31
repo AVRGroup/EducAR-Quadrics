@@ -32,6 +32,10 @@ public abstract class SurfaceObject extends ARObject{
     /** This will be used to pass in model normal information. */
     protected int mNormalHandle;
 
+    protected int mWirePosHandle;
+    protected int mWireColorHandle;
+    protected int mWireNormHandle;
+
     protected Vetor cor, color;
 
     protected float[] parameters = new float[3];
@@ -47,9 +51,10 @@ public abstract class SurfaceObject extends ARObject{
 
     protected final int stride = (POSITION_DATA_SIZE + COLOR_DATA_SIZE + NORMAL_DATA_SIZE)*BYTES_PER_FLOAT;//(coords por vertices + coords por cor)*bytes por floats
 
-    protected FloatBuffer buffer;
+    protected FloatBuffer buffer, wirebuffer;
     protected final int buffers[] = new int[1];
-    protected int capacity;
+    protected final int wirebuffers[] = new int[1];
+    protected int capacity, wirecapacity;
 
     public SurfaceObject(String name, String patternName, double markerWidth, double[] markerCenter, AndARGLES20Renderer renderer) {
         super(name, patternName, markerWidth, markerCenter);
@@ -63,7 +68,7 @@ public abstract class SurfaceObject extends ARObject{
         max_progress = 0;
         index = 0;
 
-        cor = new Vetor(1.0f, 0.0f, 0.0f);
+        cor = new Vetor(1.0f, 1.0f, 1.0f, 1.0f);
         color = new Vetor(1.0f, 0.0f, 0.0f, 1.0f);
     }
 
@@ -129,7 +134,7 @@ public abstract class SurfaceObject extends ARObject{
     @Override
     public void init( GL10 glUnused ) {
         setProgram( vertexProgramPath(1), fragmentProgramPath(1), 1);
-        //setProgram( vertexProgramPath(0), fragmentProgramPath(0), 0);
+        setProgram( vertexProgramPath(0), fragmentProgramPath(0), 0);
 
         mPositionHandle = GLES20.glGetAttribLocation(myProgram, "aPosition");
         GraphicsUtil.checkGlError("glGetAttribLocation aPosition");
@@ -153,6 +158,11 @@ public abstract class SurfaceObject extends ARObject{
         GLES20.glGenBuffers(1, buffers, 0);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, buffer.capacity() * BYTES_PER_FLOAT, buffer, GLES20.GL_DYNAMIC_DRAW);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+
+        GLES20.glGenBuffers(1, wirebuffers, 0);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, wirebuffers[0]);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, wirebuffer.capacity() * BYTES_PER_FLOAT, wirebuffer, GLES20.GL_DYNAMIC_DRAW);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
     }
 
