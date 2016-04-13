@@ -5,7 +5,6 @@ import android.opengl.GLES20;
 import javax.microedition.khronos.opengles.GL10;
 
 import edu.dhbw.andar.AndARGLES20Renderer;
-import edu.dhbw.andar.pub.SurfaceBuffer;
 import edu.dhbw.andar.pub.SurfaceObject;
 import edu.dhbw.andar.pub.Vetor;
 import edu.dhbw.andar.util.GraphicsUtil;
@@ -31,8 +30,10 @@ public class ParaboloideHiperbolico extends SurfaceObject{
         max_progress = 40;
 
         capacity = (POSITION_DATA_SIZE + COLOR_DATA_SIZE + NORMAL_DATA_SIZE)*6*2*(slices)*(stacks)*BYTES_PER_FLOAT;
+        wirecapacity = (POSITION_DATA_SIZE + COLOR_DATA_SIZE + NORMAL_DATA_SIZE)*8*(slices)*(stacks)*BYTES_PER_FLOAT;
 
         buffer = allocateFloatBuffer(capacity);
+        wirebuffer = allocateFloatBuffer(wirecapacity);
 
 		buildSurface();
 	}
@@ -94,9 +95,19 @@ public class ParaboloideHiperbolico extends SurfaceObject{
                 preenche(buffer, c, color, normalT2);
                 preenche(buffer, b, color, normalT2);
                 preenche(buffer, d, color, normalT2);
+
+                preenche(wirebuffer, a, cor, normalT1);
+                preenche(wirebuffer, b, cor, normalT1);
+                preenche(wirebuffer, b, cor, normalT1);
+                preenche(wirebuffer, d, cor, normalT1);
+                preenche(wirebuffer, d, cor, normalT1);
+                preenche(wirebuffer, c, cor, normalT1);
+                preenche(wirebuffer, c, cor, normalT1);
+                preenche(wirebuffer, a, cor, normalT1);
 			}
 		}
         buffer.position(0);
+        wirebuffer.position(0);
 	}
 	
 	public float coordX(float u, float v){
@@ -149,7 +160,6 @@ public class ParaboloideHiperbolico extends SurfaceObject{
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
         buffer.clear();
-        GLES20.glDisableVertexAttribArray(0);
 
         /** DESENHO A PARTIR DO BUFFER **/
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
@@ -166,7 +176,34 @@ public class ParaboloideHiperbolico extends SurfaceObject{
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, capacity/stride);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, capacity / stride);
+
+        /*GLES20.glUseProgram(myProgram2);
+
+        if( glCameraMatrixBuffer != null) {
+            // Transform to where the marker is
+            GLES20.glUniformMatrix4fv(muMVMatrixHandle, 1, false, glMatrix, 0);
+            GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
+            GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
+            GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
+        }
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, wirebuffers[0]);
+        GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, 0, wirebuffer.capacity() * BYTES_PER_FLOAT, wirebuffer);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+
+        wirebuffer.clear();
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, wirebuffers[0]);
+        GLES20.glEnableVertexAttribArray(mPositionHandle);
+        GLES20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, stride, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+
+        GLES20.glLineWidth(2.0f);
+        GLES20.glDrawArrays(GLES20.GL_LINES, 0, wirecapacity / stride);
+*/
+        GLES20.glDisableVertexAttribArray(0);
     }
 
 }

@@ -5,16 +5,11 @@ import android.opengl.GLES20;
 import javax.microedition.khronos.opengles.GL10;
 
 import edu.dhbw.andar.AndARGLES20Renderer;
-import edu.dhbw.andar.pub.SurfaceBuffer;
 import edu.dhbw.andar.pub.SurfaceObject;
 import edu.dhbw.andar.pub.Vetor;
 import edu.dhbw.andar.util.GraphicsUtil;
 
 public class Cone extends SurfaceObject {
-
-    public SurfaceBuffer coneInt;
-    public SurfaceBuffer coneExt;
-    public SurfaceBuffer coneWire;
 
     public final int slices = 30;
     public final int stacks = 30;
@@ -36,8 +31,10 @@ public class Cone extends SurfaceObject {
         max_progress = 10;
 
         capacity = (POSITION_DATA_SIZE + COLOR_DATA_SIZE + NORMAL_DATA_SIZE)*6*2*(slices+1)*(stacks+1)*BYTES_PER_FLOAT;
+        wirecapacity = (POSITION_DATA_SIZE + COLOR_DATA_SIZE + NORMAL_DATA_SIZE)*8*(slices+1)*(stacks+1)*BYTES_PER_FLOAT;
 
         buffer = allocateFloatBuffer(capacity);
+        wirebuffer = allocateFloatBuffer(wirecapacity);
 
         buildSurface();
     }
@@ -105,10 +102,20 @@ public class Cone extends SurfaceObject {
                 preenche(buffer, d, color, normalT2.neg());
                 preenche(buffer, b, color, normalT2.neg());
                 preenche(buffer, c, color, normalT2.neg());
+
+                preenche(wirebuffer, a, cor, normalT1);
+                preenche(wirebuffer, b, cor, normalT1);
+                preenche(wirebuffer, b, cor, normalT1);
+                preenche(wirebuffer, d, cor, normalT1);
+                preenche(wirebuffer, d, cor, normalT1);
+                preenche(wirebuffer, c, cor, normalT1);
+                preenche(wirebuffer, c, cor, normalT1);
+                preenche(wirebuffer, a, cor, normalT1);
             }
         }
         zMin = 0.0f;
         buffer.position(0);
+        wirebuffer.position(0);
     }
 
     public float coordX(float v, float u){
@@ -182,5 +189,28 @@ public class Cone extends SurfaceObject {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, capacity/stride);
+
+       /* GLES20.glUseProgram(myProgram2);
+
+        if( glCameraMatrixBuffer != null) {
+            // Transform to where the marker is
+            GLES20.glUniformMatrix4fv(muMVMatrixHandle, 1, false, glMatrix, 0);
+            GraphicsUtil.checkGlError("glUniformMatrix4fv muMVMatrixHandle");
+            GLES20.glUniformMatrix4fv(muPMatrixHandle, 1, false, glCameraMatrix, 0);
+            GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
+        }
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, wirebuffers[0]);
+        GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, 0, wirebuffer.capacity() * BYTES_PER_FLOAT, wirebuffer);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, wirebuffers[0]);
+        GLES20.glEnableVertexAttribArray(mPositionHandle);
+        GLES20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, stride, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+
+        GLES20.glLineWidth(2.0f);
+        GLES20.glDrawArrays(GLES20.GL_LINES, 0, wirecapacity/stride);*/
     }
 }

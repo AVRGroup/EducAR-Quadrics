@@ -134,7 +134,7 @@ public abstract class SurfaceObject extends ARObject{
     @Override
     public void init( GL10 glUnused ) {
         setProgram( vertexProgramPath(1), fragmentProgramPath(1), 1);
-        setProgram( vertexProgramPath(0), fragmentProgramPath(0), 0);
+        setProgram(vertexProgramPath(0), fragmentProgramPath(0), 0);
 
         mPositionHandle = GLES20.glGetAttribLocation(myProgram, "aPosition");
         GraphicsUtil.checkGlError("glGetAttribLocation aPosition");
@@ -152,6 +152,12 @@ public abstract class SurfaceObject extends ARObject{
         GraphicsUtil.checkGlError("glGetAttribLocation aNormal");
         if (mNormalHandle == -1) {
             throw new RuntimeException("Could not get attrib location for aNormal");
+        }
+
+        mWirePosHandle = GLES20.glGetAttribLocation(myProgram2, "aPosition");
+        GraphicsUtil.checkGlError("glGetAttribLocation aPosition");
+        if (mWirePosHandle == -1) {
+            throw new RuntimeException("Could not get attrib location for aPosition");
         }
 
         /** CRIAÇÃO DOS BUFFERS **/

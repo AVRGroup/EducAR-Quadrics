@@ -77,12 +77,14 @@ public class CustomActivity extends AndARActivity {
     public void CriaScaleBar(){
 
         seekBar = (SeekBar) findViewById(R.id.scale_bar);
+        seekBar.setMax(rendedObj.getMaxProgress());
+        seekBar.setProgress(rendedObj.getParameter());
+
         textView = (TextView) findViewById(R.id.txt_progress);
 
         textView.setText("Valor: " + seekBar.getProgress());
 
-        seekBar.setMax(rendedObj.getMaxProgress());
-        seekBar.setProgress(rendedObj.getParameter());
+
 
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
@@ -109,18 +111,7 @@ public class CustomActivity extends AndARActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                /*textView.setText("Valor: " + progress);
-                if (rendedObj != null) {
-                    try {
-                        art.unregisterARObject(rendedObj);
-                        rendedObj.setParameter(progress);
-                        rendedObj.buildSurface();
-                        art.registerARObject(rendedObj);
-                    } catch (AndARException ex) {
-                        //handle the exception, that means: show the user what happened
-                        Log.e("AndAR EXCEPTION", ex.getMessage());
-                    }
-                }*/
+
             }
         });
     }
