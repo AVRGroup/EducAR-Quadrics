@@ -39,6 +39,8 @@ public class ParaboloideHiperbolico extends SurfaceObject{
 	}
 	
 	public void buildSurface(){
+        buffer.clear();
+        wirebuffer.clear();
 		for(u = -4.0f; u < 4.0f; u+= passoU){
 			for(v = -4.0f; v < 4.0f; v+= passoV){
 								
@@ -144,7 +146,6 @@ public class ParaboloideHiperbolico extends SurfaceObject{
             initialized = true;
         }
 
-        // Ensure we're using the program we need
         GLES20.glUseProgram(myProgram);
 
         if( glCameraMatrixBuffer != null) {
@@ -155,30 +156,26 @@ public class ParaboloideHiperbolico extends SurfaceObject{
             GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
         }
 
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
-        GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, 0, buffer.capacity() * BYTES_PER_FLOAT, buffer);
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-
-        buffer.clear();
-
-        /** DESENHO A PARTIR DO BUFFER **/
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
+        // Pass in the position information
+        buffer.position(0);
+        GLES20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, stride, buffer); // 3 = Size of the position data in elements.
         GLES20.glEnableVertexAttribArray(mPositionHandle);
-        GLES20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, stride, 0);
 
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
+        // Pass in the color information
+        //Atencao para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
+        buffer.position(POSITION_DATA_SIZE);
+        GLES20.glVertexAttribPointer(mColorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, stride, buffer);
         GLES20.glEnableVertexAttribArray(mColorHandle);
-        GLES20.glVertexAttribPointer(mColorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, stride, POSITION_DATA_SIZE * BYTES_PER_FLOAT);
 
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
+        // Pass in the normal information
+        buffer.position(POSITION_DATA_SIZE + COLOR_DATA_SIZE);
+        GLES20.glVertexAttribPointer(mNormalHandle, NORMAL_DATA_SIZE, GLES20.GL_FLOAT, false, stride, buffer);
         GLES20.glEnableVertexAttribArray(mNormalHandle);
-        GLES20.glVertexAttribPointer(mNormalHandle, NORMAL_DATA_SIZE, GLES20.GL_FLOAT, false, stride, (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT);
 
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-
+        // Desenha cone externo
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, capacity / stride);
 
-        /*GLES20.glUseProgram(myProgram2);
+        GLES20.glUseProgram(myProgram2);
 
         if( glCameraMatrixBuffer != null) {
             // Transform to where the marker is
@@ -188,22 +185,12 @@ public class ParaboloideHiperbolico extends SurfaceObject{
             GraphicsUtil.checkGlError("glUniformMatrix4fv muPMatrixHandle");
         }
 
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, wirebuffers[0]);
-        GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, 0, wirebuffer.capacity() * BYTES_PER_FLOAT, wirebuffer);
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-
-        wirebuffer.clear();
-
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, wirebuffers[0]);
-        GLES20.glEnableVertexAttribArray(mPositionHandle);
-        GLES20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, stride, 0);
-
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+        wirebuffer.position(0);
+        GLES20.glVertexAttribPointer(mWirePosHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, stride, wirebuffer); // 3 = Size of the position data in elements.
+        GLES20.glEnableVertexAttribArray(mWirePosHandle);
 
         GLES20.glLineWidth(2.0f);
         GLES20.glDrawArrays(GLES20.GL_LINES, 0, wirecapacity / stride);
-*/
-        GLES20.glDisableVertexAttribArray(0);
     }
 
 }
