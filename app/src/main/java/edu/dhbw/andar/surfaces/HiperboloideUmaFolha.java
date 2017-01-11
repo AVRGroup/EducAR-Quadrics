@@ -46,6 +46,7 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 	public void buildSurface(){
 		buffer.clear();
 		wirebuffer.clear();
+		axes.clear();
 		for(u = -1.5f; u < 1.5f; u+=passoU){
 			for(v = 0.0f; v < 2*Math.PI; v+= passoV){
 				
@@ -113,6 +114,19 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 				preenche(wirebuffer, a, cor, normalT1);
 			}
 		}
+		//eixo x
+		preenche(axes, new Vetor(-(parameters[0]+(2 * parameters[2])), 0.0f, (2 * parameters[2])), new Vetor(1.0f, 1.0f, 0.0f, 1.0f), new Vetor(-1.0f, 1.0f, 1.0f));
+		preenche(axes, new Vetor((parameters[0]+(2 * parameters[2])), 0.0f, (2 * parameters[2])), new Vetor(1.0f, 1.0f, 0.0f, 1.0f), new Vetor(1.0f, 1.0f, 1.0f));
+
+		//eixo y
+		preenche(axes, new Vetor(0.0f, -(parameters[0]+(2 * parameters[2])), (2 * parameters[2])), new Vetor(0.0f, 1.0f, 0.0f, 1.0f), new Vetor(1.0f, -1.0f, 1.0f));
+		preenche(axes, new Vetor(0.0f, parameters[0]+(2 * parameters[2]), (2 * parameters[2])), new Vetor(0.0f, 1.0f, 0.0f, 1.0f), new Vetor(1.0f, 1.0f, 1.0f));
+
+		//eixo z
+		preenche(axes, new Vetor(0.0f, 0.0f, -(2 * parameters[2])+(2 * parameters[2])), new Vetor(0.0f, 0.0f, 1.0f, 1.0f), new Vetor(1.0f, 1.0f, -1.0f));
+		preenche(axes, new Vetor(0.0f, 0.0f, +(2 * parameters[2])+(2 * parameters[2])), new Vetor(0.0f, 0.0f, 1.0f, 1.0f), new Vetor(1.0f, 1.0f, 1.0f));
+		axes.position(0);
+
 		buffer.position(0);
 		wirebuffer.position(0);
 	}
@@ -179,6 +193,24 @@ public class HiperboloideUmaFolha extends SurfaceObject{
 
 		// Desenha cone externo
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, capacity / stride);
+
+		// Pass in the position information
+		axes.position(0);
+		GLES20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, stride, axes); // 3 = Size of the position data in elements.
+		GLES20.glEnableVertexAttribArray(mPositionHandle);
+
+		// Pass in the color information
+		//Atencao para o contador das cores, aqui defini cores sem o alpha, diferente do cubo, por isso 3
+		axes.position(POSITION_DATA_SIZE);
+		GLES20.glVertexAttribPointer(mColorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, stride, axes);
+		GLES20.glEnableVertexAttribArray(mColorHandle);
+
+		axes.position(POSITION_DATA_SIZE + COLOR_DATA_SIZE);
+		GLES20.glVertexAttribPointer(mNormalHandle, NORMAL_DATA_SIZE, GLES20.GL_FLOAT, false, stride, axes);
+		GLES20.glEnableVertexAttribArray(mNormalHandle);
+
+		// Desenha cone externo
+		GLES20.glDrawArrays(GLES20.GL_LINES, 0, (POSITION_DATA_SIZE + COLOR_DATA_SIZE+NORMAL_DATA_SIZE)*6*BYTES_PER_FLOAT / stride);
 
 		GLES20.glUseProgram(myProgram2);
 
